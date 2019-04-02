@@ -5,16 +5,16 @@ A smoke test repo breaking and diagnosing k8s at large (or small) scales and gen
 # Proposed implementation
 
 ```
-  Kafka <--- Generated BPS (or other) transactions
-  / \ |  
-   |   |
-   |   |
-   |   +-----> topic (massachusets)---> |
-   |   +-----> topic (california)  ---> | --> ETL [Spark, or just a script] --> Redis --> webapp(high x throughput) 
-   |   +-----> topic (texas)       ---> |                                                      |
-   |                                                                                           |
-   |                                                                                           |
-   -------------------Postgres/Mongo <---------------------------------------------------------+
+  Kafka <--- Generated BPS (or other) transactions                  Webapp ----+
+  / \ |                                                                        |
+   |   |                                                   + ------> Redis <---+
+   |   |                                                   |
+   |   +-----> topic (massachusets)---> |                  |
+   |   +-----> topic (california)  ---> | --> ETL [Spark, or just a script]
+   |   +-----> topic (texas)       ---> |                  |
+   |                                                       |
+   |                                                       |
+   -------------------Postgres/Mongo <---------------------+
 ```
 
 # Future
