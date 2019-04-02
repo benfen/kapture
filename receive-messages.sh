@@ -5,6 +5,7 @@ if [ $# -lt 1 ] ; then
 Usage: receive-messages.sh <TOPIC> [FLAGS]
 
 FLAGS will be passed directly to the kafka script"
+exit
 fi
 
 ARGS="$*"

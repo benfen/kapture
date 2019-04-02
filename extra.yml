@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: test-svc
+  labels:
+    app: test
+spec:
+  clusterIP: None
+  selector:
+    app: test
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test
+  template:
+    metadata:
+      labels:
+        app: test
+    spec:
+      containers:
+      - name: alpine-linux
+        image: anapsix/alpine-java
+        command:
+          - sh
+          - -c
+          - "apk add --upgrade redis && \
+             wget -P /opt http://apache.claz.org/kafka/2.2.0/kafka_2.12-2.2.0.tgz && \
+             mkdir -p /opt/kafka && \
+             tar -zxvf /opt/kafka_2.12-2.2.0.tgz -C /opt/kafka --strip-components=1 && \
+             /opt/kafka/bin/kafka-topics.sh --create --zookeeper \"$ZK_SVC_SERVICE_HOST:$ZK_SVC_SERVICE_PORT\" \
+             --topic db-messages --replication-factor 3 --partitions 1 --if-not-exists && \
+             /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server \"$KAFKA_SVC_SERVICE_HOST:$KAFKA_SVC_SERVICE_PORT\" \
+             --topic db-messages | awk '{split($0,a,\":\"); print \"set\", a[1], a[2]}' | redis-cli -h \"$REDIS_SVC_SERVICE_HOST\""
+---

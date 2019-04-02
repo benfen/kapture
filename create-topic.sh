@@ -6,6 +6,7 @@ Usage: create-topic.sh <TOPIC> [<ZOOKEEPER_URL>] [<REPLICATION_FACTOR>] [<PARTIT
 
 If ZOOKEPER_URL is not provided, the script will attempt to fetch the URL using minikube.
 "
+exit
 fi
 
 PARTITIONS=1
@@ -13,6 +14,7 @@ REP_FAC=3
 
 if [ -z "$2" ] ; then
   ZOO=$(minikube service zk-svc --url | head -n 1 | sed "s/http:\/\///")
+  echo $ZOO
 else
   ZOO=$2
 fi
