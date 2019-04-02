@@ -35,28 +35,6 @@ spec:
       labels:
         app: kafka
     spec:
-      affinity:
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - labelSelector:
-                matchExpressions:
-                  - key: "app"
-                    operator: In
-                    values: 
-                    - kafka
-              topologyKey: "kubernetes.io/hostname"
-        podAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-             - weight: 1
-               podAffinityTerm:
-                 labelSelector:
-                    matchExpressions:
-                      - key: "app"
-                        operator: In
-                        values: 
-                        - zk
-                 topologyKey: "kubernetes.io/hostname"
-      terminationGracePeriodSeconds: 300
       volumes:
       - name: datadir
         emptyDir: {}
@@ -64,10 +42,6 @@ spec:
       - name: k8skafka
         imagePullPolicy: Always
         image: gcr.io/google_samples/k8skafka:v1
-        resources:
-          requests:
-            memory: "1Gi"
-            cpu: 500m
         ports:
         - containerPort: 9093
           name: server
@@ -76,7 +50,7 @@ spec:
         - -c
         - "exec kafka-server-start.sh /opt/kafka/config/server.properties --override broker.id=${HOSTNAME##*-} \
           --override listeners=PLAINTEXT://:9093 \
-          --override zookeeper.connect=zk-0.zk-svc.default.svc.cluster.local:2181,zk-1.zk-svc.default.svc.cluster.local:2181,zk-2.zk-svc.default.svc.cluster.local:2181 \
+          --override zookeeper.connect=zk-svc:2181 \
           --override log.dir=/var/lib/kafka \
           --override auto.create.topics.enable=true \
           --override auto.leader.rebalance.enable=true \
@@ -175,6 +149,3 @@ spec:
             - sh 
             - -c 
             - "/opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server=localhost:9093"
-      securityContext:
-        runAsUser: 1000
-        fsGroup: 1000
