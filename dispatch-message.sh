@@ -4,7 +4,7 @@ if [ $# -ne 2 ] ; then
   echo "\
 Usage: dispatch-message.sh <TOPIC> <DATA>\n\
 
-DATA may be either a string or a file path.
+DATA may be either a string or a file path.  Messages are delineated by newlines.
 "
 fi
 
