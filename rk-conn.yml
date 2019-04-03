@@ -2,27 +2,27 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-svc
+  name: rkconn
   labels:
-    app: test
+    name: rkconn
 spec:
   clusterIP: None
   selector:
-    app: test
+    name: rkconn
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test
+  name: rkconn
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test
+      app: rkconn
   template:
     metadata:
       labels:
-        app: test
+        app: rkconn
     spec:
       containers:
       - name: alpine-linux
