@@ -25,19 +25,19 @@ To use this repo, the containers for this kubernetes need to be added to the clu
 * `kubectl create -f zk.yml`
 * `kubectl create -f kafka.yml`
 * `kubectl create -f redis.yml`
-* `kubectl create -f extra.yml`
+* `kubectl create -f rk-conn.yml`
 
 This will create a zookeeper instance, a couple kafka instances to talk to that, a redis that's just kind of there, and a quick container to serve as the link between redis and kafka.
 
-Once the cluster is configured, generate load by running: `./create-load.sh`.  This will create a temporary file with mock data and repeatedly toss that message into the Kafka queue.  Note: the script tends to whine a lot about errors - in general, these errors can be ignored.
+Once the cluster is configured, generate load by starting up the load generator: `kubectl create -f load-gen.yml`
 
 ## Scaling
 
-Right now, only Kafka can be scaled up.  To do so, run:
-* `kubectl scale --replicas <REPLICA_COUNT> -f kafka.yml`
+Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka:
+* `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
 * `./alter-topic.sh db-messages <REPLICA_COUNT>`
 
-This may help to increase the load on the cluster.
+To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
 
 # Future
 
