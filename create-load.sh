@@ -5,6 +5,6 @@ TMP=_tmp.txt
 
 echo "key:value" > $DATA
 
-for i in {1..25}; do cat $DATA $TMP > $TMP && mv $TMP $DATA; done
+for i in {1..25}; do cat $DATA $DATA > $TMP && mv $TMP $DATA; done
 
 watch ./dispatch-message.sh db-messages $DATA
