@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loader
+  template:
+    metadata:
+      labels:
+        app: loader
+    spec:
+      containers:
+      - name: alpine-linux
+        image: anapsix/alpine-java
+        command:
+          - bash
+          - -c
+          - "wget -P /opt http://apache.claz.org/kafka/2.2.0/kafka_2.12-2.2.0.tgz && \
+             mkdir -p /opt/kafka && \
+             tar -zxvf /opt/kafka_2.12-2.2.0.tgz -C /opt/kafka --strip-components=1 && \
+             /opt/kafka/bin/kafka-topics.sh --create --zookeeper \"$ZK_SVC_SERVICE_HOST:$ZK_SVC_SERVICE_PORT\" \
+             --topic db-messages --replication-factor 3 --partitions 3 --if-not-exists && \
+             echo \"key:value\" > /opt/file.txt && \
+             for count in {1..24}; do cat /opt/file.txt /opt/file.txt > /opt/file2.txt && mv /opt/file2.txt /opt/file.txt; done && \
+             watch 'cat /opt/file.txt | /opt/kafka/bin/kafka-console-producer.sh --broker-list \"$KAFKA_SVC_SERVICE_HOST:$KAFKA_SVC_SERVICE_PORT\" \
+             --topic db-messages'"
+---
