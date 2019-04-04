@@ -1,6 +1,11 @@
 # Kapture
 
-A smoke test repo breaking and diagnosing k8s at large (or small) scales and generating chaos metrics
+Kapture is an open source smoke testing and load generation tool based on modern application architectures, which typically combine N microservices against a durable message queue.
+
+It is meant to be an 'infrastructure centric' implementation of the original bigpetstore paper, which largely
+focuses on generating large amounts of streaming data w/ the apache bigtop project.
+
+However, its current load generator is very primitive, and is bash based.
 
 # Proposed implementation
 
