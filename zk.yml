@@ -45,7 +45,7 @@ metadata:
   name: zk
 spec:
   serviceName: zk-svc
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:
