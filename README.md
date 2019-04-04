@@ -7,7 +7,10 @@ focuses on generating large amounts of streaming data w/ the apache bigtop proje
 
 However, its current load generator is very primitive, and is bash based.
 
-# Proposed implementation
+# Kapture data flow
+
+This is only partially implemented as of April 4, 2019. The Postgres Mongo spout as well as the 
+fine grained topics are remaining.  We'll update this shortly !
 
 ```
   Kafka <--- Generated BPS (or other) transactions <--------------- Webapp ----+
