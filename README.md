@@ -43,7 +43,7 @@ Once the cluster is configured, generate load by starting up the load generator:
 
 Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka:
 * `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
-* `./alter-topic.sh db-messages <REPLICA_COUNT>`
+* `./scripts/alter-topic.sh db-messages <REPLICA_COUNT>`
 
 To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
 
