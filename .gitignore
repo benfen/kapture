@@ -1,5 +1,7 @@
 *.swp
 *.iml
 _data.txt
+.idea
+.gradle
 
 dummy-kafka-messenger/build/
