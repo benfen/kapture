@@ -10,4 +10,4 @@ fi
 
 ARGS="$*"
 
-kubectl exec -it kafka-0 -- /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic $ARGS
+kubectl exec -it kafka-0 -c k8skafka -- /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9093 --topic $ARGS
