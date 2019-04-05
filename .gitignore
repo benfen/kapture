@@ -1,2 +1,10 @@
 *.swp
+*.iml
 _data.txt
+
+
+dummy-kafka-messenger/build/*
+!dummy-kafka-messenger/build/libs
+
+dummy-kafka-messenger/build/libs/*
+!dummy-kafka-messenger/build/libs/dummy-kafka-messenger-1.0-SNAPSHOT.jar
