@@ -29,15 +29,42 @@ fine grained topics are remaining.  We'll update this shortly !
 
 The method for generating load and attempt to mess with Kubernetes currently uses shell scripts, specifically Bash.  If you are not running this on Linux, there may be issues using those scripts.
 
-To use this repo, the containers for this kubernetes need to be added to the cluster.  To do that, create the containers for the kapture in your cluster:
-* `kubectl create -f zk.yml`
-* `kubectl create -f kafka.yml`
-* `kubectl create -f redis.yml`
-* `kubectl create -f rk-conn.yml`
+## Your first time ?
+ 
+To run kapture, just download this repo, cd to it, and run:
+```
+./kapture.sh kapture-spam-my-namespace 2000
+# wait a while for your cluster to come up...
+sleep 120
+# Now, generate load !
+kubectl create -f load-gen.yml
+```
 
-This will create a zookeeper instance, a couple kafka instances to talk to that, a redis that's just kind of there, and a quick container to serve as the link between redis and kafka.
+This will generate 2000 petstore transactions, written to various kafka topics, which then get fed 
+into a redis in memory data store.  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
+proportional to the "2000", i.e., the number of petstore transactions which are generated.
 
-Once the cluster is configured, generate load by starting up the load generator: `kubectl create -f load-gen.yml`
+## What if I want to test a more advanced scenario ?
+
+Kapture is not overengineered to support a myriad of YAML situations.  We expect engineers and developers to 
+use this framework and modify the YAMLs as required.  Out of the box, it does one thing, very well: Generating
+realistic load for an enterprise grade application with a message queue and scalable key value store.
+
+## So, what if you want to do something more advanced ?
+
+Hack it ! The YAML recipes are all in this repository so that you can build your own new tests on top of 
+kapture.  Over time, please do file issues if you feel strongly that we should modularize/helmify our deployments
+to support a broader range of test types.
+
+The possibilities are endless ! 
+
+### Example Kapture projects to create new load tests
+
+- Modify the kafka volumes to use persistent storage. (note we probably will support this soon.. not sure yet though).
+- Increase the CPU and Memory parameters for Kafka
+- Change the memory foot print or scaling factor of Redis
+- Add a different load generator container then BigPetStore
+
 
 ## Scaling
 
