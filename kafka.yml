@@ -36,7 +36,7 @@ spec:
     spec:
       volumes:
       - name: datadir
-        emptyDir: {}
+        emptyDir: {} # Note that this can be swapped out w/ a PVC for storage testing.  This is for ease of deployment
       containers:
       - name: k8skafka
         imagePullPolicy: Always
