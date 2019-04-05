@@ -1,6 +1,9 @@
-#!/bin/sh
+#!/bin/bash
+COUNTER=$1
+echo $1
 
-for ((i = 0; i < $1; i++))
+while [ $COUNTER -gt 0 ]
 do
-  /opt/kafka/bin/kafka-topics.sh --create --zookeeper $ZOOKEEPER_URL --replication-factor 3 --partitions 3 --topic "Store_$1"
+    COUNTER=$(( $COUNTER - 1 ))
+    /opt/kafka/bin/kafka-topics.sh --create --zookeeper $ZOOKEEPER_URL --replication-factor 3 --partitions 3 --topic "Store_$COUNTER"
 done
