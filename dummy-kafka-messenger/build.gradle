@@ -1,16 +1,24 @@
+
 apply plugin: "kotlin"
+apply plugin: 'kotlinx-serialization'
 apply plugin: "java"
 
 buildscript {
+    ext.kotlin_version = "1.3.21"
     repositories {
         mavenCentral()
     }
 
-    dependencies { classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.2.51" }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
+    }
 }
 
 repositories {
     mavenCentral()
+
+    maven { url "https://kotlin.bintray.com/kotlinx" }
 }
 
 jar {
@@ -30,7 +38,8 @@ version "1.0-SNAPSHOT"
 sourceCompatibility = 1.11
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:1.2.51"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.10.0"
 
     compile "io.javalin:javalin:2.8.0"
     compile "org.slf4j:slf4j-simple:1.7.26"

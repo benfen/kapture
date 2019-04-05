@@ -5,9 +5,9 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.serialization.StringSerializer
 import org.slf4j.LoggerFactory
 import java.util.Properties
+import kotlinx.serialization.json.Json
 
 val brokerList: String? = System.getenv("BROKERS")
-val topic: String? = System.getenv("TOPIC")
 
 fun createProducer(brokers: String): Producer<String, String> {
     val props = Properties()
@@ -17,17 +17,24 @@ fun createProducer(brokers: String): Producer<String, String> {
     return KafkaProducer<String, String>(props)
 }
 
-fun main(args: Array<String>) {
+fun main() {
     val logger = LoggerFactory.getLogger("server")
 
-    if (brokerList == null || topic == null) {
+    if (brokerList == null) {
         logger.error("Environment variables 'brokers' and 'topic' must be defined")
         System.exit(1)
     } else {
-        logger.info("Brokers: {} , Topic: {}", brokerList, topic)
+        logger.info("Brokers: {}", brokerList)
         val app = Javalin.create().start(7000)
 
         val producer = createProducer(brokerList)
-        app.get("/:message") { ctx -> producer.send(ProducerRecord(topic, ctx.pathParam("message"))).get() }
+        app.get("/:message") { ctx ->
+            val message = ctx.pathParam("message")
+
+            val data = Json.parse(PetStoreTransaction.serializer(), message)
+            val topic = data.store.name
+
+            producer.send(ProducerRecord(topic, message)).get()
+        }
     }
 }

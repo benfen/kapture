@@ -92,12 +92,12 @@ spec:
           --override replica.socket.timeout.ms=30000 \
           --override request.timeout.ms=30000 \
           --override socket.receive.buffer.bytes=102400 \
-          --override socket.request.max.bytes=104857600 \
+          --override socket.request.max.bytes=2147483647 \
           --override socket.send.buffer.bytes=102400 \
           --override unclean.leader.election.enable=true \
           --override zookeeper.session.timeout.ms=6000 \
           --override zookeeper.set.acl=false \
-          --override broker.id.generation.enable=true \
+          --override broker.id.generation.enable=false \
           --override connections.max.idle.ms=600000 \
           --override controlled.shutdown.enable=true \
           --override controlled.shutdown.max.retries=3 \
@@ -134,7 +134,7 @@ spec:
           --override reserved.broker.max.id=1000 "
         env:
         - name: KAFKA_HEAP_OPTS
-          value : "-Xmx512M -Xms512M"
+          value : "-Xmx3G -Xms3G"
         - name: KAFKA_OPTS
           value: "-Dlogging.level=INFO"
         volumeMounts:
