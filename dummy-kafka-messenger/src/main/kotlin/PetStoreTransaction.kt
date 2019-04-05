@@ -11,7 +11,7 @@ data class Location(val state: String,
                     val coordinates: Coordinate,
                     val city: String,
                     val zipcode: String,
-                    val medianHouseholdIncome: Int,
+                    val medianHouseholdIncome: Double,
                     val population: Int)
 
 @Serializable
