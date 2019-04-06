@@ -29,14 +29,20 @@ spec:
         imagePullPolicy: Always
         image: benfen/dummy-kafka-messenger:latest
         env:
-          - name: KAFKA_URL
-            value: "$(KAFKA_SVC_SERVICE_HOST):$(KAFKA_SVC_SERVICE_PORT)"
-          - name: REDIS_URL
-            value: "$(REDIS_SVC_SERVICE_HOST)"
+          - name: BROKERS
+            value: "kafka-svc:9093"
+          - name: GROUP_ID
+            value: "producer-${HOSTNAME##*-}"
+          - name: MESSENGER_MODE
+            value: "listen"
+          - name: REDIS_HOST
+            value: "redis-svc"
+          - name: STORE_COUNT
+            value: "13"
           - name: ZOOKEEPER_URL
-            value: "$(ZK_SVC_SERVICE_HOST):$(ZK_SVC_SERVICE_PORT)"
+            value: "zk-svc:2181"
         command:
-          - sh
+          - bash
           - -c
-          - "/opt/redis-kafka-connector.sh"
+          - "java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
 ---

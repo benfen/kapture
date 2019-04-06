@@ -23,7 +23,7 @@ repositories {
 
 jar {
     manifest {
-        attributes "Main-Class": "ServerKt"
+        attributes "Main-Class": "MainKt"
     }
 
     // This line of code recursively collects and copies all of a project"s files
@@ -43,6 +43,7 @@ dependencies {
 
     compile "io.javalin:javalin:2.8.0"
     compile "org.slf4j:slf4j-simple:1.7.26"
+    compile "redis.clients:jedis:3.0.1"
 
     compile "org.apache.kafka:kafka-clients:2.0.0"
 }
