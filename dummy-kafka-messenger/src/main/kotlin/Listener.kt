@@ -1,5 +1,4 @@
 import io.prometheus.client.Counter
-import io.prometheus.client.exporter.HTTPServer
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -30,8 +29,6 @@ fun startConsumer() {
         logger.error("Environment variables 'BROKERS', 'GROUP_ID', 'REDIS_HOST', and 'STORE_COUNT' must be defined")
         System.exit(1)
     } else {
-        // Start the prometheus server
-        HTTPServer(7001)
 
         val counter = Counter.build()
                 .name("kafka_transactions")
@@ -49,6 +46,7 @@ fun startConsumer() {
         consumer.subscribe(topics)
 
         val jedis = Jedis(redisHost)
+
         while (true) {
             val records: ConsumerRecords<String, String> = consumer.poll(100)
 
