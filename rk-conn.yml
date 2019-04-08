@@ -25,7 +25,7 @@ spec:
         app: rkconn
     spec:
       containers:
-      - name: load-gen-kafka-connector
+      - name: load-gen-consumer
         imagePullPolicy: Always
         image: benfen/dummy-kafka-messenger:latest
         env:
@@ -38,7 +38,10 @@ spec:
           - name: REDIS_HOST
             value: "redis-svc"
           - name: STORE_COUNT
-            value: "13"
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: STORE_COUNT
           - name: ZOOKEEPER_URL
             value: "zk-svc:2181"
         command:

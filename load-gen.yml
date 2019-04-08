@@ -22,19 +22,31 @@ spec:
           - "/opt/PetStoreLoadGenerator-1.0/bin/PetStoreLoadGenerator http://localhost:7000/ $STORE_COUNT $CUSTOMERS $SIMULATION_LENGTH"
         env:
           - name: STORE_COUNT
-            value: "13"
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: STORE_COUNT
           - name: CUSTOMERS
-            value: "500000"
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: CUSTOMERS
           - name: SIMULATION_LENGTH
-            value: "15000"
-      - name: load-gen-kafka-connector
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: SIMULATION
+      - name: load-gen-producer
         imagePullPolicy: Always
         image: benfen/dummy-kafka-messenger:latest
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
           - name: STORE_COUNT
-            value: "13"
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: STORE_COUNT
           - name: ZOOKEEPER_URL
             value: "$(ZK_SVC_SERVICE_HOST):$(ZK_SVC_SERVICE_PORT)"
         command:
