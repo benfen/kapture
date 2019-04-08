@@ -19,17 +19,26 @@ spec:
         command:
           - bash
           - -c
-          - "/opt/PetStoreLoadGenerator-1.0/bin/PetStoreLoadGenerator http://localhost:7000/ 13 5 10000 123"
+          - "/opt/PetStoreLoadGenerator-1.0/bin/PetStoreLoadGenerator http://localhost:7000/ $STORE_COUNT $CUSTOMERS $SIMULATION_LENGTH"
+        env:
+          - name: STORE_COUNT
+            value: "13"
+          - name: CUSTOMERS
+            value: "500000"
+          - name: SIMULATION_LENGTH
+            value: "15000"
       - name: load-gen-kafka-connector
         imagePullPolicy: Always
         image: benfen/dummy-kafka-messenger:latest
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
+          - name: STORE_COUNT
+            value: "13"
           - name: ZOOKEEPER_URL
             value: "$(ZK_SVC_SERVICE_HOST):$(ZK_SVC_SERVICE_PORT)"
         command:
           - bash
           - -c
-          - "/opt/generate-topics.sh 13 && java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
+          - "/opt/generate-topics.sh $STORE_COUNT && java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
 ---

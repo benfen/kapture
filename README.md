@@ -37,7 +37,7 @@ To run kapture, just download this repo, cd to it, and run:
 # wait a while for your cluster to come up...
 sleep 120
 # Now, generate load !
-kubectl create -f load-gen.yml
+kubectl create -f load-gen.yml -n kapture-spam-my-namespace
 ```
 
 This will generate 2000 petstore transactions, written to various kafka topics, which then get fed 
