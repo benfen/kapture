@@ -5,11 +5,11 @@ Kapture is an open source smoke testing and load generation tool based on modern
 It is meant to be an 'infrastructure centric' implementation of the original bigpetstore paper, which largely
 focuses on generating large amounts of streaming data w/ the apache bigtop project.
 
-However, its current load generator is very primitive, and is bash based.
+However, its current load generator is very primitive, and is still being fleshed out.
 
 # Kapture data flow
 
-This is only partially implemented as of April 4, 2019. The Postgres Mongo spout as well as the 
+This is only partially implemented as of April 8, 2019. The Postgres Mongo spout as well as the 
 fine grained topics are remaining.  We'll update this shortly !
 
 ```
@@ -27,22 +27,22 @@ fine grained topics are remaining.  We'll update this shortly !
 
 # Usage
 
-The method for generating load and attempt to mess with Kubernetes currently uses shell scripts, specifically Bash.  If you are not running this on Linux, there may be issues using those scripts.
-
 ## Your first time ?
  
 To run kapture, just download this repo, cd to it, and run:
 ```
-./kapture.sh kapture-spam-my-namespace 2000
+./kapture.sh kapture-spam-my-namespace
 # wait a while for your cluster to come up...
 sleep 120
 # Now, generate load !
 kubectl create -f load-gen.yml -n kapture-spam-my-namespace
 ```
 
-This will generate 2000 petstore transactions, written to various kafka topics, which then get fed 
-into a redis in memory data store.  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
-proportional to the "2000", i.e., the number of petstore transactions which are generated.
+This will create a single load store generation that will write to various kafka topics, which then get fed 
+into a redis in-memory data store.  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
+proportional to the number of load generators, i.e., the number of petstore transactions which are generated.
+
+For further configuration, try running `./kapture.sh --help` to see other configuration options specifics to the BigPetStore implementation.
 
 ## What if I want to test a more advanced scenario ?
 
@@ -56,21 +56,23 @@ Hack it ! The YAML recipes are all in this repository so that you can build your
 kapture.  Over time, please do file issues if you feel strongly that we should modularize/helmify our deployments
 to support a broader range of test types.
 
-The possibilities are endless ! 
+The possibilities are endless !
+
+## How do I clean my cluster up?
+
+Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take acre of the rest.
 
 ### Example Kapture projects to create new load tests
 
 - Modify the kafka volumes to use persistent storage. (note we probably will support this soon.. not sure yet though).
 - Increase the CPU and Memory parameters for Kafka
 - Change the memory foot print or scaling factor of Redis
-- Add a different load generator container then BigPetStore
-
+- Add a different load generator container than BigPetStore
 
 ## Scaling
 
 Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka:
 * `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
-* `./scripts/alter-topic.sh db-messages <REPLICA_COUNT>`
 
 To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
 
