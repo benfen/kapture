@@ -25,7 +25,7 @@ function tear_down() {
 }
 
 # Temporary hack for testing
-if ! [ -z $1 ]; then
+if [ "on" = $1 ]; then
 	tear_down
 fi
 
