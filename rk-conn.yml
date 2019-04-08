@@ -6,7 +6,9 @@ metadata:
   labels:
     name: rkconn
 spec:
-  clusterIP: None
+  ports:
+    - port: 7001
+      name: kafka-transactions
   selector:
     name: rkconn
 ---
@@ -44,6 +46,8 @@ spec:
                 key: STORE_COUNT
           - name: ZOOKEEPER_URL
             value: "zk-svc:2181"
+        ports:
+          - containerPort: 7001
         command:
           - bash
           - -c
