@@ -98,3 +98,9 @@ serviced by other scale and density tests in the upstream Kuberentes community.
 
 All source in this Repo is Apache Commmons 2.0 licensed, please contribute ideas, code, whatever.  
 We'll have prototypes up and running soon.
+
+# Dev policy
+
+- Push to master
+- Accept almost any PR, this is a work in progress
+- Ideas that are half baked : Merge them to contrib/ :)
