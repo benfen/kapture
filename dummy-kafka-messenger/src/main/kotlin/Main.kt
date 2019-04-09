@@ -5,7 +5,7 @@ private val messengerMode: String? = System.getenv("MESSENGER_MODE")
 fun main() {
     if (messengerMode != null && messengerMode.toLowerCase() == "listen") {
         // Start the prometheus server
-        val server = HTTPServer(7001)
+        val server = HTTPServer("0.0.0.0", 7001)
 
         try {
             startConsumer()
