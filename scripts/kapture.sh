@@ -32,7 +32,7 @@ fi
 exit_if_bad
 
 kubectl create ns $namespace
-kubectl create configmap kapture-config --from-literal=STORE_COUNT="$stores" \
+kubectl create configmap -n $namespace kapture-config --from-literal=STORE_COUNT="$stores" \
 	--from-literal=CUSTOMERS="$customers" --from-literal=SIMULATION="$simulation_time"
 kubectl create -f zk.yml  -n $namespace
 kubectl create -f kafka.yml -n $namespace
