@@ -28,6 +28,10 @@ data:
       scrape_interval: 5s
       static_configs:
         - targets: ['rkconn-svc:7001']
+    - job_name: 'kafka'
+      scrape_interval: 5s
+      static_configs:
+        - targets: ['kafka-svc:7071']
 ---
 apiVersion: extensions/v1beta1
 kind: Deployment

@@ -52,5 +52,5 @@ spec:
         command:
           - bash
           - -c
-          - "/opt/generate-topics.sh $STORE_COUNT && java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
+          - "/opt/generate-topics.sh $STORE_COUNT 3 3 && java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
 ---
