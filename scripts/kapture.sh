@@ -12,7 +12,10 @@ function exit_if_bad() {
 	fi
 }
 
+exit_if_bad
+
 function tear_down() {
+	kubectl delete -f prometheus.yml -n $namespace
 	kubectl delete -f load-gen.yml -n $namespace
 	kubectl delete -f rk-conn.yml -n $namespace
 	kubectl delete -f redis.yml -n $namespace
@@ -25,11 +28,9 @@ function tear_down() {
 }
 
 # Temporary hack for testing
-if [ "on" = $1 ]; then
+if [ "on" = $delete ]; then
 	tear_down
 fi
-
-exit_if_bad
 
 kubectl create ns $namespace
 kubectl create configmap -n $namespace kapture-config --from-literal=STORE_COUNT="$stores" \
@@ -38,3 +39,7 @@ kubectl create -f zk.yml  -n $namespace
 kubectl create -f kafka.yml -n $namespace
 kubectl create -f redis.yml -n $namespace
 kubectl create -f rk-conn.yml -n $namespace
+
+if [ "on" = $deploy_prometheus ]; then  
+	kubectl create -f prometheus.yml -n $namespace
+fi
