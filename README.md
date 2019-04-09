@@ -60,7 +60,7 @@ The possibilities are endless !
 
 ## How do I clean my cluster up?
 
-Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take acre of the rest.
+Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take care of the rest.
 
 ### Example Kapture projects to create new load tests
 
@@ -71,8 +71,7 @@ Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take a
 
 ## Scaling
 
-Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka:
-* `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
+Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
 
 To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
 
