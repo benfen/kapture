@@ -76,6 +76,10 @@ to support a broader range of test types.
 
 The possibilities are endless !
 
+## What if want Prometheus metrics?
+
+Kapture's got it!  Just head over to [prometheus-recipes](https://github.com/carbonrelay/prometheus-recipes) and apply the `basic` cofiguration to your cluster.  Then, run `./kapture.sh kapture-spam-my-namepsace -p` to get Prometheus metrics from Kapture on your cluster.  Easy!
+
 ## How do I clean my cluster up?
 
 Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take care of the rest.
