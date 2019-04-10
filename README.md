@@ -62,6 +62,13 @@ proportional to the number of load generators, i.e., the number of petstore tran
 
 For further configuration, try running `./kapture.sh --help` to see other configuration options specifics to the BigPetStore implementation.
 
+
+## How do I scale up the load?
+
+Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
+
+To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
+
 ## What if I want to test a more advanced scenario ?
 
 Kapture is not overengineered to support a myriad of YAML situations.  We expect engineers and developers to 
@@ -86,12 +93,6 @@ Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take c
 - Increase the CPU and Memory parameters for Kafka
 - Change the memory foot print or scaling factor of Redis
 - Add a different load generator container than BigPetStore
-
-## Scaling
-
-Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
-
-To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
 
 # Test data
 
