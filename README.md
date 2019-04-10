@@ -1,6 +1,8 @@
+# Get ready to SWEAT !
+
 ```
-./kapture.sh kapture-spam-my-namespace  && kubectl create -f load-gen.yml -n kapture-spam-my-namespace
-echo "Get ready to SWEAT!"
+NS=perf-test \
+./kapture.sh $NS ; kubectl create -f load-gen.yml -n $NS
 ```
 
 # Kapture
