@@ -1,3 +1,8 @@
+```
+./kapture.sh kapture-spam-my-namespace  && kubectl create -f load-gen.yml -n kapture-spam-my-namespace
+echo "Get ready to SWEAT!"
+```
+
 # Kapture
 
 Kapture is an open source smoke testing and load generation tool based on modern application architectures, which typically combine N microservices against a durable message queue.
