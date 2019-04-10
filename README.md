@@ -2,14 +2,15 @@
 
 ```
 NS=perf-test \
-./kapture.sh $NS ; kubectl create -f load-gen.yml -n $NS
+REPLICAS=1 \
+./kapture.sh $NS ; kubectl create -f load-gen.yml -n $NS ; kubectl scale -f load-gen.yml -n $NS --replicas $REPLICAS
 ```
 
 ## What did I just do ? 
 
 You just ran Kapture !  Kapture is a load generator / application simulator for K8s based on the enterprise development model.
 
-- Ridiculously eay to use, and hack: No vanity languages required.
+- Ridiculously easy to use and hack: No vanity languages required.
 - Inspired by reality.
 - Relevant to anyone who runs a SaaS or uses K8s for solving REAL WORLD problems.  Yeah, like, JAVA APPs.
 - Understandable to anyone that builds apps.
@@ -26,7 +27,7 @@ However, its current load generator is very primitive, and is still being fleshe
 
 # Kapture data flow
 
-This is only partially implemented as of April 8, 2019. The Postgres Mongo spout as well as the 
+This is only partially implemented as of April 10, 2019. The Postgres Mongo spout as well as the 
 fine grained topics are remaining.  We'll update this shortly !
 
 ```
