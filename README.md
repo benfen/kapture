@@ -92,6 +92,24 @@ Right now, both Kafka and the load generator can be scaled up.  To scale up Kafk
 
 To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
 
+# Test data
+
+Basic testing for this was done on a GKE cluster with 2 nodes, 8 vCPUs, and 30G of memory (note that Kafka is configured to be memory hungry - a considerable amount of memory is required up front).  In order to test the cluster, the load generation was scaled up one at a time.  The health of the cluster was monitored using the prometheus metrics for transactions/second (both from the kafka subscription and from kafka itself) over the course of a minute as well as the resource utilization of the cluster.  
+
+| Load generators | Transactions/second |
+|---|---|---|---|---|
+| 1 | ~150 |
+| 3 | ~420 |
+| 4 | ~590 |
+| 5 | ~620 |
+| 6 | ~640 |
+| 7 | ~460-800 (exceptionally varied) |
+| 8 | ~550-820 (exceptionally varied) |
+
+In general, testing seems to display two separate slowdowns.  The first occurs when the CPU of the cluster starts to become insufficient to satisfy Kafka.  In the example here, that seems to occur around 6 load generators.  At this point, the number of transactions begins to decline due to resource starvation, although the metrics for it begin to vary wildly.  Observing the CPU utilization of the cluster also shows that it starts to hover around 90% consistently.  Past 8 load generators, metrics are hard to trust due to variance displayed.
+
+At 11 load generators the entire cluster begins to experience acute memory pressure and nodes start getting evicted.  This is the point where the cluster is basically becoming unusable.  Adding more load generators past this point will make the problem worse, but it's not a very noticeable difference.
+
 # WHY IS THIS JAVA ?
 
 As popular as Golang is in the infrastructure universe, the fact is that enterprises ship Java code at massive scales,
