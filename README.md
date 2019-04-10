@@ -97,7 +97,7 @@ To increase the amount of load on the system, run: `kubectl scale --replicas=<RE
 Basic testing for this was done on a GKE cluster with 2 nodes, 8 vCPUs, and 30G of memory (note that Kafka is configured to be memory hungry - a considerable amount of memory is required up front).  In order to test the cluster, the load generation was scaled up one at a time.  The health of the cluster was monitored using the prometheus metrics for transactions/second (both from the kafka subscription and from kafka itself) over the course of a minute as well as the resource utilization of the cluster.  
 
 | Load generators | Transactions/second |
-|---|---|---|---|---|
+|---|---|
 | 1 | ~150 |
 | 3 | ~420 |
 | 4 | ~590 |
