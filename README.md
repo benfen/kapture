@@ -7,8 +7,9 @@ NS=perf-test \
 
 ## What did I just do ? 
 
-You just ran Kapture.  The only load generator for K8s which is:
+You just ran Kapture !  Kapture is a load generator / application simulator for K8s based on the enterprise development model.
 
+- Ridiculously eay to use, and hack: No vanity languages required.
 - Inspired by reality.
 - Relevant to anyone who runs a SaaS or uses K8s for solving REAL WORLD problems.  Yeah, like, JAVA APPs.
 - Understandable to anyone that builds apps.
