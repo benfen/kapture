@@ -5,6 +5,15 @@ NS=perf-test \
 ./kapture.sh $NS ; kubectl create -f load-gen.yml -n $NS
 ```
 
+## What did I just do ? 
+
+You just ran Kapture.  The only load generator for K8s which is:
+
+- Inspired by reality.
+- Relevant to anyone who runs a SaaS or uses K8s for solving REAL WORLD problems.  Yeah, like, JAVA APPs.
+- Understandable to anyone that builds apps.
+- Gauranteed to push the limits of all major cluster resources in a deterministic way.
+
 # Kapture
 
 Kapture is an open source smoke testing and load generation tool based on modern application architectures, which typically combine N microservices against a durable message queue.
