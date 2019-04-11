@@ -116,7 +116,7 @@ In general, testing seems to display two separate slowdowns.  The first occurs w
 
 At 11 load generators the entire cluster begins to experience acute memory pressure and nodes start getting evicted.  This is the point where the cluster is basically becoming unusable.  Adding more load generators past this point will make the problem worse, but it's not a very noticeable difference.
 
-# WHY IS THIS JAVA ?
+# WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU 
 
 As popular as Golang is in the infrastructure universe, the fact is that enterprises ship Java code at massive scales,
 and the goal of Kapture is to simulate enterprise enviornments for upstream kubernetes load and scale testing.
