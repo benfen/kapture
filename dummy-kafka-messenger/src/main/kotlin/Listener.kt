@@ -3,8 +3,9 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecords
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.redisson.Redisson
+import org.redisson.config.Config
 import org.slf4j.LoggerFactory
-import redis.clients.jedis.Jedis
 import java.util.Properties
 
 private val brokerList: String? = System.getenv("BROKERS")
@@ -42,16 +43,20 @@ fun startConsumer() {
             topics.add("Store_$i")
         }
 
+        val config = Config()
+        config.useSentinelServers()
+                .setMasterName("mymaster")
+                .addSentinelAddress("redis://$redisHost")
+        val client = Redisson.create(config)
+
         val consumer = createConsumer(brokerList, groupId)
         consumer.subscribe(topics)
-
-        val jedis = Jedis(redisHost)
 
         while (true) {
             val records: ConsumerRecords<String, String> = consumer.poll(100)
 
             for (record in records) {
-                jedis.set(record.key(), record.value())
+                client.getBucket<String>(record.key()).setAsync(record.value()).get()
             }
 
             counter.inc(records.count().toDouble())

@@ -1,17 +1,18 @@
 #!/bin/bash
 
+TAG=$1
+
 (
     BASEDIR=$(dirname $0)
     cd "$BASEDIR/../dummy-kafka-messenger/"
     gradle build
 
     cd ..
-    docker build . --tag benfen/dummy-kafka-messenger:latest
-
-    read -p "Push container to dockerhub?" -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]
-    then
-        docker push benfen/dummy-kafka-messenger:latest
+    if [ -z $TAG ]; then
+        docker build . --tag benfen/dummy-kafka-messenger:latest
+        exit 0
     fi
+
+    docker build . --tag "benfen/dummy-kafka-messenger:$TAG"
+    docker push "benfen/dummy-kafka-messenger:$TAG"
 )
