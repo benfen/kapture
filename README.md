@@ -3,7 +3,7 @@
 ```
 NS=perf-test \
 REPLICAS=1 \
-./kapture.sh $NS ; kubectl create -f load-gen.yml -n $NS ; kubectl scale -f load-gen.yml -n $NS --replicas $REPLICAS
+./kapture.sh $NS ; kubectl create -f ./kube-config/load-gen.yml -n $NS ; kubectl scale -f ./kube-config/load-gen.yml -n $NS --replicas $REPLICAS
 ```
 
 See the `kube-config/` directory for details of what was created.
@@ -59,7 +59,7 @@ To run kapture, just download this repo, cd to it, and run:
 # wait a while for your cluster to come up...
 sleep 120
 # Now, generate load !
-kubectl create -f load-gen.yml -n kapture-spam-my-namespace
+kubectl create -f ./kube-config/load-gen.yml -n kapture-spam-my-namespace
 ```
 
 This will create a single load store generation that will write to various kafka topics, which then get fed 
@@ -71,9 +71,9 @@ For further configuration, try running `./kapture.sh --help` to see other config
 
 ## How do I scale up the load?
 
-Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f kafka.yml`
+Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/kafka.yml`
 
-To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f load-gen.yml`
+To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/load-gen.yml`
 
 ## What if I want to test a more advanced scenario ?
 
