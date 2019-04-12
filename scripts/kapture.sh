@@ -48,18 +48,18 @@ if [ "on" = $deploy_prometheus ]; then
 fi
 
 echo "Waiting for Redis master to start..."
-role=$(kubectl exec redis-master -c master -- bash -c "redis-cli info | grep ^role")
+role=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info | grep ^role")
 until echo $role | grep -m 1 "role:master" ; do
-	role=$(kubectl exec redis-master -c master -- bash -c "redis-cli info 2> /dev/null | grep ^role") ; sleep 2
+	role=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info 2> /dev/null | grep ^role") ; sleep 2
 done
 
 kubectl create -f $BASEDIR/../kube-config/redis.yml -n $namespace
 
 echo "Waiting for Redis slaves to start..."
-slaves=$(kubectl exec redis-master -c master -- bash -c "redis-cli info | grep ^connected_slaves")
+slaves=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info | grep ^connected_slaves")
 until echo $slaves | grep -m 1 "connected_slaves:[^0]" ; do
 	# kubectl gives an error when the container isn't ready that really doesn't matter, so it just gets dropped on the floor.
-	slaves=$(kubectl exec redis-master -c master -- bash -c "redis-cli info 2> /dev/null | grep ^connected_slaves") ; sleep 2
+	slaves=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info 2> /dev/null | grep ^connected_slaves") ; sleep 2
 done
 
 kubectl delete -f $BASEDIR/../kube-config/redis-master.yml -n $namespace
