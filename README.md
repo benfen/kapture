@@ -6,6 +6,8 @@ REPLICAS=1 \
 ./kapture.sh $NS ; kubectl create -f load-gen.yml -n $NS ; kubectl scale -f load-gen.yml -n $NS --replicas $REPLICAS
 ```
 
+See the `kube-config/` directory for details of what was created.
+
 ## What did I just do ? 
 
 You just ran Kapture !  Kapture is a load generator / application simulator for K8s based on the enterprise development model.
