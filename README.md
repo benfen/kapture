@@ -10,9 +10,9 @@ REPLICAS=1 \
 
 You just ran Kapture !  Kapture is a load generator / application simulator for K8s based on the enterprise development model.
 
-- Ridiculously easy to use and hack: No vanity languages required.
-- Inspired by reality.
-- Relevant to anyone who runs a SaaS or uses K8s for wanting to compare k8s distros for REAL world applications.
+## Whats Kapture? 
+
+- A ridiculously easy to use, easy to hack load generator: No vanity languages required.  It is meant to simulate the behaviour, at scale, of the common 'lift and shift' kuberentes enterprise experience.
   - Jvm apps that make their own app frameworks inside other frameworks, b/c they were designed in the 1990s.
   - Ruby apps with tons and tons of code and memory getting slurped up for no reason.
   - Web apps with weird transaction flows b/c you didn't batch properly.
