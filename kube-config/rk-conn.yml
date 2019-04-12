@@ -30,7 +30,7 @@ spec:
       containers:
       - name: load-gen-consumer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:latest
+        image: benfen/dummy-kafka-messenger:0.1
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
@@ -49,8 +49,4 @@ spec:
             value: "zk-svc:2181"
         ports:
           - containerPort: 7001
-        command:
-          - bash
-          - -c
-          - "java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
 ---

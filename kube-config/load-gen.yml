@@ -38,7 +38,7 @@ spec:
                 key: SIMULATION
       - name: load-gen-producer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:latest
+        image: benfen/dummy-kafka-messenger:0.1
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
