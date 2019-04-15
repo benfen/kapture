@@ -39,7 +39,7 @@ spec:
           - name: MESSENGER_MODE
             value: "listen"
           - name: REDIS_HOST
-            value: "$(REDIS_SENTINEL_SERVICE_HOST):26379"
+            value: "redis-sentinel:26379"
           - name: STORE_COUNT
             valueFrom:
               configMapKeyRef:
