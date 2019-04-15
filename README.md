@@ -63,7 +63,7 @@ kubectl create -f ./kube-config/load-gen.yml -n kapture-spam-my-namespace
 ```
 
 This will create a single load store generation that will write to various kafka topics, which then get fed 
-into a redis in-memory data store.  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
+into a redis in-memory data store (if the Redis is deployed).  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
 proportional to the number of load generators, i.e., the number of petstore transactions which are generated.
 
 For further configuration, try running `./kapture.sh --help` to see other configuration options specifics to the BigPetStore implementation.
