@@ -71,9 +71,11 @@ For further configuration, try running `./kapture.sh --help` to see other config
 
 ## How do I scale up the load?
 
-Right now, both Kafka and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/kafka.yml`
+Right now, Kafka, Redis, and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/kafka.yml -n kapture-spam-my-namespace`
 
-To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/load-gen.yml`
+Before trying to scale up Redis, make sure to run`./kapture.sh kapture-spam-my-namespace --deploy-redis` to make sure Redis is deployed on your cluster!  Then, just run `kubectl scale --replicas=<REPLICA_COUNT> rc redis -n kapture-spam-my-namespace`!
+
+To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/load-gen.yml -n kapture-spam-my-namespace`
 
 ## What if I want to test a more advanced scenario ?
 
@@ -106,7 +108,7 @@ Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take c
 
 # Test data
 
-Basic testing for this was done on a GKE cluster with 2 nodes, 8 vCPUs, and 30G of memory (note that Kafka is configured to be memory hungry - a considerable amount of memory is required up front).  In order to test the cluster, the load generation was scaled up one at a time.  The health of the cluster was monitored using the prometheus metrics for transactions/second (both from the kafka subscription and from kafka itself) over the course of a minute as well as the resource utilization of the cluster.  
+Basic testing for this was done on a GKE cluster with 2 nodes, 8 vCPUs, and 30G of memory.  In order to test the cluster, the load generation was scaled up one at a time.  The health of the cluster was monitored using the prometheus metrics for transactions/second (both from the kafka subscription and from kafka itself) over the course of a minute as well as the resource utilization of the cluster.  
 
 | Load generators | Transactions/second (GKE) | Transactions/second (Minikube on CentOS w/ kvm2 driver) |
 |---|---|---|
