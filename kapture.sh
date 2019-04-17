@@ -3,8 +3,8 @@
 # Created by argbash-init v2.8.0
 # Rearrange the order of options below according to what you would like to see in the help message.
 # ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[13])
-# ARG_OPTIONAL_SINGLE([customers],[c],[Number of customers to simulate for BigPetStore],[500000])
-# ARG_OPTIONAL_SINGLE([simulation],[d],[Time (in days) to run the BigPetStore simulation over],[15000]))
+# ARG_OPTIONAL_SINGLE([customers],[c],[Number of customers to simulate for BigPetStore],[5000])
+# ARG_OPTIONAL_SINGLE([simulation],[d],[Time (in days) to run the BigPetStore simulation over],[1500]))
 # ARG_OPTIONAL_SINGLE([kafka-java-options],[],[Heap options to initialize kafka with],[-Xmx512M -Xms512M]))
 # ARG_OPTIONAL_SINGLE([kafka-cpu-limit],[],[Limit to the CPU usage of a single Kafka container.  Should be expressed as a floating point number],[.2]))
 # ARG_OPTIONAL_SINGLE([kafka-cpu-request],[],[Initial request for CPU by a single Kafka container.  Should be expressed as a floating point number],[.1]))
@@ -47,8 +47,8 @@ _arg_namespace=
 _arg_load_generators="0"
 # THE DEFAULTS INITIALIZATION - OPTIONALS
 _arg_stores="13"
-_arg_customers="500000"
-_arg_simulation="15000"
+_arg_customers="5000"
+_arg_simulation="1500"
 _arg_kafka_java_options="-Xmx512M -Xms512M"
 _arg_kafka_cpu_limit=".2"
 _arg_kafka_cpu_request=".1"
@@ -66,8 +66,8 @@ print_help()
 	printf '\t%s\n' "<namespace>: The namespace to deploy Kapture to"
 	printf '\t%s\n' "<load-generators>: Number of load generators to create to place load on the cluster (default: '0')"
 	printf '\t%s\n' "-s, --stores: Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated (default: '13')"
-	printf '\t%s\n' "-c, --customers: Number of customers to simulate for BigPetStore (default: '500000')"
-	printf '\t%s\n' "-d, --simulation: Time (in days) to run the BigPetStore simulation over (default: '15000')"
+	printf '\t%s\n' "-c, --customers: Number of customers to simulate for BigPetStore (default: '5000')"
+	printf '\t%s\n' "-d, --simulation: Time (in days) to run the BigPetStore simulation over (default: '1500')"
 	printf '\t%s\n' "--kafka-java-options: Heap options to initialize kafka with (default: '-Xmx512M -Xms512M')"
 	printf '\t%s\n' "--kafka-cpu-limit: Limit to the CPU usage of a single Kafka container.  Should be expressed as a floating point number (default: '.2')"
 	printf '\t%s\n' "--kafka-cpu-request: Initial request for CPU by a single Kafka container.  Should be expressed as a floating point number (default: '.1')"
