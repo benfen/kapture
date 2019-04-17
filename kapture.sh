@@ -14,6 +14,7 @@
 # ARG_OPTIONAL_BOOLEAN([deploy-prometheus],[p],[Deploy Prometheus as part of the cluster],[off])
 # ARG_OPTIONAL_BOOLEAN([deploy-redis],[r],[Deploy Redis (and the connector) as part of the cluster],[off])
 # ARG_POSITIONAL_SINGLE([namespace],[The namespace to deploy Kapture to],[])
+# ARG_POSITIONAL_SINGLE([load-generators],[Number of load generators to create to place load on the cluster],[0])
 # ARG_DEFAULTS_POS()
 # ARG_HELP([This script configures a cluster to run Kapture.])
 # ARGBASH_GO()
@@ -43,6 +44,7 @@ begins_with_short_option()
 # THE DEFAULTS INITIALIZATION - POSITIONALS
 _positionals=()
 _arg_namespace=
+_arg_load_generators="0"
 # THE DEFAULTS INITIALIZATION - OPTIONALS
 _arg_stores="13"
 _arg_customers="500000"
@@ -60,8 +62,9 @@ _arg_deploy_redis="off"
 print_help()
 {
 	printf '%s\n' "This script configures a cluster to run Kapture."
-	printf 'Usage: %s [-s|--stores <arg>] [-c|--customers <arg>] [-d|--simulation <arg>] [--kafka-java-options <arg>] [--kafka-cpu-limit <arg>] [--kafka-cpu-request <arg>] [--kafka-memory-limit <arg>] [--kafka-memory-request <arg>] [--(no-)delete] [-p|--(no-)deploy-prometheus] [-r|--(no-)deploy-redis] [-h|--help] <namespace>\n' "$0"
+	printf 'Usage: %s [-s|--stores <arg>] [-c|--customers <arg>] [-d|--simulation <arg>] [--kafka-java-options <arg>] [--kafka-cpu-limit <arg>] [--kafka-cpu-request <arg>] [--kafka-memory-limit <arg>] [--kafka-memory-request <arg>] [--(no-)delete] [-p|--(no-)deploy-prometheus] [-r|--(no-)deploy-redis] [-h|--help] <namespace> [<load-generators>]\n' "$0"
 	printf '\t%s\n' "<namespace>: The namespace to deploy Kapture to"
+	printf '\t%s\n' "<load-generators>: Number of load generators to create to place load on the cluster (default: '0')"
 	printf '\t%s\n' "-s, --stores: Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated (default: '13')"
 	printf '\t%s\n' "-c, --customers: Number of customers to simulate for BigPetStore (default: '500000')"
 	printf '\t%s\n' "-d, --simulation: Time (in days) to run the BigPetStore simulation over (default: '15000')"
@@ -207,15 +210,15 @@ parse_commandline()
 handle_passed_args_count()
 {
 	local _required_args_string="'namespace'"
-	test "${_positionals_count}" -ge 1 || _PRINT_HELP=yes die "FATAL ERROR: Not enough positional arguments - we require exactly 1 (namely: $_required_args_string), but got only ${_positionals_count}." 1
-	test "${_positionals_count}" -le 1 || _PRINT_HELP=yes die "FATAL ERROR: There were spurious positional arguments --- we expect exactly 1 (namely: $_required_args_string), but got ${_positionals_count} (the last one was: '${_last_positional}')." 1
+	test "${_positionals_count}" -ge 1 || _PRINT_HELP=yes die "FATAL ERROR: Not enough positional arguments - we require between 1 and 2 (namely: $_required_args_string), but got only ${_positionals_count}." 1
+	test "${_positionals_count}" -le 2 || _PRINT_HELP=yes die "FATAL ERROR: There were spurious positional arguments --- we expect between 1 and 2 (namely: $_required_args_string), but got ${_positionals_count} (the last one was: '${_last_positional}')." 1
 }
 
 
 assign_positional_args()
 {
 	local _positional_name _shift_for=$1
-	_positional_names="_arg_namespace "
+	_positional_names="_arg_namespace _arg_load_generators "
 
 	shift "$_shift_for"
 	for _positional_name in ${_positional_names}
@@ -248,9 +251,11 @@ printf "'%s' is %s\\n" 'delete' "$_arg_delete"
 printf "'%s' is %s\\n" 'deploy-prometheus' "$_arg_deploy_prometheus"
 printf "'%s' is %s\\n" 'deploy-redis' "$_arg_deploy_redis"
 printf "Value of '%s': %s\\n" 'namespace' "$_arg_namespace"
+printf "Value of '%s': %s\\n" 'load-generators' "$_arg_load_generators"
 
 
 export namespace=$_arg_namespace
+export load_generators=$_arg_load_generators
 export customers=$_arg_customers
 export simulation_time=$_arg_simulation
 export stores=$_arg_stores

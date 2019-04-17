@@ -81,4 +81,7 @@ else
 	if [ "on" = $deploy_redis ]; then
 		deploy_redis
 	fi
+
+	kubectl create -f $BASEDIR/../kube-config/pods/load-gen.yml -n $namespace
+	kubectl scale Deployment data-loader -n $namespace --replicas $load_generators
 fi

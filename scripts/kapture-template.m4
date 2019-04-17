@@ -16,6 +16,7 @@ exit 11  #)Created by argbash-init v2.8.0
 # ARG_OPTIONAL_BOOLEAN([deploy-prometheus], [p], [Deploy Prometheus as part of the cluster], [off])
 # ARG_OPTIONAL_BOOLEAN([deploy-redis], [r], [Deploy Redis (and the connector) as part of the cluster], [off])
 # ARG_POSITIONAL_SINGLE([namespace],[The namespace to deploy Kapture to],[])
+# ARG_POSITIONAL_SINGLE([load-generators],[Number of load generators to create to place load on the cluster],[0])
 # ARG_DEFAULTS_POS
 # ARG_HELP([This script configures a cluster to run Kapture.])
 # ARGBASH_GO
@@ -34,10 +35,12 @@ printf "'%s' is %s\\n" 'delete' "$_arg_delete"
 printf "'%s' is %s\\n" 'deploy-prometheus' "$_arg_deploy_prometheus"
 printf "'%s' is %s\\n" 'deploy-redis' "$_arg_deploy_redis"
 printf "Value of '%s': %s\\n" 'namespace' "$_arg_namespace"
+printf "Value of '%s': %s\\n" 'load-generators' "$_arg_load_generators"
 
 # ] <-- needed because of Argbash
 
 export namespace=$_arg_namespace
+export load_generators=$_arg_load_generators
 export customers=$_arg_customers
 export simulation_time=$_arg_simulation
 export stores=$_arg_stores
