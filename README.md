@@ -3,10 +3,10 @@
 ```
 NS=perf-test \
 REPLICAS=1 \
-./kapture.sh $NS ; kubectl create -f ./kube-config/load-gen.yml -n $NS ; kubectl scale -f ./kube-config/load-gen.yml -n $NS --replicas $REPLICAS
+./kapture.sh $NS $REPLICAS
 ```
 
-See the `kube-config/` directory for details of what was created.
+See the `kube-config/pods` directory for details of what was created.
 
 ## What did I just do ? 
 
@@ -33,7 +33,7 @@ However, its current load generator is very primitive, and is still being fleshe
 
 # Kapture data flow
 
-This is only partially implemented as of April 10, 2019. The Postgres Mongo spout as well as the 
+This is only partially implemented as of April 17, 2019. The Postgres Mongo spout as well as the 
 fine grained topics are remaining.  We'll update this shortly !
 
 ```
@@ -55,14 +55,10 @@ fine grained topics are remaining.  We'll update this shortly !
  
 To run kapture, just download this repo, cd to it, and run:
 ```
-./kapture.sh kapture-spam-my-namespace
-# wait a while for your cluster to come up...
-sleep 120
-# Now, generate load !
-kubectl create -f ./kube-config/load-gen.yml -n kapture-spam-my-namespace
+./kapture.sh kapture-spam-my-namespace 3
 ```
 
-This will create a single load store generation that will write to various kafka topics, which then get fed 
+That's it!  This will create a single load store generation that will write to various kafka topics, which then get fed 
 into a redis in-memory data store (if the Redis is deployed).  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
 proportional to the number of load generators, i.e., the number of petstore transactions which are generated.
 
@@ -71,11 +67,11 @@ For further configuration, try running `./kapture.sh --help` to see other config
 
 ## How do I scale up the load?
 
-Right now, Kafka, Redis, and the load generator can be scaled up.  To scale up Kafka: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/kafka.yml -n kapture-spam-my-namespace`
+Right now, Kafka, Redis, and the load generator can be scaled up.  To scale up Kafka: `kubectl scale StatefulSet kafka --replicas=$REPLICA_COUNT -n kapture-spam-my-namespace`
 
-Before trying to scale up Redis, make sure to run`./kapture.sh kapture-spam-my-namespace --deploy-redis` to make sure Redis is deployed on your cluster!  Then, just run `kubectl scale --replicas=<REPLICA_COUNT> rc redis -n kapture-spam-my-namespace`!
+Before trying to scale up Redis, make sure to run`./kapture.sh kapture-spam-my-namespace --deploy-redis` to make sure Redis is deployed on your cluster!  Then, just run `kubectl scale --replicas=$REPLICA_COUNT rc redis -n kapture-spam-my-namespace`!
 
-To increase the amount of load on the system, run: `kubectl scale --replicas=<REPLICA_COUNT> -f ./kube-config/load-gen.yml -n kapture-spam-my-namespace`
+To increase the amount of load on the system, run: `kubectl scale Deployment data-loader -n kapture-spam-my-namespace --replicas $REPLICA_COUNT`
 
 ## What if I want to test a more advanced scenario ?
 
