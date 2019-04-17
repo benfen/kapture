@@ -18,7 +18,7 @@ exit_if_bad
 
 function tear_down() {
 	# Attempt to wipe everything out, even the stuff not being used
-	kubectl delete -f $BASEDIR/../kube-config
+	kubectl delete -f $BASEDIR/../kube-config/pods -n $namespace
 
 	kubectl delete configmaps kapture-config -n $namespace
 
@@ -26,12 +26,12 @@ function tear_down() {
 }
 
 function deploy_prometheus() {
-	kubectl create -f $BASEDIR/../kube-config/prometheus.yml -n $namespace
+	kubectl create -f $BASEDIR/../kube-config/pods/prometheus.yml -n $namespace
 }
 
 function deploy_redis() {
-	kubectl create -f $BASEDIR/../kube-config/redis-master.yml -n $namespace
-	kubectl create -f $BASEDIR/../kube-config/rk-conn.yml -n $namespace
+	kubectl create -f $BASEDIR/../kube-config/pods/redis-master.yml -n $namespace
+	kubectl create -f $BASEDIR/../kube-config/pods/rk-conn.yml -n $namespace
 
 	echo "Waiting for Redis master to start..."
 	role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster 2> /dev/null | grep ^role-reported -A 1")
@@ -40,7 +40,7 @@ function deploy_redis() {
 		role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster 2> /dev/null | grep ^role-reported -A 1")
 	done
 
-	kubectl create -f $BASEDIR/../kube-config/redis.yml -n $namespace
+	kubectl create -f $BASEDIR/../kube-config/pods/redis.yml -n $namespace
 
 	echo "Waiting for Redis slaves to register with the master (this may take some time)..."
 	slaves=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info | grep ^connected_slaves")
@@ -51,7 +51,7 @@ function deploy_redis() {
 	done
 
 	echo "Removing Redis master..."
-	kubectl delete -f $BASEDIR/../kube-config/redis-master.yml -n $namespace
+	# kubectl delete -f $BASEDIR/../kube-config/pods/redis-master.yml -n $namespace
 }
 
 if [ "on" = $delete ] ; then
@@ -60,8 +60,18 @@ else
 	kubectl create ns $namespace
 	kubectl create configmap -n $namespace kapture-config --from-literal=STORE_COUNT="$stores" \
 		--from-literal=CUSTOMERS="$customers" --from-literal=SIMULATION="$simulation_time"
-	kubectl create -f $BASEDIR/../kube-config/zk.yml  -n $namespace
-	kubectl create -f $BASEDIR/../kube-config/kafka.yml -n $namespace
+	kubectl create -f $BASEDIR/../kube-config/pods/zk.yml  -n $namespace
+
+	mkdir -p $BASEDIR/../kube-config/temp
+
+	cat $BASEDIR/../kube-config/kafka-resources-template.yml| \
+		sed "s/JAVA_MEMORY_OPTIONS/$kafka_java_options/" | \
+		sed "s/CPU_LIMIT/$kafka_cpu_limit/" | \
+		sed "s/CPU_REQUEST/$kafka_cpu_request/" | \
+		sed "s/MEMORY_LIMIT/$kafka_memory_limit/" | \
+		sed "s/MEMORY_REQUEST/$kafka_memory_request/" > $BASEDIR/../kube-config/temp/kafka-resources.yml
+
+	kubectl kustomize kube-config | kubectl create -n $namespace -f -
 
 
 	if [ "on" = $deploy_prometheus ]; then
