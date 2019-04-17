@@ -5,7 +5,7 @@ echo "This is just a script template, not the script (yet) - pass it to 'argbash
 exit 11  #)Created by argbash-init v2.8.0
 # Rearrange the order of options below according to what you would like to see in the help message.
 # ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[13])
-# ARG_OPTIONAL_SINGLE([customers],[c],[Number of customers to simulate for BigPetStore],[500000])
+# ARG_OPTIONAL_SINGLE([customers],[c],[Number of customers to simulate for BigPetStore],[5000])
 # ARG_OPTIONAL_SINGLE([simulation],[d],[Time (in days) to run the BigPetStore simulation over],[15000]))
 # ARG_OPTIONAL_SINGLE([kafka-java-options],[],[Heap options to initialize kafka with],[-Xmx512M -Xms512M]))
 # ARG_OPTIONAL_SINGLE([kafka-cpu-limit],[],[Limit to the CPU usage of a single Kafka container.  Should be expressed as a floating point number],[.2]))

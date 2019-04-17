@@ -38,6 +38,10 @@ spec:
         volumeMounts:
         - mountPath: /redis-master-data
           name: data
+        command:
+          - bash
+          - -c
+          - "printf \"maxmemory 50mb\nmaxmemory-policy allkeys-lru\" >> /redis-slave/redis.conf && /run.sh"
       volumes:
       - name: data
 ---

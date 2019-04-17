@@ -34,10 +34,10 @@ function deploy_redis() {
 	kubectl create -f $BASEDIR/../kube-config/pods/rk-conn.yml -n $namespace
 
 	echo "Waiting for Redis master to start..."
-	role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster 2> /dev/null | grep ^role-reported -A 1")
+	role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster | grep ^role-reported -A 1")
 	until echo $role | grep -m 1 "master" ; do
 		sleep 2
-		role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster 2> /dev/null | grep ^role-reported -A 1")
+		role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster | grep ^role-reported -A 1")
 	done
 
 	kubectl create -f $BASEDIR/../kube-config/pods/redis.yml -n $namespace
@@ -51,7 +51,7 @@ function deploy_redis() {
 	done
 
 	echo "Removing Redis master..."
-	# kubectl delete -f $BASEDIR/../kube-config/pods/redis-master.yml -n $namespace
+	kubectl delete -f $BASEDIR/../kube-config/pods/redis-master.yml -n $namespace
 }
 
 if [ "on" = $delete ] ; then
