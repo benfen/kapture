@@ -39,10 +39,12 @@ spec:
         env:
           - name: MAX_MEMORY
             value: "50mb"
+          - name: EVICTION_POLICY
+            value: allkeys-lru
         command:
           - bash
           - -c
-          - "printf \"maxmemory $MAX_MEMORY\nmaxmemory-policy allkeys-lru\" >> /redis-slave/redis.conf && /run.sh"
+          - "printf \"maxmemory $MAX_MEMORY\nmaxmemory-policy $EVICTION_POLICY\" >> /redis-slave/redis.conf && /run.sh"
       volumes:
       - name: data
 ---

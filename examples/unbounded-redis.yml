@@ -9,8 +9,8 @@ spec:
       containers:
       - name: redis
         env:
-          - name: MAX_MEMORY
-            value: "500000mb"
+          - name: EVICTION_POLICY
+            value: "noeviction"
         resources:
           limits:
             cpu: 0.1
