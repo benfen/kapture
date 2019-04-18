@@ -40,6 +40,7 @@ function deploy_redis() {
 	done
 
 	kubectl scale rc redis -n $namespace --replicas $redis_count
+	kubectl scale Deployment rkconn -n $namespace --replicas 1
 	kubectl scale rc redis-sentinel -n $namespace --replicas 3
 
 	echo "Waiting for Redis slaves to register with the master (this may take some time)..."
