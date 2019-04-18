@@ -90,7 +90,7 @@ The possibilities are endless !
 
 ### Can I Kustomize my Kapture?
 
-You bet!  Check out the [`examples`](examples/README.md) for what you can use [`Kustomize`][1] to create all kinds of different configurations for Kapture!
+You bet!  Check out the [`examples`](examples/README.md) for how you can use [`Kustomize`][1] to create all kinds of different configurations for Kapture!
 
 ## What if want Prometheus metrics?
 
