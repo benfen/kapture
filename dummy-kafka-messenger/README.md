@@ -4,7 +4,7 @@ This app serves as a quick go-between anything that can dispatch HTTP requests a
 
 Alternatively, it allows for subscribing to Kafka and sending those messages to Redis to store.  The application will only do one of these at a time, based on the configuration flags that are passed into the application.
 
-This server expects data to conform to the structure of Apache's BigPetStore.  If the incoming data does not do this, the server will error out.
+This server expects data to conform to the structure of Apache's BigPetStore.  If the incoming data is not a superset of the structure of the BigPetStore data, the server will error out.
 
 # Usage
 
