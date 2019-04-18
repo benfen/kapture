@@ -6,7 +6,7 @@ REPLICAS=1 \
 ./kapture.sh $NS $REPLICAS
 ```
 
-See the `kube-config/pods` directory for details of what was created.
+See the `kube-config` directory for details of what was created.
 
 ## What did I just do ? 
 
@@ -33,7 +33,7 @@ However, its current load generator is very primitive, and is still being fleshe
 
 # Kapture data flow
 
-This is only partially implemented as of April 17, 2019. The Postgres Mongo spout as well as the 
+This is only partially implemented as of April 18, 2019. The Postgres Mongo spout as well as the 
 fine grained topics are remaining.  We'll update this shortly !
 
 ```
@@ -58,20 +58,21 @@ To run kapture, just download this repo, cd to it, and run:
 ./kapture.sh kapture-spam-my-namespace 3
 ```
 
-That's it!  This will create a single load store generation that will write to various kafka topics, which then get fed 
-into a redis in-memory data store (if the Redis is deployed).  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns
-proportional to the number of load generators, i.e., the number of petstore transactions which are generated.
+That's it!  This will create a single load store generation that will write to various kafka topics.  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns proportional to the number of load generators, i.e., the number of petstore transactions which are generated.
 
 For further configuration, try running `./kapture.sh --help` to see other configuration options specifics to the BigPetStore implementation.
 
+### Deploying Redis
+
+By default, Kapture doesn't deploy Redis as part of its minimalistic approach.  If you want to include Redis as part of your deployment, just run `./kapture.sh kapture-spam-my-namespace 3 --deploy-redis`.  That will start up Kapture with a basic Redis configuration that listens to Kafka for messages.
 
 ## How do I scale up the load?
 
 Right now, Kafka, Redis, and the load generator can be scaled up.  To scale up Kafka: `kubectl scale StatefulSet kafka --replicas=$REPLICA_COUNT -n kapture-spam-my-namespace`
 
-Before trying to scale up Redis, make sure to run`./kapture.sh kapture-spam-my-namespace --deploy-redis` to make sure Redis is deployed on your cluster!  Then, just run `kubectl scale --replicas=$REPLICA_COUNT rc redis -n kapture-spam-my-namespace`!
+To scale Redis, just run `kubectl scale --replicas=$REPLICA_COUNT rc redis -n kapture-spam-my-namespace`!
 
-To increase the amount of load on the system, run: `kubectl scale Deployment data-loader -n kapture-spam-my-namespace --replicas $REPLICA_COUNT`
+To increase the amount of load on the system, run: `kubectl scale Deployment data-loader --replicas $REPLICA_COUNT -n kapture-spam-my-namespace`
 
 ## What if I want to test a more advanced scenario ?
 
@@ -87,9 +88,15 @@ to support a broader range of test types.
 
 The possibilities are endless !
 
+### Can I Kustomize my Kapture?
+
+You bet!  Check out the [`examples`](examples/EXAMPLES.md) for what you can use [`Kustomize`][1] to create all kinds of different configurations for Kapture!
+
 ## What if want Prometheus metrics?
 
 Kapture's got it!  Just head over to [prometheus-recipes](https://github.com/carbonrelay/prometheus-recipes) and apply the `basic` cofiguration to your cluster.  Then, run `./kapture.sh kapture-spam-my-namepsace -p` to get Prometheus metrics from Kapture on your cluster.  Easy!
+
+__This feature is still experimental and will likely not work 100% out of the box__
 
 ## How do I clean my cluster up?
 
@@ -104,22 +111,7 @@ Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take c
 
 # Test data
 
-Basic testing for this was done on a GKE cluster with 2 nodes, 8 vCPUs, and 30G of memory.  In order to test the cluster, the load generation was scaled up one at a time.  The health of the cluster was monitored using the prometheus metrics for transactions/second (both from the kafka subscription and from kafka itself) over the course of a minute as well as the resource utilization of the cluster.  
-
-| Load generators | Transactions/second (GKE) | Transactions/second (Minikube on CentOS w/ kvm2 driver) |
-|---|---|---|
-| 1 | ~150 | ~210 |
-| 2 | ~300 | ~420 |
-| 3 | ~420 | ~620 |
-| 4 | ~590 | ~800 |
-| 5 | ~620 | ~960 |
-| 6 | ~640 | ~1130 |
-| 7 | ~460-800 (exceptionally varied) | ~1320 (varied)  |
-| 8 | ~550-820 (exceptionally varied) | ~670-1240 (expectionally varied) |
-
-In general, testing seems to display two separate slowdowns.  The first occurs when the CPU of the cluster starts to become insufficient due to the load generators.  In the example here, that seems to occur around 6 load generators.  At this point, the number of transactions begins to decline due to resource starvation, although the metrics for it begin to vary wildly.  Observing the CPU utilization of the cluster also shows that it starts to hover around 90% consistently.  Past 8 load generators, metrics are hard to trust due to variance displayed.
-
-At 11 load generators the entire cluster begins to experience acute memory pressure and nodes start getting evicted.  This is the point where the cluster is basically becoming unusable.  Adding more load generators past this point will make the problem worse, but it's not a very noticeable difference.  It is worth noting that, although slow, Redis will eventually also begin to run the cluster out of memory, as there is no recycling strategy.
+Take a look at the [`data`](DATA.md)!
 
 # WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU 
 
@@ -137,7 +129,7 @@ serviced by other scale and density tests in the upstream Kuberentes community.
 - Dockerization of the kapture container with
   - kubectl (poor mans operator)
   - gradle : to build kafka connectors 
-  - jvm : to support running bps, gradle, etc  
+  - jvm : to support running bps, gradle, etc
   
 # License
 
@@ -149,3 +141,5 @@ We'll have prototypes up and running soon.
 - Push to master
 - Accept almost any PR, this is a work in progress
 - Ideas that are half baked : Merge them to contrib/ :)
+
+[1]: https://kustomize.io/
