@@ -1,5 +1,0 @@
-resources:
-  - pods/kafka.yml
-
-patchesStrategicMerge:
-  - temp/kafka-resources.yml
