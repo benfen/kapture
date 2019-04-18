@@ -10,7 +10,7 @@ spec:
       - name: redis
         env:
           - name: EVICTION_POLICY
-            value: "noeviction"
+            value: noeviction
         resources:
           limits:
             cpu: 0.1

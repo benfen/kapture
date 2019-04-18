@@ -27,6 +27,8 @@ spec:
       env:
         - name: SENTINEL
           value: "true"
+        - name: REDIS_SENTINEL_SERVICE_HOST
+          value: localhost
       ports:
         - containerPort: 26379
   volumes:
