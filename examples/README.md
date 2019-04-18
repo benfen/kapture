@@ -16,7 +16,7 @@ Just modify the [`kustomization.yml`](../kustomization.yml) to point to which re
 
 ## Caveats
 
-* With the exception of [`zk.yml`](../kube-config/zk.yml) and [`kafka.yml`](../kube-config/kafka.yml), the number of `replicas` should not be modified using [`Kustomize`][1].  The replica count is managed by `Kapture` and should be controlled using the [`kapture.sh`](../kapture.sh) script.
-* Neither [`rk-conn.yml`](../kube-config/rk-conn.yml) nor [`redis-master.yml`](../kube-config/redis-master.yml) will be affected by [`Kustomize`][1].
+* The number of `replicas` should not be modified using [`Kustomize`][1].  The replica count is managed by `Kapture` and should be controlled using the [`kapture.sh`](../kapture.sh) script.  There are a couple of locations in the startup code that depend on the number of replicas (Redis, Kafka) that may not function correctly if these things are modified prior to startup.  Once Kapture initializes, it should be fine to scale things up and down.
+* [`redis-master.yml`](../kube-config/redis-master.yml) will not be affected by [`Kustomize`][1] as a consequence of how the clustered Redis needs to start up.
 
 [1]: https://kustomize.io/

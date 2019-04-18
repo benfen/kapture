@@ -5,5 +5,9 @@ resources:
   - kube-config/rk-conn.yml
   - kube-config/zk.yml
 
+images:
+  - name: benfen/dummy-kafka-messenger
+    newTag: v0.3-dev
+
 patchesStrategicMerge:
   - examples/default-resources.yml
