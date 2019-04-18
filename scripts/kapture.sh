@@ -39,7 +39,7 @@ function deploy_redis() {
 		role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster | grep ^role-reported -A 1")
 	done
 
-	kubectl scale rc redis -n $namespace --replicas 3
+	kubectl scale rc redis -n $namespace --replicas $redis_count
 	kubectl scale rc redis-sentinel -n $namespace --replicas 3
 
 	echo "Waiting for Redis slaves to register with the master (this may take some time)..."
