@@ -1,0 +1,54 @@
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: kafka
+spec:
+  template:
+    spec:
+      containers:
+      - name: k8skafka
+        env:
+        - name: KAFKA_HEAP_OPTS
+          value : "-Xmx512M -Xms512m"
+        resources:
+          limits:
+            cpu: 0.2
+            memory: 2G
+          requests:
+            cpu: 0.1
+            memory: 600M
+---
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: redis
+spec:
+  template:
+    spec:
+      containers:
+      - name: redis
+        env:
+          - name: MAX_MEMORY
+            value: "50mb"
+        resources:
+          limits:
+            cpu: 0.1
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-loader
+spec:
+  template:
+    spec:
+      containers:
+      - name: pet-store-generator
+        resources:
+          limits:
+            cpu: 1
+      - name: load-gen-producer
+        resources:
+          limits:
+            cpu: 0.5
+---

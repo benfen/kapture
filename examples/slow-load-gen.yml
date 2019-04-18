@@ -1,0 +1,18 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-loader
+spec:
+  template:
+    spec:
+      containers:
+      - name: pet-store-generator
+        resources:
+          limits:
+            cpu: 0.2
+      - name: load-gen-producer
+        resources:
+          limits:
+            cpu: 0.1
+---

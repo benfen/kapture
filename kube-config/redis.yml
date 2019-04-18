@@ -18,26 +18,31 @@ kind: ReplicationController
 metadata:
   name: redis
 spec:
-  replicas: 3
+  replicas: 0
   selector:
     name: redis
+    role: slave
   template:
     metadata:
       labels:
         name: redis
-        role: master
+        role: slave
     spec:
       containers:
       - name: redis
         image: k8s.gcr.io/redis:v1
         ports:
         - containerPort: 6379
-        resources:
-          limits:
-            cpu: "0.1"
         volumeMounts:
         - mountPath: /redis-master-data
           name: data
+        env:
+          - name: MAX_MEMORY
+            value: "50mb"
+        command:
+          - bash
+          - -c
+          - "printf \"maxmemory $MAX_MEMORY\nmaxmemory-policy allkeys-lru\" >> /redis-slave/redis.conf && /run.sh"
       volumes:
       - name: data
 ---
@@ -46,9 +51,10 @@ kind: ReplicationController
 metadata:
   name: redis-sentinel
 spec:
-  replicas: 3
+  replicas: 0
   selector:
     redis-sentinel: "true"
+    role: sentinel
   template:
     metadata:
       labels:

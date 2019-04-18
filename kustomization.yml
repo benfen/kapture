@@ -1,0 +1,9 @@
+resources:
+  - kube-config/kafka.yml
+  - kube-config/load-gen.yml
+  - kube-config/redis.yml
+  - kube-config/rk-conn.yml
+  - kube-config/zk.yml
+
+patchesStrategicMerge:
+  - examples/default-resources.yml
