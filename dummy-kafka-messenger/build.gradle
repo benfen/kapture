@@ -46,4 +46,6 @@ dependencies {
     compile "org.slf4j:slf4j-simple:1.7.26"
 
     compile "org.apache.kafka:kafka-clients:2.0.0"
+
+    compile "com.mashape.unirest:unirest-java:1.4.9"
 }
