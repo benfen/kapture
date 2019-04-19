@@ -37,7 +37,7 @@ spec:
           - name: GROUP_ID
             value: "producer-${HOSTNAME##*-}"
           - name: MESSENGER_MODE
-            value: "listen"
+            value: "REDIS_LISTEN"
           - name: REDIS_HOST
             value: "redis-sentinel:26379"
           - name: STORE_COUNT
