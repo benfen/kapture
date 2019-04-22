@@ -20,7 +20,7 @@ exit 11  #)Created by argbash-init v2.8.0
 # [ <-- needed because of Argbash
 
 printf 'Value of --%s: %s\n' 'stores' "$_arg_stores"
-printf 'Value of --%s: %s\n' 'cusomters' "$_arg_cusomters"
+printf 'Value of --%s: %s\n' 'customers' "$_arg_customers"
 printf 'Value of --%s: %s\n' 'simulation' "$_arg_simulation"
 printf "'%s' is %s\\n" 'delete' "$_arg_delete"
 printf "'%s' is %s\\n" 'deploy-prometheus' "$_arg_deploy_prometheus"
