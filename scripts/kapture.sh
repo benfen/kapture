@@ -25,6 +25,13 @@ function tear_down() {
 	exit 0
 }
 
+function deploy_elastic_search() {
+	kubectl scale Deployment es-master -n $namespace --replicas 3
+	kubectl scale Deployment es-client -n $namespace --replicas 2
+	kubectl scale Deployment es-data -n $namespace --replicas 3
+	kubectl scale Deployment elconn -n $namespace --replicas 1
+}
+
 function deploy_prometheus() {
 	kubectl create -f $BASEDIR/../kube-config/prometheus.yml -n $namespace
 }
@@ -72,6 +79,10 @@ else
 
 	if [ "on" = $deploy_redis ]; then
 		deploy_redis
+	fi
+
+	if [ "on" = $deploy_elastic_search ]; then
+		deploy_elastic_search
 	fi
 
 	kubectl scale Deployment data-loader -n $namespace --replicas $load_generators

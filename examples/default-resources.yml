@@ -45,10 +45,59 @@ spec:
       containers:
       - name: pet-store-generator
         resources:
+          requests:
+            cpu: 0.1
           limits:
             cpu: 1
       - name: load-gen-producer
         resources:
+          requests:
+            cpu: 0.1
           limits:
             cpu: 0.5
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: es-data
+spec:
+  template:
+    spec:
+      containers:
+      - name: es-data
+        resources:
+          requests:
+            cpu: 0.25
+          limits:
+            cpu: 1
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: es-client
+spec:
+  template:
+    spec:
+      containers:
+      - name: es-client
+        resources:
+          requests:
+            cpu: 0.25
+          limits:
+            cpu: 1
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: es-master
+spec:
+  template:
+    spec:
+      containers:
+      - name: es-master
+        resources:
+          requests:
+            cpu: 0.25
+          limits:
+            cpu: 1
 ---

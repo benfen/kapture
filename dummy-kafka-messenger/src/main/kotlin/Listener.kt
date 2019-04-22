@@ -14,7 +14,6 @@ private val brokerList: String? = System.getenv("BROKERS")
 private val elasticHost: String? = System.getenv("ELASTIC_HOST")
 private val groupId: String? = System.getenv("GROUP_ID")
 private val redisHost: String? = System.getenv("REDIS_HOST")
-private val stores: String? = System.getenv("STORE_COUNT")
 
 private fun createConsumer(brokers: String, groupId: String): Consumer<String, String> {
     val props = Properties()
@@ -37,10 +36,13 @@ fun startListener(mode: MessengerMode) {
                 System.exit(1)
             }
 
-            dispatch = { record -> Unirest.post("$elasticHost/${record.topic()}/store")
+            dispatch = { record ->
+                Unirest.post("http://$elasticHost/${record.topic()}/store")
                     .header("Content-Type", "application/json")
                     .body(record.value())
-                    .asStringAsync() }
+                    .asStringAsync()
+                    .get()
+            }
         }
         MessengerMode.REDIS_LISTEN -> {
             if (redisHost == null) {
@@ -58,8 +60,8 @@ fun startListener(mode: MessengerMode) {
         }
     }
 
-    if (brokerList == null || groupId == null || stores == null) {
-        logger.error("Environment variables 'BROKERS', 'GROUP_ID', and 'STORE_COUNT' must be defined")
+    if (brokerList == null || groupId == null) {
+        logger.error("Environment variables 'BROKERS' and 'GROUP_ID' must be defined")
         System.exit(1)
     } else {
 
@@ -68,15 +70,61 @@ fun startListener(mode: MessengerMode) {
                 .help("Total number of kafka transactions seen by this node")
                 .register()
 
-        val storeCount = Integer.parseInt(stores)
-
-        val topics = ArrayList<String>()
-        for (i in 0..storeCount) {
-            topics.add("Store_$i")
-        }
+        val states = arrayOf(
+            "ak",
+            "al",
+            "ar",
+            "az",
+            "ca",
+            "co",
+            "ct",
+            "de",
+            "fl",
+            "ga",
+            "hi",
+            "ia",
+            "id",
+            "il",
+            "in",
+            "ks",
+            "ky",
+            "la",
+            "ma",
+            "md",
+            "me",
+            "mi",
+            "mn",
+            "mo",
+            "ms",
+            "mt",
+            "nc",
+            "nd",
+            "ne",
+            "nh",
+            "nj",
+            "nm",
+            "nv",
+            "ny",
+            "oh",
+            "ok",
+            "or",
+            "pa",
+            "ri",
+            "sc",
+            "sd",
+            "tn",
+            "tx",
+            "ut",
+            "va",
+            "vt",
+            "wa",
+            "wi",
+            "wv",
+            "wy"
+        ).asList()
 
         val consumer = createConsumer(brokerList, groupId)
-        consumer.subscribe(topics)
+        consumer.subscribe(states)
 
         while (true) {
             val records: ConsumerRecords<String, String> = consumer.poll(100)

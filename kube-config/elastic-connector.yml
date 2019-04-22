@@ -2,44 +2,44 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: rkconn-svc
+  name: elconn-svc
   labels:
-    app: rkconn
+    app: elconn
 spec:
   ports:
     - port: 7001
       targetPort: 7001
       name: metrics
   selector:
-    app: rkconn
+    app: elconn
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: rkconn
+  name: elconn
 spec:
   replicas: 0
   selector:
     matchLabels:
-      app: rkconn
+      app: elconn
   template:
     metadata:
       labels:
-        app: rkconn
+        app: elconn
     spec:
       containers:
-      - name: load-gen-consumer
+      - name: elastic-consumer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:0.1
+        image: benfen/dummy-kafka-messenger:v0.4-dev
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
           - name: GROUP_ID
             value: "producer-${HOSTNAME##*-}"
           - name: MESSENGER_MODE
-            value: "REDIS_LISTEN"
-          - name: REDIS_HOST
-            value: "redis-sentinel:26379"
+            value: "ELASTIC_LISTEN"
+          - name: ELASTIC_HOST
+            value: "elasticsearch:9200"
         ports:
           - containerPort: 7001
 ---

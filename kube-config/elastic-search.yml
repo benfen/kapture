@@ -7,7 +7,7 @@ metadata:
     component: elasticsearch
     role: master
 spec:
-  replicas: 3
+  replicas: 0
   template:
     metadata:
       labels:
@@ -53,11 +53,6 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        resources:
-          requests:
-            cpu: 0.25
-          limits:
-            cpu: 1
         ports:
         - containerPort: 9300
           name: transport
@@ -95,7 +90,7 @@ metadata:
     role: data
 spec:
   serviceName: elasticsearch-data
-  replicas: 3
+  replicas: 0
   template:
     metadata:
       labels:
@@ -137,11 +132,6 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        resources:
-          requests:
-            cpu: 0.25
-          limits:
-            cpu: 1
         ports:
         - containerPort: 9300
           name: transport
@@ -177,7 +167,7 @@ metadata:
     component: elasticsearch
     role: client
 spec:
-  replicas: 2
+  replicas: 0
   template:
     metadata:
       labels:
@@ -221,11 +211,6 @@ spec:
           valueFrom:
             resourceFieldRef:
               resource: limits.cpu
-        resources:
-          requests:
-            cpu: 0.25
-          limits:
-            cpu: 1
         ports:
         - containerPort: 9200
           name: http
