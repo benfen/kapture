@@ -94,9 +94,9 @@ You bet!  Check out the [`examples`](examples/README.md) for how you can use [`K
 
 ## What if want Prometheus metrics?
 
-Kapture's got it!  Just head over to [prometheus-recipes](https://github.com/carbonrelay/prometheus-recipes) and apply the `basic` cofiguration to your cluster.  Then, run `./kapture.sh kapture-spam-my-namepsace -p` to get Prometheus metrics from Kapture on your cluster.  Easy!
+Kapture's got it!  Just head over to [prometheus-recipes](https://github.com/carbonrelay/prometheus-recipes) and apply the `basic` cofiguration to your cluster.  Make sure to use the same namespace when configuring your cluster for prometheus as you do for Kapture.
 
-__This feature is still experimental and will likely not work 100% out of the box__
+Once that has been done, you can configure your cluster to provide metrics to prometheus by running `./kapture.sh kapture-spam-my-namespace -p`.  It's that easy!
 
 ## How do I clean my cluster up?
 
