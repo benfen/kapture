@@ -1,4 +1,6 @@
 resources:
+  - kube-config/elastic-connector.yml
+  - kube-config/elastic-search.yml
   - kube-config/kafka.yml
   - kube-config/load-gen.yml
   - kube-config/redis.yml
