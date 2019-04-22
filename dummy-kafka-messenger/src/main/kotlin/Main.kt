@@ -3,7 +3,7 @@ import io.prometheus.client.exporter.HTTPServer
 private val messengerMode = System.getenv("MESSENGER_MODE")
 
 fun main() {
-    if (messengerMode != null && messengerMode.toLowerCase() == "listen") {
+    if (messengerMode == null || messengerMode.isEmpty()) {
         startProducer()
     } else {
         val mode = MessengerMode.valueOf(messengerMode)
