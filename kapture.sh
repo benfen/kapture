@@ -2,7 +2,7 @@
 
 # Created by argbash-init v2.8.0
 # Rearrange the order of options below according to what you would like to see in the help message.
-# ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[13])
+# ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[250])
 # ARG_OPTIONAL_SINGLE([customers],[c],[Number of customers to simulate for BigPetStore],[5000])
 # ARG_OPTIONAL_SINGLE([simulation],[d],[Time (in days) to run the BigPetStore simulation over],[1500]))
 # ARG_OPTIONAL_SINGLE([redis-count],[],[Number of Redis instances to cluster.  This option will be ignored unless deploy-redis is set to true.],[3]))
@@ -42,7 +42,7 @@ _positionals=()
 _arg_namespace=
 _arg_load_gen_count="0"
 # THE DEFAULTS INITIALIZATION - OPTIONALS
-_arg_stores="13"
+_arg_stores="250"
 _arg_customers="5000"
 _arg_simulation="1500"
 _arg_redis_count="3"
@@ -57,7 +57,7 @@ print_help()
 	printf 'Usage: %s [-s|--stores <arg>] [-c|--customers <arg>] [-d|--simulation <arg>] [--redis-count <arg>] [--(no-)delete] [-p|--(no-)deploy-prometheus] [-r|--(no-)deploy-redis] [-h|--help] <namespace> [<load-gen-count>]\n' "$0"
 	printf '\t%s\n' "<namespace>: The namespace to deploy Kapture to"
 	printf '\t%s\n' "<load-gen-count>: Number of load generators to create to place load on the cluster (default: '0')"
-	printf '\t%s\n' "-s, --stores: Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated (default: '13')"
+	printf '\t%s\n' "-s, --stores: Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated (default: '250')"
 	printf '\t%s\n' "-c, --customers: Number of customers to simulate for BigPetStore (default: '5000')"
 	printf '\t%s\n' "-d, --simulation: Time (in days) to run the BigPetStore simulation over (default: '1500')"
 	printf '\t%s\n' "--redis-count: Number of Redis instances to cluster.  This option will be ignored unless deploy-redis is set to true. (default: '3')"

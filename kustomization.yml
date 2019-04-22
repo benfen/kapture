@@ -2,12 +2,12 @@ resources:
   - kube-config/kafka.yml
   - kube-config/load-gen.yml
   - kube-config/redis.yml
-  - kube-config/rk-conn.yml
+  - kube-config/redis-connector.yml
   - kube-config/zk.yml
 
 images:
   - name: benfen/dummy-kafka-messenger
-    newTag: v0.3
+    newTag: v0.4-dev
 
 patchesStrategicMerge:
   - examples/default-resources.yml

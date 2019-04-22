@@ -4,7 +4,7 @@
 echo "This is just a script template, not the script (yet) - pass it to 'argbash' to fix this." >&2
 exit 11  #)Created by argbash-init v2.8.0
 # Rearrange the order of options below according to what you would like to see in the help message.
-# ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[13])
+# ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[250])
 # ARG_OPTIONAL_SINGLE([customers],[c],[Number of customers to simulate for BigPetStore],[5000])
 # ARG_OPTIONAL_SINGLE([simulation],[d],[Time (in days) to run the BigPetStore simulation over],[1500]))
 # ARG_OPTIONAL_SINGLE([redis-count],[],[Number of Redis instances to cluster.  This option will be ignored unless deploy-redis is set to true.],[3]))

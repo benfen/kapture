@@ -37,7 +37,7 @@ spec:
           - name: GROUP_ID
             value: "producer-${HOSTNAME##*-}"
           - name: MESSENGER_MODE
-            value: "listen"
+            value: "REDIS_LISTEN"
           - name: REDIS_HOST
             value: "redis-sentinel:26379"
           - name: STORE_COUNT
@@ -47,10 +47,6 @@ spec:
                 key: STORE_COUNT
           - name: ZOOKEEPER_URL
             value: "zk-svc:2181"
-        command:
-          - bash
-          - -c
-          - "/opt/generate-topics.sh $STORE_COUNT && java -jar /opt/dummy-kafka-messenger-1.0-SNAPSHOT.jar"
         ports:
           - containerPort: 7001
 ---
