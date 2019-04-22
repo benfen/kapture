@@ -45,10 +45,14 @@ spec:
       containers:
       - name: pet-store-generator
         resources:
+          requests:
+            cpu: 0.1
           limits:
             cpu: 1
       - name: load-gen-producer
         resources:
+          requests:
+            cpu: 0.1
           limits:
             cpu: 0.5
 ---

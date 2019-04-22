@@ -32,7 +32,7 @@ fun startProducer() {
             val message = ctx.pathParam("message")
 
             val data = Json.parse(PetStoreTransaction.serializer(), message)
-            val topic = data.store.location.state
+            val topic = data.store.location.state.toLowerCase()
 
             producer.send(ProducerRecord(topic, data.dateTime.toString(), message)).get()
         }
