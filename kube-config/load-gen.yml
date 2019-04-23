@@ -1,10 +1,25 @@
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-gen-svc
+  labels:
+    app: datagen
+spec:
+  ports:
+    - port: 7001
+      targetPort: 7001
+      name: metrics
+  selector:
+    app: data-loader
+  type: NodePort
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: data-loader
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: data-loader
@@ -42,11 +57,8 @@ spec:
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
-          - name: STORE_COUNT
-            valueFrom:
-              configMapKeyRef:
-                name: kapture-config
-                key: STORE_COUNT
           - name: ZOOKEEPER_URL
             value: "$(ZK_SVC_SERVICE_HOST):$(ZK_SVC_SERVICE_PORT)"
+        ports:
+          - containerPort: 7001
 ---

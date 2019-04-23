@@ -47,14 +47,10 @@ spec:
         resources:
           requests:
             cpu: 0.1
-          limits:
-            cpu: 1
       - name: load-gen-producer
         resources:
           requests:
             cpu: 0.1
-          limits:
-            cpu: 0.5
 ---
 apiVersion: apps/v1beta1
 kind: StatefulSet
@@ -68,8 +64,6 @@ spec:
         resources:
           requests:
             cpu: 0.25
-          limits:
-            cpu: 1
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -83,8 +77,6 @@ spec:
         resources:
           requests:
             cpu: 0.25
-          limits:
-            cpu: 1
 ---
 apiVersion: apps/v1beta1
 kind: Deployment
@@ -98,6 +90,4 @@ spec:
         resources:
           requests:
             cpu: 0.25
-          limits:
-            cpu: 1
 ---

@@ -1,4 +1,5 @@
 import io.javalin.Javalin
+import io.prometheus.client.Counter
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -19,6 +20,10 @@ private fun createProducer(brokers: String): Producer<String, String> {
 
 fun startProducer() {
     val logger = LoggerFactory.getLogger("server")
+    val counter = Counter.build()
+            .name("bps_messages_produced")
+            .help("Total number of messages produced from Big Pet Store and passed to Kafka")
+            .register()
 
     if (brokerList == null) {
         logger.error("Environment variable 'BROKERS' must be defined")
@@ -35,6 +40,8 @@ fun startProducer() {
             val topic = data.store.location.state.toLowerCase()
 
             producer.send(ProducerRecord(topic, data.dateTime.toString(), message)).get()
+            counter.inc()
         }
+
     }
 }

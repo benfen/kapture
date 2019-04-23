@@ -17,10 +17,10 @@ function exit_if_bad() {
 exit_if_bad
 
 function tear_down() {
-	# Attempt to wipe everything out, even the stuff not being used
-	kubectl delete -f $BASEDIR/../kube-config -n $namespace
+	# Attempt to wipe everything out, even the stuff not being used.  Drop the error like we just don't care.
+	kubectl delete -f $BASEDIR/../kube-config -n $namespace --ignore-not-found
 
-	kubectl delete configmaps kapture-config -n $namespace
+	kubectl delete configmaps kapture-config -n $namespace --ignore-not-found
 
 	exit 0
 }
