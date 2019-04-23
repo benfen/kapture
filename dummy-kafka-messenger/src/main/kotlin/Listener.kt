@@ -29,40 +29,6 @@ fun startListener(mode: MessengerMode) {
     val logger = LoggerFactory.getLogger("server")
     val dispatch: (record: ConsumerRecord<String, String>) -> Any
 
-    when(mode) {
-        MessengerMode.ELASTIC_LISTEN -> {
-            if (elasticHost == null) {
-                logger.error("Environment variable 'ELASTIC_HOST' must be defined when the message mode is 'ELASTIC_LISTEN")
-                System.exit(1)
-            }
-
-            dispatch = { record ->
-                Unirest.post("http://$elasticHost/${record.topic()}/store")
-                    .header("Content-Type", "application/json")
-                    .body(record.value())
-                    .asStringAsync()
-                    .get()
-            }
-        }
-        MessengerMode.REDIS_LISTEN -> {
-            if (redisHost == null) {
-                logger.error("Environment variable 'REDIS_HOST' must be defined when the message mode is 'REDIS_LISTEN")
-                System.exit(1)
-            }
-
-            val config = Config()
-            config.useSentinelServers()
-                    .setMasterName("mymaster")
-                    .addSentinelAddress("redis://$redisHost")
-            val client = Redisson.create(config)
-
-            dispatch = { record ->
-                client.getBucket<String>(record.key()).setAsync(record.value()).get()
-                true
-            }
-        }
-    }
-
     if (brokerList == null || groupId == null) {
         logger.error("Environment variables 'BROKERS' and 'GROUP_ID' must be defined")
         System.exit(1)
@@ -128,6 +94,44 @@ fun startListener(mode: MessengerMode) {
 
         val consumer = createConsumer(brokerList, groupId)
         consumer.subscribe(states)
+
+        when(mode) {
+            MessengerMode.ELASTIC_LISTEN -> {
+                if (elasticHost == null) {
+                    logger.error("Environment variable 'ELASTIC_HOST' must be defined when the message mode is 'ELASTIC_LISTEN")
+                    System.exit(1)
+                }
+
+                dispatch = { record ->
+                    Unirest.post("http://$elasticHost/${record.topic()}/store")
+                        .header("Content-Type", "application/json")
+                        .body(record.value())
+                        .asStringAsync()
+                        .get()
+                }
+            }
+            MessengerMode.REDIS_LISTEN -> {
+                if (redisHost == null) {
+                    logger.error("Environment variable 'REDIS_HOST' must be defined when the message mode is 'REDIS_LISTEN")
+                    System.exit(1)
+                }
+
+                val config = Config()
+                config.useSentinelServers()
+                        .setMasterName("mymaster")
+                        .addSentinelAddress("redis://$redisHost")
+                val client = Redisson.create(config)
+
+                dispatch = { record ->
+                    if (client.isShutdown) {
+                        logger.error("Redis client has been shutdown")
+                        System.exit(1)
+                    }
+                    client.getBucket<String>(record.key()).set(record.value())
+                    true
+                }
+            }
+        }
 
         while (true) {
             val records: ConsumerRecords<String, String> = consumer.poll(100)

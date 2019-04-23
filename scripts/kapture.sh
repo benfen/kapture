@@ -46,7 +46,6 @@ function deploy_redis() {
 		role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster | grep ^role-reported -A 1")
 	done
 
-	kubectl scale rc redis -n $namespace --replicas $redis_count
 	kubectl scale Deployment rkconn -n $namespace --replicas 1
 	kubectl scale rc redis-sentinel -n $namespace --replicas 3
 
@@ -60,6 +59,7 @@ function deploy_redis() {
 
 	echo "Removing Redis master..."
 	kubectl delete -f $BASEDIR/../kube-config/redis-master.yml -n $namespace
+	kubectl scale rc redis -n $namespace --replicas $redis_count
 }
 
 if [ "on" = $delete ] ; then
