@@ -13,6 +13,7 @@ spec:
       labels:
         component: elasticsearch
         role: master
+        kapture: "true"
     spec:
       initContainers:
       - name: init-sysctl
@@ -96,6 +97,7 @@ spec:
       labels:
         component: elasticsearch
         role: data
+        kapture: "true"
     spec:
       initContainers:
       - name: init-sysctl
@@ -173,6 +175,7 @@ spec:
       labels:
         component: elasticsearch
         role: client
+        kapture: "true"
     spec:
       initContainers:
       - name: init-sysctl

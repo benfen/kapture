@@ -6,6 +6,7 @@ metadata:
     name: redis
     redis-sentinel: "true"
     role: master
+    kapture: "true"
   name: redis-master
 spec:
   containers:

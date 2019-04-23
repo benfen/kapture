@@ -50,6 +50,7 @@ spec:
     metadata:
       labels:
         app: zk
+        kapture: "true"
     spec:
       affinity:
         podAntiAffinity:

@@ -27,6 +27,7 @@ spec:
       labels:
         name: redis
         role: slave
+        kapture: "true"
     spec:
       containers:
       - name: redis
@@ -63,6 +64,7 @@ spec:
         name: redis-sentinel
         redis-sentinel: "true"
         role: sentinel
+        kapture: "true"
     spec:
       containers:
       - name: sentinel

@@ -28,14 +28,14 @@ spec:
         app: rkconn
     spec:
       containers:
-      - name: load-gen-consumer
+      - name: redis-consumer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:0.1
+        image: benfen/dummy-kafka-messenger:v0.4-dev
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
           - name: GROUP_ID
-            value: "producer-${HOSTNAME##*-}"
+            value: "redis-consumer"
           - name: MESSENGER_MODE
             value: "REDIS_LISTEN"
           - name: REDIS_HOST

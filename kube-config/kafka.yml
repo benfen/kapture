@@ -36,6 +36,7 @@ spec:
     metadata:
       labels:
         app: kafka
+        kapture: "true"
     spec:
       volumes:
       - name: datadir

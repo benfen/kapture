@@ -56,7 +56,10 @@ fun startListener(mode: MessengerMode) {
                     .addSentinelAddress("redis://$redisHost")
             val client = Redisson.create(config)
 
-            dispatch = { record -> client.getBucket<String>(record.key()).setAsync(record.value()).get() }
+            dispatch = { record ->
+                client.getBucket<String>(record.key()).setAsync(record.value()).get()
+                true
+            }
         }
     }
 
