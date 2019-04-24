@@ -3,6 +3,12 @@
 # Ideally, at some point the cluster is so messed up that one of the commands fails and the script exits.
 set -e
 
+function get_metrics() {
+    data=$(kubectl exec -it prometheus-k8s-0 -n monitoring -c prometheus -- wget -O - -q "http://localhost:9090/api/v1/query?query=sum(rate(bps_messages_produced%5B${2}%5D))")
+    data=$(echo $data | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}')
+    echo "Generators : $1 ; Messages/s[${2}] : $data"
+}
+
 namespace=test
 
 rm -rf temp
@@ -26,13 +32,12 @@ fi
 seperator="-----------------------------------"
 echo $seperator > results.txt
 results="benchmark/temp/results.txt"
-prometheus_url="$(minikube service -n monitoring prometheus-k8s --url)"
 # Go to the base of this repo
 cd ../..
 ./kapture.sh $namespace 1 $flags
 
 # Wait a minute for things to settle
-sleep 60
+sleep 120
 
 if [ $mode == "fast" ]; then
     waiting_period=180
@@ -46,20 +51,15 @@ i=1
 while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     sleep $waiting_period
 
-    one=$(curl "$prometheus_url/api/v1/query?query=sum(rate(bps_messages_produced%5B1m%5D))" | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}')
-    echo "Generators : $i ; Messages/s[1m] : $one" >> $results
-
-    two=$(curl "$prometheus_url/api/v1/query?query=sum(rate(bps_messages_produced%5B2m%5D))" | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}')
-    echo "Generators : $i ; Messages/s[2m] : $two" >> $results
+    get_metrics $i "1m" >> $results
+    get_metrics $i "2m" >> $results
 
     if [ "$mode" != "fast" ]; then
-        three=$(curl "$prometheus_url/api/v1/query?query=sum(rate(bps_messages_produced%5B3m%5D))" | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}')
-        echo "Generators : $i ; Messages/s[3m] : $three" >> $results
+        get_metrics $i "3m" >> $results
     fi
 
     if [ "$mode" == "slow" ]; then
-        five=$(curl "$prometheus_url/api/v1/query?query=sum(rate(bps_messages_produced%5B5m%5D))" | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}')
-        echo "Generators : $i ; Messages/s[5m] : $five" >> $results
+        get_metrics $i "5m" >> $results
     fi
 
     echo $seperator >> $results
