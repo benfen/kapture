@@ -1,10 +1,14 @@
-# Get ready to SWEAT !
+# Is my K8s cluster capable of supporting production workloads ? 
+
+Find out by running this:
 
 ```
 NS=perf-test \
 REPLICAS=1 \
 ./kapture.sh $NS $REPLICAS
 ```
+
+And compare your results to the data in the (benchmarks)[https://github.com/carbonrelay/kapture/tree/master/benchmark/results]. 
 
 See the `kube-config` directory for details of what was created.
 
