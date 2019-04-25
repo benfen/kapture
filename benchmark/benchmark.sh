@@ -65,8 +65,8 @@ i=1
 while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     sleep $waiting_period
 
-    cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/count}' | paste -sd+ - | bc)
-    memory_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $5/count}' | paste -sd+ - | bc)
+    cpu_usage=$(prometheus_query "node%3Anode_cpu_utilisation%3Aavg1m*100")
+    memory_usage=$(prometheus_query "node%3Anode_memory_utilisation%3Aratio*100")
     network_receive_bytes=$(prometheus_query "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
     disk_write_bytes=$(prometheus_query "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
 

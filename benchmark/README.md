@@ -26,6 +26,8 @@ If you run into permissions problems when configuring the Prometheus role bindin
 | 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | Yes | 125.40 msg/node/s (3) | [n3-v12-m11-r.md](./results/n3-v12-m11-r.md) |
 | 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | No | 91.08 msg/node/s (4) | [n4-v8-m52.md](./results/n4-v8-m52.md) |
 | 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [n4-v8-m52-r.md](./results/n4-v8-m52-r.md) |
+| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [n2-v16-m60.md](./results/n2-v16-m60.md) |
+| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [n2-v16-m60-r.md](./results/n2-v16-m60-r.md) |
 
 ## Minikube
 
