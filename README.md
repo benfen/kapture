@@ -111,7 +111,7 @@ Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take c
 
 # Test data
 
-Take a look at the [`data`](DATA.md)!
+Take a look at the [`data`](benchmark/results/README.md)!
 
 # WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU 
 
