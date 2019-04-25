@@ -5,9 +5,9 @@ metadata:
   name: kafka-metrics
 spec:
   endpoints:
-  - interval: 120s
+  - interval: 60s
     port: metrics
-    scrapeTimeout: 60s
+    scrapeTimeout: 45s
   selector:
     matchLabels:
       app: kafka

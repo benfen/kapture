@@ -5,4 +5,4 @@ _data.txt
 .gradle
 
 dummy-kafka-messenger/build/
-kube-config/temp
+benchmark/temp
