@@ -49,6 +49,10 @@ fine grained topics are remaining.  We'll update this shortly !
    -------------------Postgres/Mongo <---------------------+
 ```
 
+# Benchmarks
+
+Take a look at the [`data`](benchmark/README.md)!
+
 # Usage
 
 ## Your first time ?
@@ -108,10 +112,6 @@ Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take c
 - Increase the CPU and Memory parameters for Kafka
 - Change the memory foot print or scaling factor of Redis
 - Add a different load generator container than BigPetStore
-
-# Test data
-
-Take a look at the [`data`](benchmark/results/README.md)!
 
 # WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU 
 
