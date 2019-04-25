@@ -66,7 +66,7 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     row="| $i | $network_receive_bytes | $disk_write_bytes | $(get_metrics "1m") | $(get_metrics "2m") | $(get_metrics "3m") |"
 
     if [ "$mode" == "slow" ]; then
-        row="$row $(get_metrics \"5m\"") |"
+        row="$row $(get_metrics \"5m\") |"
     fi
 
     echo $row >> $results
