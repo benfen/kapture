@@ -5,7 +5,7 @@ set -e
 
 function prometheus_query() {
     data=$(kubectl exec -it prometheus-k8s-0 -n monitoring -c prometheus -- wget -O - -q "http://localhost:9090/api/v1/query?query=$1")
-    echo $data | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}'
+    echo $data | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); gsub(/"/, "", a[2]); print a[2]}'
 }
 
 function get_messages_metric() {
@@ -32,16 +32,20 @@ if [ "on" == $redis ]; then
     flags="${flags}r"
 fi
 
-header="| Generators | Network Traffic (bytes/s) | Disk Writes (bytes/s) | Messages/s [1m] | Messages/s [2m] |"
+header="| Generators | CPU Usage (% of Cluster) | Memory Usage (% of Cluster) | Network Traffic (bytes/s) | Disk Writes (bytes/s) | Messages/s [1m] | Messages/s [2m] |"
+header2="|-|-|-|-|-|-|-|"
 if [ "$mode" != "fast" ]; then
     header="$header Messages/s [3m] |"
+    header2="$header2-|"
 fi
 
 if [ "$mode" == "slow" ]; then
     header="$header Messages/s [5m] |"
+    header2="$header2-|"
 fi
 
 echo $header > results.txt
+echo $header2 >> results.txt
 results="benchmark/temp/results.txt"
 # Go to the base of this repo
 cd ../..
@@ -56,14 +60,17 @@ else
     waiting_period=300
 fi
 
+node_count=$(kubectl get nodes --no-headers | wc -l)
 i=1
 while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     sleep $waiting_period
 
+    cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/$count}' | paste -sd+ - | bc)
+    memory_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $5/$count}' | paste -sd+ - | bc)
     network_receive_bytes=$(prometheus_query "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
     disk_write_bytes=$(prometheus_query "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
 
-    row="| $i | $network_receive_bytes | $disk_write_bytes | $(get_messages_metric "1m") | $(get_messages_metric "2m") | $(get_messages_metric "3m") |"
+    row="| $i | $cpu_usage | $memory_usage | $network_receive_bytes | $disk_write_bytes | $(get_messages_metric "1m") | $(get_messages_metric "2m") | $(get_messages_metric "3m") |"
 
     if [ "$mode" == "slow" ]; then
         row="$row $(get_messages_metric \"5m\") |"
