@@ -8,7 +8,7 @@ function prometheus_query() {
 }
 
 function get_metrics() {
-    data=$(prometheus_query sum(rate(bps_messages_produced%5B${1}%5D)))
+    data=$(prometheus_query "sum(rate(bps_messages_produced%5B${1}%5D))")
     echo $data | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); print a[2]}'
 }
 
@@ -60,13 +60,13 @@ i=1
 while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     sleep $waiting_period
 
-    network_receive_bytes=$(prometheus_query "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
-    disk_write_bytes=$(prometheus_query "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
+    network_receive_bytes=$(get_metrics "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
+    disk_write_bytes=$(get_metrics "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
 
-    row="| $i | $network_receive_bytes | $disk_write_bytes | $(get_metrics 1m) | $(get_metrics 2m) | $(get_metrics 3m) |"
+    row="| $i | $network_receive_bytes | $disk_write_bytes | $(get_metrics "1m") | $(get_metrics "2m") | $(get_metrics "3m") |"
 
     if [ "$mode" == "slow" ]; then
-        row="$row $(get_metrics 5m) |"
+        row="$row $(get_metrics \"5m\"") |"
     fi
 
     echo $row >> $results
