@@ -20,14 +20,14 @@ If you run into permissions problems when configuring the Prometheus role bindin
 
 | Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
 |-|-|-|-|-|-|-|-|
-| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | No | 66.38 msg/node/s (3) | [gke_n1-standard-2_n3_v6_m23.md](./results/gke_n1-standard-2_n3_v6_m23.md) |
-| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | Yes | 62.06 msg/node/s (3) | [gke_n1-standard-2_n3_v6_m23_r.md](./results/gke_n1-standard-2_n3_v6_m23_r.md) |
-| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | No | 135.59 msg/node/s (3) | [gke_n1-highcpu-4_n3_v12_m11.md](./results/gke_n1-highcpu-4_n3_v12_m11.md) |
-| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | Yes | 125.40 msg/node/s (3) | [gke_n1-highcpu-4_n3_v12_m11_r.md](./results/gke_n1-highcpu-4_n3_v12_m11_r.md) |
-| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | No | 91.08 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52.md](./results/gke_n1-highmem-2_n4_v8_m52.md) |
-| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52_r.md](./results/gke_n1-highmem-2_n4_v8_m52_r.md) |
-| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60.md](./results/gke_n1-standard-8_n2_v16_m60.md) |
-| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60_r.md](./results/gke_n1-standard-8_n2_v16_m60_r.md) |
+| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | No | 66.38 msg/node/s (3) | [gke_n1-standard-2_n3_v6_m23_3.md](./results/gke_n1-standard-2_n3_v6_m23_3.md) |
+| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | Yes | 62.06 msg/node/s (3) | [gke_n1-standard-2_n3_v6_m23_3_r.md](./results/gke_n1-standard-2_n3_v6_m23_3_r.md) |
+| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | No | 135.59 msg/node/s (3) | [gke_n1-highcpu-4_n3_v12_m11_3.md](./results/gke_n1-highcpu-4_n3_v12_m11_3.md) |
+| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | Yes | 125.40 msg/node/s (3) | [gke_n1-highcpu-4_n3_v12_m11_3_r.md](./results/gke_n1-highcpu-4_n3_v12_m11_3_r.md) |
+| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | No | 91.08 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52_4.md](./results/gke_n1-highmem-2_n4_v8_m52_4.md) |
+| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52_4_r.md](./results/gke_n1-highmem-2_n4_v8_m52_4_r.md) |
+| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60_8.md](./results/gke_n1-standard-8_n2_v16_m60_8.md) |
+| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60_8_r.md](./results/gke_n1-standard-8_n2_v16_m60_8_r.md) |
 
 ## Minikube
 

@@ -3,6 +3,7 @@
 _data.txt
 .idea
 .gradle
+__pycache__
 
 dummy-kafka-messenger/build/
 benchmark/temp

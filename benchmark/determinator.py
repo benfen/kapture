@@ -41,12 +41,3 @@ def simple_linear_regression(x_arr, y_arr):
     b = (points * dot_product - sum_x * sum_y) / denominator
 
     return (a, b)
-
-def main():
-    x_arr = [ 43, 21, 25, 42, 57, 59 ]
-    y_arr = [ 99, 65, 79, 75, 87, 81 ]
-    simple_linear_regression(x_arr, y_arr)
-    print(distance_to_line((1, 2), (1, 1)))
-
-if __name__ == "__main__": 
-    main()
