@@ -3,10 +3,28 @@ from os import listdir, path
 from sys import argv
 
 def parse_data_point(data):
+    """Parse a single data point
+
+    Args:
+        data: A single line (in the form of a string) from a results file
+
+    Returns:
+        A tuple in the form (cpu, memory, network, disk, messages), where each element of the tuple
+        represents a single value from that line.
+    """
     parts = data.split("|")
     return (float(parts[2]), float(parts[3]), float(parts[4]), float(parts[5]), float(parts[7]))
 
 def load_result_file(filename):
+    """Loads data from a result file
+
+    Args:
+        filename: Name of the file to load the data from
+
+    Returns:
+        A tuple if the form (cpu, memory, network, disk, messages), where each element of the tuple
+        represents an array of the corresponding elements in the results file.
+    """
     with open(filename, 'r') as file:
         lines = file.readlines()
         cpu = []
@@ -26,6 +44,21 @@ def load_result_file(filename):
         return (cpu, memory, network, disk, messages)
 
 class ResultCharacterization:
+    """Data container for performance characterizing metrics from a Kapture result
+
+    This has a couple of methods for generating data from a file and comparing it to other data.
+
+    Attributes:
+        provider: A string naming the provider used by this characterization
+        node_type: A string naming the type of node used by this characterization
+        redis_enabled: Boolean indicating whether Redis is enabled
+        limit: Number of result rows from the characterization to use to build the regression
+        cpu: A tuple (a, b) meant to represent a simple linear regression over cpu
+        memory: A tuple (a, b) meant to represent a simple linear regression over memory
+        network: A tuple (a, b) meant to represent a simple linear regression over network
+        disk: A tuple (a, b) meant to represent a simple linear regression over disk
+        messages: A tuple (a, b) meant to represent a simple linear regression over messages
+    """
 
     def __init__(self, filename):
         parts = path.splitext(path.basename(filename))[0].split("_")
@@ -76,7 +109,7 @@ def main():
     scores = []
 
     for c in characterizations:
-        # Ignore Redis and minikube results for now - can be added later
+        # Ignore minikube results for now - can be added later
         if c.provider == "minikube" or c.redis_enabled != redis_enabled:
             continue
 
