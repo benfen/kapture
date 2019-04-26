@@ -82,7 +82,7 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     kubectl scale Deployment data-loader -n $namespace --replicas $i 
 done
 
-if [ "$characterization" == "on" ]; then
+if [ "$characterize" == "on" ]; then
     if ! [ -z $(command -v python3) ]; then
         python3 benchmark/characterization.py $results $redis
     elif ! [-z $(command -v python) ]; then

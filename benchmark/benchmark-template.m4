@@ -14,7 +14,7 @@ exit 11  #)Created by argbash-init v2.8.0
 # [ <-- needed because of Argbash
 
 printf "'%s' is %s\\n" 'mode' "$_arg_mode"
-printf "'%s' is %s\\n" 'characterization' "$_arg_characterization"
+printf "'%s' is %s\\n" 'characterize' "$_arg_characterize"
 printf "'%s' is %s\\n" 'redis' "$_arg_redis"
 printf "Value of '%s': %s\\n" 'max-generators' "$_arg_max_generators"
 
@@ -23,7 +23,7 @@ printf "Value of '%s': %s\\n" 'max-generators' "$_arg_max_generators"
 export mode=$_arg_mode
 export redis=$_arg_redis
 export max_generators=$_arg_max_generators
-export characterization=$_arg_characterization
+export characterize=$_arg_characterize
 
 BASEDIR=$(dirname $0)
 
