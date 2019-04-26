@@ -20,14 +20,14 @@ If you run into permissions problems when configuring the Prometheus role bindin
 
 | Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
 |-|-|-|-|-|-|-|-|
-| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | No | 66.38 msg/node/s (3) | [n3-v6-m23.md](./results/n3-v6-m23.md) |
-| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | Yes | 62.06 msg/node/s (3) | [n3-v6-m23-r.md](./results/n3-v6-m23-r.md) |
-| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | No | 135.59 msg/node/s (3) | [n3-v12-m11.md](./results/n3-v12-m11.md) |
-| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | Yes | 125.40 msg/node/s (3) | [n3-v12-m11-r.md](./results/n3-v12-m11-r.md) |
-| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | No | 91.08 msg/node/s (4) | [n4-v8-m52.md](./results/n4-v8-m52.md) |
-| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [n4-v8-m52-r.md](./results/n4-v8-m52-r.md) |
-| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [n2-v16-m60.md](./results/n2-v16-m60.md) |
-| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [n2-v16-m60-r.md](./results/n2-v16-m60-r.md) |
+| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | No | 66.38 msg/node/s (3) | [gke_n1-standard-2_n3_v6_m23.md](./results/gke_n1-standard-2_n3_v6_m23.md) |
+| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | Yes | 62.06 msg/node/s (3) | [gke_n1-standard-2_n3_v6_m23_r.md](./results/gke_n1-standard-2_n3_v6_m23_r.md) |
+| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | No | 135.59 msg/node/s (3) | [gke_n1-highcpu-4_n3_v12_m11.md](./results/gke_n1-highcpu-4_n3_v12_m11.md) |
+| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | Yes | 125.40 msg/node/s (3) | [gke_n1-highcpu-4_n3_v12_m11_r.md](./results/gke_n1-highcpu-4_n3_v12_m11_r.md) |
+| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | No | 91.08 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52.md](./results/gke_n1-highmem-2_n4_v8_m52.md) |
+| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52_r.md](./results/gke_n1-highmem-2_n4_v8_m52_r.md) |
+| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60.md](./results/gke_n1-standard-8_n2_v16_m60.md) |
+| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60_r.md](./results/gke_n1-standard-8_n2_v16_m60_r.md) |
 
 ## Minikube
 
@@ -35,5 +35,5 @@ The MacBook Pro used for testing had 8 cores with 16 GB of memory.
 
 | Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
 |-|-|-|-|-|-|-|-|
-| 0.4 | 1 | MacBook Pro | 5 | 8.79GB | No | 134.70 msg/node/s (2) | [n1-v5-m9.md](./results/n1-v5-m9.md) |
-| 0.4 | 1 | MacBook Pro | 5 | 8.79GB | Yes | 132.23 msg/node/s (2) | [n1-v5-m9-r.md](./results/n1-v5-m9-r.md) |
+| 0.4 | 1 | MacBook Pro | 5 | 8.79GB | No | 134.70 msg/node/s (2) | [minikube_none_n1_v5_m9.md](./results/minikube_none_n1_v5_m9.md) |
+| 0.4 | 1 | MacBook Pro | 5 | 8.79GB | Yes | 132.23 msg/node/s (2) | [minikube_none_n1_v5_m9_r.md](./results/minikube_none_n1_v5_m9_r.md) |
