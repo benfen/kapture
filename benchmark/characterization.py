@@ -33,13 +33,23 @@ def load_result_file(filename):
         disk = []
         messages = []
 
+        last_messages = 0
+
         for i in range(2, len(lines)):
             parts = parse_data_point(lines[i])
+
+            # Some of the data captured is post-decline in Kapture.  Since we're using a simpel linear model,
+            # that could mess up the comparison.  As such, ignore those values that follow an apparent drop-off.
+            current_messages = float(parts[4])
+            if last_messages > current_messages:
+                break
+            last_messages = current_messages
+
             cpu.append(float(parts[0]))
             memory.append(float(parts[1]))
             network.append(float(parts[2]))
             disk.append(float(parts[3]))
-            messages.append(float(parts[4]))
+            messages.append(current_messages)
 
         return (cpu, memory, network, disk, messages)
 
@@ -71,16 +81,9 @@ class ResultCharacterization:
 
     def compare(self, result):
         cpu, memory, network, disk, messages = result
-        last_messages = 0
 
         sum = 0
         for x in range(0, len(cpu)):
-            # Some of the data captured is post-decline in Kapture.  Since we're using a simpel linear model,
-            # that could mess up the comparison.  As such, ignore those values that follow an apparent drop-off.
-            if last_messages >= messages[x]:
-                break
-            last_messages = messages[x]
-
             sum += distance_to_line(((x + 1), cpu[x]), self.cpu) ** 2
             sum += distance_to_line(((x + 1), memory[x]), self.memory) ** 2
             # Quick patch.  Network and disk are much larger values and seem to contribute much more.
