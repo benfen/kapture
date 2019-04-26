@@ -58,6 +58,7 @@ __This feature should be considered unstable and liable to change in the future_
 | 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [gke_n1-highmem-2_n4_v8_m52_4_r.md](./results/gke_n1-highmem-2_n4_v8_m52_4_r.md) |
 | 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60_8.md](./results/gke_n1-standard-8_n2_v16_m60_8.md) |
 | 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [gke_n1-standard-8_n2_v16_m60_8_r.md](./results/gke_n1-standard-8_n2_v16_m60_8_r.md) |
+| 0.4 | 8 | n1-standard-1 | 8 | 30.00GB | Yes | 62.05 msg/node/s (6) | [gke_n1-standard-1_n8_v8_m30_6.md](./results/gke_n1-standard-1_n8_v8_m30_6.md)
 
 ## Minikube
 
