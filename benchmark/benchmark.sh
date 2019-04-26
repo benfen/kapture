@@ -65,8 +65,8 @@ i=1
 while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     sleep $waiting_period
 
-    cpu_usage=$(prometheus_query "node%3Anode_cpu_utilisation%3Aavg1m*100")
-    memory_usage=$(prometheus_query "node%3Anode_memory_utilisation%3Aratio*100")
+    cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/count}' | paste -sd+ - | bc)
+    memory_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $5/count}' | paste -sd+ - | bc)
     network_receive_bytes=$(prometheus_query "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
     disk_write_bytes=$(prometheus_query "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
 
@@ -82,7 +82,19 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     kubectl scale Deployment data-loader -n $namespace --replicas $i 
 done
 
+if [ "$characterize" == "on" ]; then
+    if ! [ -z $(command -v python3) ]; then
+        python3 benchmark/characterization.py $results $redis
+    elif ! [-z $(command -v python) ]; then
+        python benchmark/characterization.py $results $redis
+    elif ! [-z $(command -v py) ]; then
+        py benchmark/characterization.py $results $redis
+    else
+        echo "Unable to locate python on this machine.  Skipping characterization..."
+    fi
+fi
+
 # Clean up
-./kapture.sh $namespace --delete
+./kapture.sh $namespace --delete > /dev/null
 cd ./benchmark/temp
-./prometheus-recipes.sh $namespace --delete
+./prometheus-recipes.sh $namespace --delete > /dev/null
