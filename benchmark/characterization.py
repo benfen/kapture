@@ -22,7 +22,7 @@ def load_result_file(filename):
         filename: Name of the file to load the data from
 
     Returns:
-        A tuple if the form (cpu, memory, network, disk, messages), where each element of the tuple
+        A tuple of the form (cpu, memory, network, disk, messages), where each element of the tuple
         represents an array of the corresponding elements in the results file.
     """
     with open(filename, 'r') as file:
@@ -80,6 +80,15 @@ class ResultCharacterization:
         self.load_data(filename)
 
     def compare(self, result):
+        """Compare the provided result to this characterization.
+
+        Args:
+            result: A tuple of the form (cpu, memory, network, disk, messages), where each element of the tuple
+            represents an array of the corresponding elements in the results file.
+        
+        Returns:
+            Float representation of the quality of the comparison.  A lower number is a better match.
+        """
         cpu, memory, network, disk, messages = result
 
         sum = 0
@@ -94,6 +103,11 @@ class ResultCharacterization:
         return sum
 
     def load_data(self, filename):
+        """Loads data from a file into this instance
+        
+        Args:
+            filename: A string of the full filename
+        """
         (cpu, memory, network, disk, messages) = load_result_file(filename)
         points = list(range(1, self.limit + 1))
 
