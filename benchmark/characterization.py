@@ -83,8 +83,9 @@ class ResultCharacterization:
 
             sum += distance_to_line(((x + 1), cpu[x]), self.cpu) ** 2
             sum += distance_to_line(((x + 1), memory[x]), self.memory) ** 2
-            sum += distance_to_line(((x + 1), network[x]), self.network) ** 2
-            sum += distance_to_line(((x + 1), disk[x]), self.disk) ** 2
+            # Quick patch.  Network and disk are much larger values and seem to contribute much more.
+            sum += distance_to_line(((x + 1), network[x]), self.network) ** 2 / 10
+            sum += distance_to_line(((x + 1), disk[x]), self.disk) ** 2 / 10
             sum += distance_to_line(((x + 1), messages[x]), self.messages) ** 2
 
         return sum
