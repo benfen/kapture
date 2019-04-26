@@ -108,7 +108,7 @@ def main():
     characterizations = [ ResultCharacterization(path.join(results_dir, filename)) for filename in listdir(results_dir) ]
 
     test_file = path.abspath(argv[1])
-    redis_enabled = len(argv) > 2 and argv[2].lower() == 'true'
+    redis_enabled = len(argv) > 2 and argv[2].lower() == 'on'
     results = load_result_file(test_file)
     scores = []
 

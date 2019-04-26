@@ -1,4 +1,4 @@
-# Benchmark Results
+# Benchmarking
 
 Listed here are results on running kapture on several differen configurations.  Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-highcpu-4_n3_v12_m11_#.md`".  The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.
 
@@ -15,6 +15,36 @@ The summary value for a benchmarking run was calculated by summing up all the `[
 ### Troubleshooting
 
 If you run into permissions problems when configuring the Prometheus role bindings, see the [Troubleshooting](https://github.com/carbonrelay/prometheus-recipes#troubleshooting) section of the [prometheus-recipes](https://github.com/carbonrelay/prometheus-recipes) repo that Kapture uses to configure Kapture.
+
+# Characterization
+
+Kapture can attempt to characterize the performance of a cluster based on the past results stored in the `results` directory.  To do so as part of a benchmark, run `./benchmark.sh $iterations --characterize`.  Once the run completes, Kapture will characterize the cluster and spit out the results.
+
+Python is required for this to function.  If Kapture does not find python (`python3`, `python`, or `py` on the path, specifically) it will simply skip characterization.
+
+## What do these results mean?
+
+At the end of the benchmark, it might output something that looks like this:
+
+```text
+Score     Provider  Node Type           
+8.17      gke       n1-highcpu-4        
+136.11    gke       n1-standard-2       
+432.89    gke       n1-standard-8       
+673.88    gke       n1-highmem-2 
+```
+
+Score is a relative metric, with a lower value indicating that the targeted cluster is more similar.  In this example, a gke `n1-highcpu-4` cluster has the lowest score, meaning that Kapture thinks the cluster in question is most similar to that sort of cluster.  Results for all known cluster types are output to allow the user to make more informed decisions about the output from Kapture.
+
+Because score is a relative metric, it should not be compared between different runs of the characterization tool.  It is only useful when comparing cluster types within the same run.
+
+## What if I just want to use the characterization tool?
+
+Easy!  Just go the `benchmark` directory and run the python directly: `python3 characterization.py $result_file $redis`.  `$result_file` should be the path to the result file to scan and `$redis` should be `on` if the result file to scan used Redis.
+
+__This feature should be considered unstable and liable to change in the future__
+
+# Results
 
 ## GKE
 

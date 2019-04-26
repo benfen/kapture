@@ -84,11 +84,11 @@ done
 
 if [ $characterization == "on" ]; then
     if ! [ -z $(command -v python3) ]; then
-        python3 benchmark/characterization.py $results
+        python3 benchmark/characterization.py $results $redis
     elif ! [-z $(command -v python) ]; then
-        python benchmark/characterization.py $results
+        python benchmark/characterization.py $results $redis
     elif ! [-z $(command -v py) ]; then
-        py benchmark/characterization.py $results
+        py benchmark/characterization.py $results $redis
     else
         echo "Unable to locate python on this machine.  Skipping characterization..."
     fi
