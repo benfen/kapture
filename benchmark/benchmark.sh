@@ -82,7 +82,19 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     kubectl scale Deployment data-loader -n $namespace --replicas $i 
 done
 
+if [ $characterization == "on" ]; then
+    if ! [ -z $(command -v python3) ]; then
+        python3 benchmark/characterization.py $results
+    elif ! [-z $(command -v python) ]; then
+        python benchmark/characterization.py $results
+    elif ! [-z $(command -v py) ]; then
+        py benchmark/characterization.py $results
+    else
+        echo "Unable to locate python on this machine.  Skipping characterization..."
+    fi
+fi
+
 # Clean up
-./kapture.sh $namespace --delete
+./kapture.sh $namespace --delete > /dev/null
 cd ./benchmark/temp
-./prometheus-recipes.sh $namespace --delete
+./prometheus-recipes.sh $namespace --delete > /dev/null

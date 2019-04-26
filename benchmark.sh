@@ -2,8 +2,9 @@
 
 # Created by argbash-init v2.8.0
 # Rearrange the order of options below according to what you would like to see in the help message.
-# ARG_OPTIONAL_SINGLE([mode],[m],[Mode to run the benchmark in (fast, normal, slow).  Slower tests will likely give more accurate values],[normal])
+# ARG_OPTIONAL_SINGLE([mode],[m],[Mode to run the benchmark in (fast, normal, slow).  Slower tests will give more accurate values and a wider range of them],[normal])
 # ARG_OPTIONAL_BOOLEAN([redis],[r],[Include Redis in Kapture as part of the test],[off])
+# ARG_OPTIONAL_BOOLEAN([characterize],[],[Attempts to characterize the performance of the cluster based on previously collected data.  Will run at the end after the benchmark.  Requires python to be installed on the system.],[off])
 # ARG_POSITIONAL_SINGLE([max-generators],[The maximum number of generators to run as part of this test.  If the number is less than 1, it will run forever],[-1])
 # ARG_HELP([Performs a benchmark of Kapture against a cluster])
 # ARGBASH_GO()
@@ -36,15 +37,17 @@ _arg_max_generators="-1"
 # THE DEFAULTS INITIALIZATION - OPTIONALS
 _arg_mode="normal"
 _arg_redis="off"
+_arg_characterize="off"
 
 
 print_help()
 {
 	printf '%s\n' "Performs a benchmark of Kapture against a cluster"
-	printf 'Usage: %s [-m|--mode <arg>] [-r|--(no-)redis] [-h|--help] [<max-generators>]\n' "$0"
+	printf 'Usage: %s [-m|--mode <arg>] [-r|--(no-)redis] [--(no-)characterize] [-h|--help] [<max-generators>]\n' "$0"
 	printf '\t%s\n' "<max-generators>: The maximum number of generators to run as part of this test.  If the number is less than 1, it will run forever (default: '-1')"
-	printf '\t%s\n' "-m, --mode: Mode to run the benchmark in (fast, normal, slow).  Slower tests will likely give more accurate values (default: 'normal')"
+	printf '\t%s\n' "-m, --mode: Mode to run the benchmark in (fast, normal, slow).  Slower tests will give more accurate values and a wider range of them (default: 'normal')"
 	printf '\t%s\n' "-r, --redis, --no-redis: Include Redis in Kapture as part of the test (off by default)"
+	printf '\t%s\n' "--characterize, --no-characterize: Attempts to characterize the performance of the cluster based on previously collected data.  Will run at the end after the benchmark.  Requires python to be installed on the system. (off by default)"
 	printf '\t%s\n' "-h, --help: Prints help"
 }
 
@@ -78,6 +81,10 @@ parse_commandline()
 				then
 					begins_with_short_option "$_next" && shift && set -- "-r" "-${_next}" "$@" || die "The short option '$_key' can't be decomposed to ${_key:0:2} and -${_key:2}, because ${_key:0:2} doesn't accept value and '-${_key:2:1}' doesn't correspond to a short option."
 				fi
+				;;
+			--no-characterize|--characterize)
+				_arg_characterize="on"
+				test "${1:0:5}" = "--no-" && _arg_characterize="off"
 				;;
 			-h|--help)
 				print_help
@@ -129,6 +136,7 @@ assign_positional_args 1 "${_positionals[@]}"
 
 
 printf "'%s' is %s\\n" 'mode' "$_arg_mode"
+printf "'%s' is %s\\n" 'characterization' "$_arg_characterization"
 printf "'%s' is %s\\n" 'redis' "$_arg_redis"
 printf "Value of '%s': %s\\n" 'max-generators' "$_arg_max_generators"
 
@@ -136,6 +144,7 @@ printf "Value of '%s': %s\\n" 'max-generators' "$_arg_max_generators"
 export mode=$_arg_mode
 export redis=$_arg_redis
 export max_generators=$_arg_max_generators
+export characterization=$_arg_characterization
 
 BASEDIR=$(dirname $0)
 
