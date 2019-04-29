@@ -1,5 +1,7 @@
 # Is my K8s cluster capable of supporting production workloads ? 
 
+<a href="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png"><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a>
+
 Find out by running this:
 
 ```
