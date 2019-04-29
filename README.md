@@ -5,7 +5,7 @@ sharing and access patterns.  Kapture simulates one such production in environme
 stack.  As an example, below is a screenshot of a Kapture run on a single node cluster, where you can observe several different
 types of oscillating resource consumption patterns.
 
-<a href="https://asciinema.org/connect/814b2010-9cdf-434e-b897-4c3f82cba230"><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a>
+<a href="https://asciinema.org/814b2010-9cdf-434e-b897-4c3f82cba230"><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a>
 
 In any case, give it a shot on your kubernetes cluster - you may learn something about the durability and reliability
 of your networking, storage, and virtualization layers.  Better yet, you might learn a little bit about how multi-tier
