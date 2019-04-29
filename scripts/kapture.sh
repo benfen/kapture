@@ -28,7 +28,7 @@ function tear_down() {
 function deploy_elastic_search() {
 	kubectl scale Deployment es-master -n $namespace --replicas 3
 	kubectl scale Deployment es-client -n $namespace --replicas 2
-	kubectl scale Deployment es-data -n $namespace --replicas 3
+	kubectl scale StatefulSet es-data -n $namespace --replicas 3
 	kubectl scale Deployment elconn -n $namespace --replicas 1
 }
 
