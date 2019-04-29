@@ -85,5 +85,9 @@ else
 		deploy_elastic_search
 	fi
 
+	echo "Scaling load generators now to $load_generators..."
+
 	kubectl scale Deployment data-loader -n $namespace --replicas $load_generators
+
+	echo "Done scaling !"
 fi

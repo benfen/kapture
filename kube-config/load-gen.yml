@@ -19,7 +19,7 @@ kind: Deployment
 metadata:
   name: data-loader
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: data-loader
@@ -28,6 +28,7 @@ spec:
       labels:
         app: data-loader
     spec:
+      restartPolicy: Always
       containers:
       - name: pet-store-generator
         image: jayunit100/bigpetstore-load-generator
