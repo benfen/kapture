@@ -3,9 +3,7 @@
 Find out by running this:
 
 ```
-NS=perf-test \
-REPLICAS=1 \
-./kapture.sh $NS $REPLICAS
+./kapture.sh perf-test 3 # run kapture in the perf-test namespace, with a relative scale of 3 replicas.
 ```
 
 And compare your results to the data in the [benchmarks](https://github.com/carbonrelay/kapture/tree/master/benchmark/results).
