@@ -2,11 +2,11 @@
 
 Listed here are results on running kapture on several differen configurations.  Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-standard-1_n8_v8_m30_6_r.md`".
 
-The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.
+The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.  By default, this is the point at which the `benchmark.sh` will exit.
 
 ## Method
 
-All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  Tests were run using: `./benchmark.sh $iterations [flags]` (all tests were run with the default speed).  The number of iterations used for each type of cluster was determined by experimentation and extrapolation from previous runs.
+All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  Tests were run using: `./benchmark.sh [flags]` (all tests were run with the default speed).  If you want more fine-grained control over a test run, try using `./benchmark.sh $iterations [flags]` - this will override the default benchmark heuristic for when to stop.
 
 Output from test runs is placed at `benchmark/temp/results.txt`.  __The benchmark script does not attempt to preserve or protect data from previous runs - it will simply delete any existing data__.
 
@@ -20,7 +20,7 @@ If you run into permissions problems when configuring the Prometheus role bindin
 
 # Characterization
 
-Kapture can attempt to characterize the performance of a cluster based on the past results stored in the `results` directory.  To do so as part of a benchmark, run `./benchmark.sh $iterations --characterize`.  Once the run completes, Kapture will characterize the cluster and spit out the results.
+Kapture can attempt to characterize the performance of a cluster based on the past results stored in the `results` directory.  To do so as part of a benchmark, run `./benchmark.sh --characterize`.  Once the run completes, Kapture will characterize the cluster and spit out the results.
 
 Python is required for this to function.  If Kapture does not find python (`python3`, `python`, or `py` on the path, specifically) it will simply skip characterization.
 
@@ -64,7 +64,7 @@ __This feature should be considered unstable and liable to change in the future_
 
 ## Minikube
 
-The MacBook Pro used for testing had 8 cores with 16 GB of memory.
+The MacBook Pro used for testing had 8 cores (2.6 GHz Intel Core i7), 16 GB of memory (2400 MHz DDR4), and an SSD.  Minikube itself was run using the [`hyperkit`](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#hyperkit-driver) driver.
 
 | Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
 |-|-|-|-|-|-|-|-|

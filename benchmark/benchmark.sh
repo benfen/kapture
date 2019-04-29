@@ -88,7 +88,9 @@ while [ $i -le $max_generators ] || [[ $max_generators -le 0 &&  $messages_decli
     fi
 
     i=$((i+1))
-    kubectl scale Deployment data-loader -n $namespace --replicas $i 
+    echo "Scaling load generators now to $i..."
+    kubectl scale Deployment data-loader -n $namespace --replicas $i
+    echo "Done scaling !"
 done
 
 if [ "$characterize" == "on" ]; then
