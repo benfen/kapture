@@ -60,9 +60,11 @@ else
     waiting_period=300
 fi
 
+messages_declining=0
+old_count=0
 node_count=$(kubectl get nodes --no-headers | wc -l)
 i=1
-while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
+while { [ $max_generators -le 0 ] && [ $messages_declining -eq 0 ]; } ||  [ $i -le $max_generators ]; do
     sleep $waiting_period
 
     cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/count}' | paste -sd+ - | bc)
@@ -70,7 +72,8 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     network_receive_bytes=$(prometheus_query "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
     disk_write_bytes=$(prometheus_query "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
 
-    row="| $i | $cpu_usage | $memory_usage | $network_receive_bytes | $disk_write_bytes | $(get_messages_metric "1m") | $(get_messages_metric "2m") | $(get_messages_metric "3m") |"
+    messages_two=$(get_messages_metric "2m")
+    row="| $i | $cpu_usage | $memory_usage | $network_receive_bytes | $disk_write_bytes | $(get_messages_metric "1m") | $messages_two | $(get_messages_metric "3m") |"
 
     if [ "$mode" == "slow" ]; then
         row="$row $(get_messages_metric \"5m\") |"
@@ -78,23 +81,32 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
 
     echo $row >> $results
 
+    if [ $messages_declining -eq 1 ] || [ $(echo "$old_count > $messages_two" | bc -l) -eq 1 ]; then
+        messages_declining=1
+    else
+        old_count=$messages_two
+    fi
+
     i=$((i+1))
-    kubectl scale Deployment data-loader -n $namespace --replicas $i 
+    echo "Scaling load generators now to $i..."
+    kubectl scale Deployment data-loader -n $namespace --replicas $i
+    echo "Done scaling !"
 done
 
 if [ "$characterize" == "on" ]; then
     if ! [ -z $(command -v python3) ]; then
         python3 benchmark/characterization.py $results $redis
-    elif ! [-z $(command -v python) ]; then
+    elif ! [ -z $(command -v python) ]; then
         python benchmark/characterization.py $results $redis
-    elif ! [-z $(command -v py) ]; then
+    elif ! [ -z $(command -v py) ]; then
         py benchmark/characterization.py $results $redis
     else
         echo "Unable to locate python on this machine.  Skipping characterization..."
     fi
 fi
 
-# Clean up
-./kapture.sh $namespace --delete > /dev/null
+echo "Removing created Kapture resources from the cluster..."
+./kapture.sh $namespace --delete > /dev/null 2> /dev/null
 cd ./benchmark/temp
-./prometheus-recipes.sh $namespace --delete > /dev/null
+echo "Removing created Prometheus resources from the cluster..."
+./prometheus-recipes.sh $namespace --delete > /dev/null 2> /dev/null
