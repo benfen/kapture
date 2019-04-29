@@ -1,10 +1,12 @@
 # Benchmarking
 
-Listed here are results on running kapture on several differen configurations.  Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-highcpu-4_n3_v12_m11_#.md`".  The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.
+Listed here are results on running kapture on several differen configurations.  Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-standard-1_n8_v8_m30_6_r.md`".
+
+The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.
 
 ## Method
 
-All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  Tests were run using: `./benchmark.sh $iterations [flags]` (all tests were run in the default mode).  The number of iterations used for each type of cluster was determined by experimentation and extrapolation from previous runs.
+All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  Tests were run using: `./benchmark.sh $iterations [flags]` (all tests were run with the default speed).  The number of iterations used for each type of cluster was determined by experimentation and extrapolation from previous runs.
 
 Output from test runs is placed at `benchmark/temp/results.txt`.  __The benchmark script does not attempt to preserve or protect data from previous runs - it will simply delete any existing data__.
 
