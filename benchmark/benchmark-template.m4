@@ -7,7 +7,7 @@ exit 11  #)Created by argbash-init v2.8.0
 # ARG_OPTIONAL_SINGLE([mode], [m], [Mode to run the benchmark in (fast, normal, slow).  Slower tests will give more accurate values and a wider range of them], [normal])
 # ARG_OPTIONAL_BOOLEAN([redis], [r], [Include Redis in Kapture as part of the test], [off])
 # ARG_OPTIONAL_BOOLEAN([characterize], [], [Attempts to characterize the performance of the cluster based on previously collected data.  Will run at the end after the benchmark.  Requires python to be installed on the system.], [off])
-# ARG_POSITIONAL_SINGLE([max-generators],[The maximum number of generators to run as part of this test.  If the number is less than 1, it will run forever],[-1])
+# ARG_POSITIONAL_SINGLE([max-generators],[The maximum number of generators to run as part of this test.  If the number is less than 1, it will run until it observes a decrease in the message throughput in Kafka],[-1])
 # ARG_HELP([Performs a benchmark of Kapture against a cluster])
 # ARGBASH_GO
 
