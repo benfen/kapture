@@ -60,9 +60,11 @@ else
     waiting_period=300
 fi
 
+messages_declining=0
+old_count=0
 node_count=$(kubectl get nodes --no-headers | wc -l)
 i=1
-while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
+while [ $i -le $max_generators ] || [[ $max_generators -le 0 &&  $messages_declining -eq 1 ]]; do
     sleep $waiting_period
 
     cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/count}' | paste -sd+ - | bc)
@@ -70,13 +72,20 @@ while [ $i -le $max_generators ] || [ $max_generators -le 0 ]; do
     network_receive_bytes=$(prometheus_query "sum(rate(node_network_receive_bytes_total%5B3m%5D))")
     disk_write_bytes=$(prometheus_query "sum(rate(node_disk_written_bytes_total%5B3m%5D))")
 
-    row="| $i | $cpu_usage | $memory_usage | $network_receive_bytes | $disk_write_bytes | $(get_messages_metric "1m") | $(get_messages_metric "2m") | $(get_messages_metric "3m") |"
+    messages_two=$(get_messages_metric "2m")
+    row="| $i | $cpu_usage | $memory_usage | $network_receive_bytes | $disk_write_bytes | $(get_messages_metric "1m") | $messages_two | $(get_messages_metric "3m") |"
 
     if [ "$mode" == "slow" ]; then
         row="$row $(get_messages_metric \"5m\") |"
     fi
 
     echo $row >> $results
+
+    if (( $messages_declining && $(echo "$old_count > $messages_two" | bc -l) )); then
+        messages_declining=1
+    else
+        old_count=$messages_two
+    fi
 
     i=$((i+1))
     kubectl scale Deployment data-loader -n $namespace --replicas $i 
