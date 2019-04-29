@@ -64,7 +64,7 @@ messages_declining=0
 old_count=0
 node_count=$(kubectl get nodes --no-headers | wc -l)
 i=1
-while [ $i -le $max_generators ] || [[ $max_generators -le 0 && $messages_declining -eq 0 ]]; do
+while { [ $max_generators -le 0 ] && [ $messages_declining -eq 0 ]; } ||  [ $i -le $max_generators ]; do
     sleep $waiting_period
 
     cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/count}' | paste -sd+ - | bc)
@@ -81,7 +81,7 @@ while [ $i -le $max_generators ] || [[ $max_generators -le 0 && $messages_declin
 
     echo $row >> $results
 
-    if (( $messages_declining && $(echo "$old_count > $messages_two" | bc -l) )); then
+    if [ $messages_declining -eq 1 ] || [ $(echo "$old_count > $messages_two" | bc -l) -eq 1 ]; then
         messages_declining=1
     else
         old_count=$messages_two
@@ -106,7 +106,7 @@ if [ "$characterize" == "on" ]; then
 fi
 
 echo "Removing created Kapture resources from the cluster..."
-./kapture.sh $namespace --delete > /dev/null
+./kapture.sh $namespace --delete > /dev/null 2> /dev/null
 cd ./benchmark/temp
 echo "Removing created Prometheus resources from the cluster..."
-./prometheus-recipes.sh $namespace --delete > /dev/null
+./prometheus-recipes.sh $namespace --delete > /dev/null 2> /dev/null
