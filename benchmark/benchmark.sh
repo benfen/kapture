@@ -96,16 +96,17 @@ done
 if [ "$characterize" == "on" ]; then
     if ! [ -z $(command -v python3) ]; then
         python3 benchmark/characterization.py $results $redis
-    elif ! [-z $(command -v python) ]; then
+    elif ! [ -z $(command -v python) ]; then
         python benchmark/characterization.py $results $redis
-    elif ! [-z $(command -v py) ]; then
+    elif ! [ -z $(command -v py) ]; then
         py benchmark/characterization.py $results $redis
     else
         echo "Unable to locate python on this machine.  Skipping characterization..."
     fi
 fi
 
-# Clean up
+echo "Removing created Kapture resources from the cluster..."
 ./kapture.sh $namespace --delete > /dev/null
 cd ./benchmark/temp
+echo "Removing created Prometheus resources from the cluster..."
 ./prometheus-recipes.sh $namespace --delete > /dev/null
