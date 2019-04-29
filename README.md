@@ -70,17 +70,18 @@ If you want to tune the simulation parameters for the input data generators, or 
 ```
 ./kapture.sh --help
 ```
-For further configuration, try running `./kapture.sh --help` to see other configuration options specifics to the BigPetStore implementation.
 
 ### Deploying Redis
 
 By default, Kapture doesn't deploy Redis as part of its minimalistic approach.  If you want to include Redis as part of your deployment, just run `./kapture.sh kapture-spam-my-namespace 3 --deploy-redis`.  That will start up Kapture with a basic Redis configuration that listens to Kafka for messages.
 
+### Deploying ElasticSearch
+
+Elasticsearch operates in the same manner as Redis - if you want to deploy Elasticsearch just run `./kapture.sh kapture-spam-my-namespace 3 --deploy-elastic-search` to get Kapture running with a basic Elasticsearch configuration.
+
+If you want to use Elasticsearch to examine some of the BPS data, Kapture uses the state name as the index for data in Elasticsearch.
+
 ## How do I scale up the load?
-
-Right now, Kafka, Redis, and the load generator can be scaled up.  To scale up Kafka: `kubectl scale StatefulSet kafka --replicas=$REPLICA_COUNT -n kapture-spam-my-namespace`
-
-To scale Redis, just run `kubectl scale --replicas=$REPLICA_COUNT rc redis -n kapture-spam-my-namespace`!
 
 To increase the amount of load on the system, run: `kubectl scale Deployment data-loader --replicas $REPLICA_COUNT -n kapture-spam-my-namespace`
 
