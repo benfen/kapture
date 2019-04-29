@@ -1,8 +1,17 @@
 # Is my K8s cluster capable of supporting production workloads ? 
 
+A production SaaS or Data center cluster will feature a broad range of workloads, often many of them using different resource
+sharing and access patterns.  Kapture simulates one such production in environment: The enterprise data driven application
+stack.  As an example, below is a screenshot of a Kapture run on a single node cluster, where you can observe several different
+types of oscillating resource consumption patterns.
+
 <a href="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png"><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a>
 
-Find out by running this:
+In any case, give it a shot on your kubernetes cluster - you may learn something about the durability and reliability
+of your networking, storage, and virtualization layers.  Better yet, you might learn a little bit about how multi-tier
+applications are deployed in a real kubernetes environment.  
+
+Its easy !
 
 ```
 ./kapture.sh perf-test 3 # run kapture in the perf-test namespace, with a relative scale of 3 replicas.
@@ -12,28 +21,21 @@ And compare your results to the data in the [benchmarks](https://github.com/carb
 
 See the `kube-config` directory for details of what was created.
 
-## What did I just do ? 
+## Project Goals
 
-You just ran Kapture !  Kapture is a load generator / application simulator for K8s based on the enterprise development model.
+- To build a a ridiculously easy to use, easy to K8s hack load generator focused on the bigdata and NoSQL community: No vanity languages required.  
+- Simulate the behaviour of these apps under realistic workloads, at scale, of the common 'lift and shift' kuberentes enterprise experience.
+- Jvm apps that make their own app frameworks inside other frameworks, b/c they were designed in the 1990s.
+- Ruby apps with tons and tons of code and memory getting slurped up for no reason.
+- Web apps with weird transaction flows b/c you didn't batch properly.
+- Message queues that never seem to end, and users that can't make up their minds.
+- To curate a generic tool that pushes the limits of all major cluster resources in a deterministic way.
 
-## Whats Kapture? 
+However, our current load generator is based on an extremely realistic data generator, which in and of itself simluates
+resource usage patterns that are very hard to build in a one off manner.
 
-- A ridiculously easy to use, easy to hack load generator: No vanity languages required.  It is meant to simulate the behaviour, at scale, of the common 'lift and shift' kuberentes enterprise experience.
-  - Jvm apps that make their own app frameworks inside other frameworks, b/c they were designed in the 1990s.
-  - Ruby apps with tons and tons of code and memory getting slurped up for no reason.
-  - Web apps with weird transaction flows b/c you didn't batch properly.
-  - Message queues that never seem to end, and users that can't make up their minds.
-- Understandable to anyone that builds apps.
-- Gauranteed to push the limits of all major cluster resources in a deterministic way.
-
-# Kapture
-
-Kapture is an open source smoke testing and load generation tool based on modern application architectures, which typically combine N microservices against a durable message queue.
-
-It is meant to be an 'infrastructure centric' implementation of the original bigpetstore paper, which largely
-focuses on generating large amounts of streaming data w/ the apache bigtop project.
-
-However, its current load generator is very primitive, and is still being fleshed out.
+Currently our architecture is heavily based on *kafka*, but includes several other NoSQL technologies, including redis, elasticsearch, zookeeper.  We are open to ideas on including other technologies as well ! Kapture is sufficiently resilient
+due to its kafka baseline, that it can easily support other snowflake branches.
 
 # Kapture data flow
 
@@ -57,17 +59,16 @@ fine grained topics are remaining.  We'll update this shortly !
 
 Take a look at the [`data`](benchmark/README.md)!
 
-# Usage
+# Detailed Usage
 
 ## Your first time ?
  
-To run kapture, just download this repo, cd to it, and run:
-```
-./kapture.sh kapture-spam-my-namespace 3
-```
+As shown eariler, to run kapture, just download this repo, cd to it, and run it in the above examples.
+If you want to tune the simulation parameters for the input data generators, or what components are processing them, just run
 
-That's it!  This will create a single load store generation that will write to various kafka topics.  It will trigger a wide variety of JVM, disk, Memory, and I/O patterns proportional to the number of load generators, i.e., the number of petstore transactions which are generated.
-
+```
+./kapture.sh --help
+```
 For further configuration, try running `./kapture.sh --help` to see other configuration options specifics to the BigPetStore implementation.
 
 ### Deploying Redis
