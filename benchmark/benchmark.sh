@@ -64,7 +64,7 @@ messages_declining=0
 old_count=0
 node_count=$(kubectl get nodes --no-headers | wc -l)
 i=1
-while [ $i -le $max_generators ] || [[ $max_generators -le 0 &&  $messages_declining -eq 1 ]]; do
+while [ $i -le $max_generators ] || [[ $max_generators -le 0 && $messages_declining -eq 0 ]]; do
     sleep $waiting_period
 
     cpu_usage=$(kubectl top nodes --no-headers | awk -v count="$node_count" '{print $3/count}' | paste -sd+ - | bc)
