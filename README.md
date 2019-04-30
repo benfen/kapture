@@ -8,6 +8,10 @@ types of oscillating resource consumption patterns.
 <a href="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X
 "><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a>
 
+## Kapture Tutorial
+
+[![Kapture Tutorial](https://i.ytimg.com/vi/ZZbEvMRrf90/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCimMzNU8LwFqEe7TLRZNiod-myhA)](https://www.youtube.com/watch?v=ZZbEvMRrf90&t=4s)
+
 In any case, give it a shot on your kubernetes cluster - you may learn something about the durability and reliability
 of your networking, storage, and virtualization layers.  Better yet, you might learn a little bit about how multi-tier
 applications are deployed in a real kubernetes environment.  
