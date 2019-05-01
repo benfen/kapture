@@ -5,6 +5,7 @@ If you're reading this then thanks for helping out with Kapture!
 # Guidelines
 
 We plan to accept almost any PR; we value your ideas. Including half baked ones.
+If you think your idea is a little too undercooked, just throw it onto a contrib branch and draw some attention to it.
 
 # Coding Conventions
 
