@@ -155,10 +155,4 @@ serviced by other scale and density tests in the upstream Kuberentes community.
 All source in this Repo is Apache Commmons 2.0 licensed, please contribute ideas, code, whatever.  It would be awesome if,
 eventually we were able to support 10 or 15 different databases.
 
-# Dev policy
-
-- Push to master.  Push push push !!!
-- Accept almost any PR, we value your ideas.  Including half baked ones.
-- Ideas that are half baked : Merge them to contrib/ :).
-
 [1]: https://kustomize.io/
