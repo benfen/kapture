@@ -1,4 +1,10 @@
-# Is my K8s cluster capable of supporting production workloads ? 
+... TL;DR? scroll down to the quick start section ...
+
+# Kapture: Realistic benchmarking for Cloud Native Application developers
+
+If you build applications or ship kubernetes products, you need a way to determine wether or not the infrastructure is causing problems for you.  One way to do this is running the kubernetes end to end tests, but that only tells you about functionality.  Another option would be to run Kubernetes performance tests, however, these tend to measure different metrics in isolation.  Kapture fills the gap: demonstrating giving you a realistic performance benchmark, based on a realistic workload.
+
+## What's is a realistic workload? 
 
 A production SaaS or Data center cluster will feature a broad range of workloads, often many of them using different resource
 sharing and access patterns.  Kapture simulates one such production in environment: the enterprise data driven application
@@ -13,6 +19,8 @@ types of oscillating resource consumption patterns.
 If you're interested in a more complete walkthrough of Kapture's capabilities, be sure to check out the tutorial!
 
 [![Kapture Tutorial](https://i.ytimg.com/vi/ZZbEvMRrf90/hqdefault.jpg?sqp=-oaymwEjCNACELwBSFryq4qpAxUIARUAAAAAGAElAADIQj0AgKJDeAE=&rs=AOn4CLCimMzNU8LwFqEe7TLRZNiod-myhA)](https://www.youtube.com/watch?v=ZZbEvMRrf90&t=4s)
+
+## Quick Start !!!
 
 In any case, give it a shot on your kubernetes cluster - you may learn something about the durability and reliability
 of your networking, storage, and virtualization layers.  Better yet, you might learn a little bit about how multi-tier
