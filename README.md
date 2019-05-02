@@ -1,6 +1,6 @@
 ... TL;DR? scroll down to the quick start section ...
 
-# Kapture: Realistic benchmarking for Cloud Native Application developers
+# Kapture: Realistic cluster benchmarking for Cloud Native Application developers
 
 If you build applications or ship kubernetes products, you need a way to determine wether or not the infrastructure is causing problems for you.  One way to do this is running the kubernetes end to end tests, but that only tells you about functionality.  Another option would be to run Kubernetes performance tests, however, these tend to measure different metrics in isolation.  Kapture fills the gap: demonstrating giving you a realistic performance benchmark, based on a realistic workload.
 
