@@ -4,7 +4,7 @@
 set -e
 
 function prometheus_query() {
-    data=$(kubectl exec -it prometheus-k8s-0 -n monitoring -c prometheus -- wget -O - -q "http://localhost:9090/api/v1/query?query=$1")
+    data=$(kubectl exec prometheus-k8s-0 -n monitoring -c prometheus -- wget -O - -q "http://localhost:9090/api/v1/query?query=$1")
     echo $data | grep -o "\"value\":\[.*\"" | awk '{split($0,a,","); gsub(/"/, "", a[2]); print a[2]}'
 }
 
