@@ -1,10 +1,8 @@
-# Whats the point of this whole thing?
-
-If you're new to performance and load testing on kubernetes... check out our recent presentation for the sig-big-data working group, here: https://zoom.us/recording/play/e1GXJ5V4DHLkSShbdeJCQwNg_m4icnLcAD_O0rX6xLb71n635GyaqK3ehc7Pr4bm?startTime=1556730127000 , which provides a comprehensive introduction to this project.
-
 # Kapture: Realistic cluster benchmarking for Cloud Native Application developers
 
 If you build applications or ship kubernetes products, you need a way to determine wether or not the infrastructure is causing problems for you.  One way to do this is running the kubernetes end to end tests, but that only tells you about functionality.  Another option would be to run Kubernetes performance tests, however, these tend to measure different metrics in isolation.  Kapture fills the gap: demonstrating giving you a realistic performance benchmark, based on a realistic workload.
+
+If you're new to performance and load testing on kubernetes... check out our recent presentation for the sig-big-data working group, here: https://zoom.us/recording/play/e1GXJ5V4DHLkSShbdeJCQwNg_m4icnLcAD_O0rX6xLb71n635GyaqK3ehc7Pr4bm?startTime=1556730127000 , which provides a comprehensive introduction to this project.
 
 ## What's is a realistic workload? 
 
