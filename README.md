@@ -1,4 +1,6 @@
-... TL;DR? scroll down to the quick start section ...
+# Whats the point of this whole thing?
+
+If you're new to performance and load testing on kubernetes... check out our recent presentation for the sig-big-data working group, here: https://zoom.us/recording/play/e1GXJ5V4DHLkSShbdeJCQwNg_m4icnLcAD_O0rX6xLb71n635GyaqK3ehc7Pr4bm?startTime=1556730127000 , which provides a comprehensive introduction to this project.
 
 # Kapture: Realistic cluster benchmarking for Cloud Native Application developers
 
