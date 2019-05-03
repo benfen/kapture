@@ -84,6 +84,27 @@
             }
         ]
     }, {
+        "provider": "gke",
+        "nodes": [
+            {
+                "count": 8,
+                "type": "n1-standard-1"
+            }
+        ],
+        "configuration": {
+            "redis": true
+        },
+        "cpus": "8",
+        "memory": "30.00",
+        "summary": 62.05,
+        "runs": [
+            {
+                "path": "gke/8_n1-standard-1/0.json",
+                "max": 6,
+                "summary": 62.05
+            }
+        ]
+    }, {
         "provider": "minikube",
         "nodes": [
             {
