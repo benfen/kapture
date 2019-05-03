@@ -41,5 +41,47 @@
                 "summary": 125.40
             }
         ]
+    }, {
+        "provider": "minikube",
+        "nodes": [
+            {
+                "count": 1,
+                "type": ""
+            }
+        ],
+        "configuration": {
+            "redis": false
+        },
+        "cpus": "5",
+        "memory": "9.00",
+        "summary": 134.70,
+        "runs": [
+            {
+                "path": "minikube/0.json",
+                "max": 2,
+                "summary": 134.70
+            }
+        ]
+    }, {
+        "provider": "minikube",
+        "nodes": [
+            {
+                "count": 1,
+                "type": ""
+            }
+        ],
+        "configuration": {
+            "redis": true
+        },
+        "cpus": "5",
+        "memory": "9.00",
+        "summary": 132.23,
+        "runs": [
+            {
+                "path": "minikube/1.json",
+                "max": 2,
+                "summary": 132.23
+            }
+        ]
     }
 ]
