@@ -1,14 +1,25 @@
 # Benchmarking
 
-Listed here are results on running kapture on several different configurations.  Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-standard-1_n8_v8_m30_6_r.md`".
+Kapture is a deterministic, realistic workload and the tooling necessary to run it with the click of a button.  The obvious extension of these two components combined is, obviously, a *benchmark*.
+
+In Kapture terms, "Benchmarking" means running kapture on your cluster, to determine how fast and performant it is.
+
+Listed here are results on running kapture on several different configurations:
+
+Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-standard-1_n8_v8_m30_6_r.md`".
 
 The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.  By default, this is the point at which the `benchmark.sh` will exit.
 
 ## Method
 
-All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  Tests were run using: `./benchmark.sh [-r]` (all tests were run with the default speed).  If you want more fine-grained control over a test run, try using `./benchmark.sh $iterations [flags]` - this will override the default benchmark heuristic for when to stop.
+- All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  
+- Tests were run using: `./benchmark.sh [-r]` (all tests were run with the default speed).  
+- If you want more fine-grained control over a test run, try using `./benchmark.sh $iterations [flags]` 
+- This will override the default benchmark heuristic for when to stop.
 
-Output from test runs is placed at `benchmark/temp/results.txt` in the same format as the file in the `results` directory.  __The benchmark script does not attempt to preserve or protect data from previous runs - it will simply delete any existing data__.
+Output from test runs is placed at `benchmark/temp/results.txt` in the same format as the file in the `results` directory. 
+
+__The benchmark script does not attempt to preserve or protect data from previous runs - it will simply delete any existing data__.
 
 ### Summary Calculation
 
