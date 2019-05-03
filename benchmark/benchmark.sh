@@ -110,3 +110,5 @@ echo "Removing created Kapture resources from the cluster..."
 cd ./benchmark/temp
 echo "Removing created Prometheus resources from the cluster..."
 ./prometheus-recipes.sh $namespace --delete > /dev/null 2> /dev/null
+echo "Cleaning up created testing namespace..."
+kubectl delete namespace $namespace > /dev/null 2> /dev/null
