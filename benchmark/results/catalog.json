@@ -105,6 +105,48 @@
             }
         ]
     }, {
+        "provider": "gke",
+        "nodes": [
+            {
+                "count": 3,
+                "type": "n1-standard-2"
+            }
+        ],
+        "configuration": {
+            "redis": false
+        },
+        "cpus": "6",
+        "memory": "22.50",
+        "summary": 66.38,
+        "runs": [
+            {
+                "path": "gke/3_n1-standard-2/0.json",
+                "max": 3,
+                "summary": 66.38
+            }
+        ]
+    }, {
+        "provider": "gke",
+        "nodes": [
+            {
+                "count": 3,
+                "type": "n1-standard-2"
+            }
+        ],
+        "configuration": {
+            "redis": true
+        },
+        "cpus": "6",
+        "memory": "22.50",
+        "summary": 62.06,
+        "runs": [
+            {
+                "path": "gke/3_n1-standard-2/1.json",
+                "max": 3,
+                "summary": 62.06
+            }
+        ]
+    }, {
         "provider": "minikube",
         "nodes": [
             {
