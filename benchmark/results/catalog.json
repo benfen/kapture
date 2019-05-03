@@ -1,0 +1,45 @@
+[
+    {
+        "provider": "gke",
+        "nodes": [
+            {
+                "count": 3,
+                "type": "n1-highcpu-4"
+            }
+        ],
+        "configuration": {
+            "redis": false
+        },
+        "cpus": "12",
+        "memory": "11.50",
+        "summary": 135.59,
+        "runs": [
+            {
+                "path": "gke/3_n1-highcpu-4/0.json",
+                "max": 3,
+                "summary": 135.59
+            }
+        ]
+    }, {
+        "provider": "gke",
+        "nodes": [
+            {
+                "count": 3,
+                "type": "n1-highcpu-4"
+            }
+        ],
+        "configuration": {
+            "redis": true
+        },
+        "cpus": "12",
+        "memory": "11.50",
+        "summary": 125.40,
+        "runs": [
+            {
+                "path": "gke/3_n1-highcpu-4/1.json",
+                "max": 3,
+                "summary": 125.40
+            }
+        ]
+    }
+]
