@@ -1,4 +1,8 @@
-# Examples
+# Example c(K)ustomizations
+
+This directory has examples of how you can modify kapture to suit your needs for differnt performance tests.
+
+These examples are meant to be used with [Kustomize](https://github.com/kubernetes-sigs/kustomize/blob/master/docs/INSTALL.md), but can easily be manually implemented on a kapture fork.
 
 The configuration files in this directory provide some possible configuration to utilize with Kapture.  Three straightforward examples are provided:
 
@@ -6,7 +10,7 @@ The configuration files in this directory provide some possible configuration to
 * [`slow-load-gen.yml`](./slow-load-gen.yml) - This configuration strangles the CPU of the load-gen containers, slowing down the generation of messages, but also delaying the rate that the rest of the cluster runs out of CPU.
 * [`unbounded-redis.yml`](./unbounded-redis.yml) - By default, Redis is configured to act as an LRU cache in order to prevent it from slowly consuming all available memory in the cluster.  While this configuration does not remove that specific behavior, it does increase the size of the cache sufficiently to make it seem like there is no eviction strategy.
 
-# How does it work?
+# How can I use these examples customizations with kapture?
 
 This utilizes Kubernetes built-in [Kustomize][1] functionality to modify existing configurations.  Configurations listed in each example file are merged with the existing configurations in the `kube-config` folder using Kubernetes' built-in merging strategy.
 
