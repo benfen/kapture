@@ -12,7 +12,13 @@ This utilizes Kubernetes built-in [Kustomize][1] functionality to modify existin
 
 ## How do I use it?
 
-Just modify the  [`top level kustomization.yml file in this repo`](../kustomization.yml) to point to which resource you want.  Or modify it to point to multiple resources.  Or create your own patches to lay on top of Kapture.  Do whatever you want!
+Clone this repo
+
+- edit the [`top level kustomization.yml file`](../kustomization.yml) to point to which resource you want. 
+- *or* modify it to point to any other multiple kustomizations as well. 
+- *or* create your own patches to lay on top of Kapture.  
+
+Run the kapture command line tool the same as you normally would.
 
 ## Caveats
 
