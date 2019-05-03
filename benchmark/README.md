@@ -31,7 +31,11 @@ The summary value for a benchmarking run was calculated by summing up all the `[
 
 # Characterization
 
-Kapture can attempt to characterize the performance of a cluster based on the past results stored in the `results` directory.  To do so as part of a benchmark, run `./benchmark.sh --characterize`.  Once the run completes, Kapture will characterize the cluster and spit out the results.  Note that results for Minikube are not used for characterization, although example data for them does exist.
+Kapture can attempt to characterize the performance of a cluster based on the past results stored in the `results` directory.  
+- To do so as part of a benchmark, run `./benchmark.sh --characterize`.  
+- Once the run completes, Kapture will characterize the cluster and spit out the results. 
+
+Note that results for Minikube are not used for characterization, although example data for them does exist.
 
 Python is required for this to function.  If Kapture does not find python (`python3`, `python`, or `py` on the path, specifically) it will simply skip characterization.
 
