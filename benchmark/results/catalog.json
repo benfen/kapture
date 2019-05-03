@@ -45,6 +45,48 @@
         "provider": "gke",
         "nodes": [
             {
+                "count": 4,
+                "type": "n1-highmem-2"
+            }
+        ],
+        "configuration": {
+            "redis": false
+        },
+        "cpus": "8",
+        "memory": "52.00",
+        "summary": 91.08,
+        "runs": [
+            {
+                "path": "gke/3_n1-highmem-2/0.json",
+                "max": 4,
+                "summary": 91.08
+            }
+        ]
+    }, {
+        "provider": "gke",
+        "nodes": [
+            {
+                "count": 4,
+                "type": "n1-highmem-2"
+            }
+        ],
+        "configuration": {
+            "redis": true
+        },
+        "cpus": "8",
+        "memory": "52.00",
+        "summary": 72.35,
+        "runs": [
+            {
+                "path": "gke/3_n1-highmem-2/1.json",
+                "max": 4,
+                "summary": 72.35
+            }
+        ]
+    }, {
+        "provider": "gke",
+        "nodes": [
+            {
                 "count": 2,
                 "type": "n1-standard-8"
             }
