@@ -207,7 +207,7 @@
                     "redis": false
                 },
                 "cpus": 5,
-                "memory": 9.00,
+                "memory": 8.79,
                 "summary": 134.70,
                 "runs": [
                     {
@@ -228,7 +228,7 @@
                     "redis": true
                 },
                 "cpus": 5,
-                "memory": 9.00,
+                "memory": 8.79,
                 "summary": 132.23,
                 "runs": [
                     {
