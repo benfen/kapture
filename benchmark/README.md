@@ -2,13 +2,18 @@
 
 Kapture is a deterministic, realistic workload and the tooling necessary to run it with the click of a button.  The obvious extension of these two components combined is, obviously, a *benchmark*.
 
-In Kapture terms, "Benchmarking" means running kapture on your cluster, to determine how fast and performant it is.
+In Kapture terms, "Benchmarking" means running kapture on your cluster, to determine how fast and performant it is *relative to other industry standards, i.e. GKE*.  If you are a K8s vendor and would like to submit benchmarks on your own hardware, we'd love to host it, and we can help add it to the benchmarking script.
+
+# Results
 
 Listed here are results on running kapture on several different configurations:
 
 Other markdown files in this folder are stored in the format: `${provider}_${node_type}_n${node_count}_v${cpu_count}_m${memory}_${max_generators}_[$any_extra_flags].md`.  For example, a test using three n1-highcpu-4 nodes from gke that had Redis enabled would be called "`gke_n1-standard-1_n8_v8_m30_6_r.md`".
 
 The value of `max-generators` is determined experimentally and should correspond to the number of generators such that the next generator does not increase the total message throughput.  By default, this is the point at which the `benchmark.sh` will exit.
+
+Kapture is open source, so feel free to reuse this data in other experiements or whitepapers that you might be producing around Kubernetes performance.  Please do site us though, as we're a new project and are working hard to grow mindshare
+and increase contributions from like minded K8's engineers.
 
 ## Method
 
