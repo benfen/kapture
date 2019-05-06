@@ -33,8 +33,8 @@ def configure_prometheus(namespace):
     os.chmod('./temp/prometheus.sh', 0o755)
 
     # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
-    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'])
-    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'])
+    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
+    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
 
 def top_nodes():
     """Retrieves current memory/cpu usage of nodes.
@@ -108,7 +108,7 @@ def main():
         if args.redis:
             flags = flags + 'r'
 
-        subprocess.check_output(['./kapture.sh', namespace, '1', flags])
+        subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=subprocess.DEVNULL)
         sleep(1 * 60)
 
         last_message_rate = 0
