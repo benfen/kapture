@@ -1,3 +1,4 @@
+import characterization
 from urllib.parse import quote
 from urllib.request import urlopen
 from zipfile import ZipFile
@@ -120,13 +121,16 @@ def main():
 
         results.write(json.dumps(result_data))
 
+    if characterize:
+        characterization.characterize_data(result_data)
+
     print('Removing created Kapture resources from the cluster...')
-    subprocess.check_output(['./kapture.sh', namespace, '--delete'])
+    subprocess.check_output(['./kapture.sh', namespace, '--delete'], stdout=subprocess.DEVNULL)
     print('Removing created Prometheus resources from the cluster...')
     os.chdir('benchmark/temp')
     print('Cleaning up created testing namespace...')
     # This command can be a little squirrely, so we're ignoring the output for now
-    subprocess.call(['./prometheus-recipes.sh', namespace, '--delete'])
+    subprocess.call(['./prometheus-recipes.sh', namespace, '--delete'], stdout=subprocess.DEVNULL)
 
 if __name__ == '__main__': 
     main()
