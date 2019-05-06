@@ -36,6 +36,23 @@ def configure_prometheus(namespace):
     subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
     subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
 
+def heartbeat(period, update_file, duration = 270):
+    if period <= 0:
+        sleep(duration)
+    else:
+        time = 0
+        while time < duration:
+            top = top_nodes()
+
+            output = {
+                'cpu': top[0],
+                'memory': top[1]
+            }
+
+            print(json.dumps(output), file=update_file, flush=True)
+            time += period
+            sleep(period)
+
 def top_nodes():
     """Retrieves current memory/cpu usage of nodes.
 
@@ -85,10 +102,16 @@ def main():
     parser.add_argument('-r', '--redis', action='store_true',
                     help='Include Redis in Kapture as part of the test')
     parser.add_argument('--characterize', action='store_true',
+                    help='Configures a heartbeat for Kapture to use while waiting for the benchmark.  The heartbeat specifies the ' +
+                        'time (in seconds) for Kapture to wait before pinging the server to get cpu/memory statistics.  These stats ' +
+                        'are then stored in the updates.json file next to results.json.  If the value for the heartbeat is less ' +
+                        'than or equal to 0, the heartbeat will not trigger; this is the default behavior')
+    parser.add_argument('--heartbeat',  type=int, default=-1,
                     help='Attempts to characterize the performance of the cluster based on previously collected data.  ' +
                         'Will run at the end after the benchmark.')
     args = parser.parse_args()
 
+    heartbeat_period = int(args.heartbeat)
     max_generators = int(args.generators)
     characterize = args.characterize
     namespace = 'test'
@@ -96,7 +119,8 @@ def main():
     configure_prometheus(namespace)
 
     os.chdir('..')
-    with open('./benchmark/temp/results.json', 'w') as results:
+
+    with open('./benchmark/temp/results.json', 'w') as results, open('./benchmark/temp/updates.json', 'w') as updates:
         result_data = {
             'configuration': {
                 'redis': args.redis
@@ -109,13 +133,13 @@ def main():
             flags = flags + 'r'
 
         subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=subprocess.DEVNULL)
-        sleep(1 * 60)
+        heartbeat(heartbeat_period, updates, duration=60)
 
         last_message_rate = 0
         messages_declining = False
         generators = 1
         while (max_generators <= 0 and not messages_declining) or generators <= max_generators:
-            sleep(4.5 * 60)
+            heartbeat(heartbeat_period, updates)
 
             cpu, memory = top_nodes()
             network = prometheus_query('sum(rate(node_network_receive_bytes_total[3m]))')
@@ -136,7 +160,6 @@ def main():
                 'messages3m': messages3m
             }
 
-            print(json.dumps(data))
             result_data['data'].append(data)
 
             if messages_declining or last_message_rate > messages2m:

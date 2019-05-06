@@ -6,10 +6,12 @@ function python_version() {
     $1 -c 'import sys; print(sys.version_info[0])'
 }
 
+echo $python_command
+
 if [[ ! -z "$python_command" && "3" == "$(python_version $python_command)" ]]; then
     # Do something so the conditional can exist
     echo "" > /dev/null
-elif [[ ! -z $(command -v python3) && "3" == "$(python_version python3)" ]]; then
+elif [[ ! -z "$(command -v python3)" && "3" == "$(python_version python3)" ]]; then
     python_command=python3
 elif [[ ! -z $(command -v python) && "3" == "$(python_version python)" ]]; then
     python_command=python
@@ -23,13 +25,11 @@ fi
 flags=
 
 if [ "on" == "$redis" ]; then
-	flags="-r"
+	flags="$flags -r"
 fi
 
 if [ "on" == "$characterize" ]; then
-	characterize="--characterize"
-else
-	characterize=
+	flags="$flags --characterize"
 fi
 
-$python_command benchmark.py $max_generators $flags $characterize
+$python_command benchmark.py $max_generators $flags --heartbeat $heartbeat
