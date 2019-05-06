@@ -154,10 +154,11 @@ def main():
 
     print('Removing created Kapture resources from the cluster...')
     subprocess.check_output(['./kapture.sh', namespace, '--delete'])
-    print('Removing created Prometheus resources from the cluster...')
     os.chdir('benchmark/temp')
-    print('Cleaning up created testing namespace...')
+    print('Removing created Prometheus resources from the cluster...')
     subprocess.check_output(['./prometheus-recipes.sh', namespace, '--delete'])
+    print('Cleaning up created testing namespace...')
+    subprocess.check_output(['kubectl', 'delete', 'namespace', namespace])
 
 if __name__ == '__main__': 
     main()
