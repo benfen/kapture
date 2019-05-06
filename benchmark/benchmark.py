@@ -12,6 +12,14 @@ import subprocess
 import json
 
 def configure_prometheus(namespace):
+    """Configures a cluster to use Prometheus.
+
+    Fetches the prometheus-recipes repo and runs the script from there to configure the cluster to use it.
+
+    Args:
+        namespace: Comma-separated list of namespaces for Prometheus to watch
+    """
+
     shutil.rmtree('./temp', ignore_errors=True)
     result = requests.get('https://codeload.github.com/carbonrelay/prometheus-recipes/zip/master')  
 
@@ -29,6 +37,15 @@ def configure_prometheus(namespace):
     subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'])
 
 def top_nodes():
+    """Retrieves current memory/cpu usage of nodes.
+
+    Fetches current usage of ndoes in the cluster.  Retrieves values as percentages and then averages those percents
+    against the current number of nodes in the cluster.
+
+    Returns:
+        A tuple (cpu usage, memory usage) representing current usage by the nodes.
+    """
+
     node_lines = subprocess.check_output(['kubectl', 'top', 'nodes', '--no-headers']).split()
     length = len(node_lines)
 
@@ -41,6 +58,17 @@ def top_nodes():
     return (cpu / length, memory / length)
 
 def prometheus_query(query):
+    """Performs a query against prometheus.
+
+    Utilizes kubectl to execute a command within the prometheus container.  Assumes that the query given
+    only returns one value and only returns that value.
+
+    Args:
+        query - Prometheus QL query to make.  Should only fetch one value.
+
+    Returns:
+        A single float representing the result of the provided query.
+    """
     query_url = 'http://localhost:9090/api/v1/query?query=' + quote(query, safe='~@#$&()*!+=:;,.?/\'')
     response = subprocess.check_output(['kubectl', 'exec', 'prometheus-k8s-0', '-n', 'monitoring', '-c', 'prometheus',
         '--', 'wget', '-O', '-', '-q', query_url])

@@ -44,18 +44,37 @@ class ResultCharacterization:
 
     Attributes:
         provider: A string naming the provider used by this characterization
-        node_type: A string naming the type of node used by this characterization
+        node_configuration: A string naming the type of node used by this characterization
         redis_enabled: Boolean indicating whether Redis is enabled
-        cpu: A tuple (a, b) meant to represent a simple linear regression over cpu
-        memory: A tuple (a, b) meant to represent a simple linear regression over memory
-        network: A tuple (a, b) meant to represent a simple linear regression over network
-        disk: A tuple (a, b) meant to represent a simple linear regression over disk
-        messages: A tuple (a, b) meant to represent a simple linear regression over messages
+
+        generators: Part of the six data lists.  Indicates number of generators for a given data point.
+        cpu: Part of the six data lists.  Indicates usage of cpu for a given data point.
+        memory: Part of the six data lists.  Indicates usage of memory for a given data point.
+        network: Part of the six data lists.  Indicates network usage for a given data point.
+        disk: Part of the six data lists.  Indicates disk usage for a given data point.
+        messages: Part of the six data lists.  Indicates number of messages for a given data point.
+
+        cpu_regression: A tuple (a, b) meant to represent a simple linear regression over cpu
+        memory_regression: A tuple (a, b) meant to represent a simple linear regression over memory
+        network_regression: A tuple (a, b) meant to represent a simple linear regression over network
+        disk_regression: A tuple (a, b) meant to represent a simple linear regression over disk
+        messages_regression: A tuple (a, b) meant to represent a simple linear regression over messages
     """
 
-    def __init__(self, provider, node_type, configuration):
+    def __init__(self, provider, node_configuration, configuration):
+        """Initializes this characterization.
+
+        Sets up the characterization.  Note that the regressions defined on the class are not defined until
+        `create_regression` is explicitly called.
+
+        Args:
+            provider - String; provider for this cluster (e.g. minikube, gke)
+            node_configuration - String; configurations of nodes being used in the cluster (e.g. 2_n1-standard-8)
+            configuration - String; list of configuration flags.  The string 'r' would represent having Redis enabled.
+                By convention, the string '-' represents the default configuration.
+        """
         self.provider = provider
-        self.node_type = node_type
+        self.node_configuration = node_configuration
         self.redis_enabled = 'r' in configuration
 
         self.generators = []
@@ -72,6 +91,11 @@ class ResultCharacterization:
         self.messages_regression = None
 
     def add_data(self, results):
+        """Add a single set of results to the data in this characterization.  All data is added to this instance.
+
+        Args:
+            results - Dict representation of the JSON from a benchmark run
+        """
         with open(results) as f:
             data = json.load(f)
 
@@ -87,8 +111,7 @@ class ResultCharacterization:
         """Compare the provided result to this characterization.
 
         Args:
-            result: A tuple of the form (cpu, memory, network, disk, messages), where each element of the tuple
-            represents an array of the corresponding elements in the results file.
+            result: Dict representation of the JSON from a benchmark run
         
         Returns:
             Float representation of the quality of the comparison.  A lower number is a better match.
@@ -112,7 +135,7 @@ class ResultCharacterization:
     def create_regressions(self):
         """Creates the regressions for cpu, memory, network, disk, and messages and attaches them to the class.
 
-            Note that this will simply overwrite any pre-existing regressions that may have existed 
+        Note that this will simply overwrite any pre-existing regressions that may have existed 
         """
         self.cpu_regression = determinator.simple_linear_regression(self.generators, self.cpu)
         self.memory_regression = determinator.simple_linear_regression(self.generators, self.memory)
@@ -121,6 +144,13 @@ class ResultCharacterization:
         self.messages_regression = determinator.simple_linear_regression(self.generators, self.messages)
 
 def characterize_data(data):
+    """Characterizes the data provided based on known results.
+
+    Outputs results to standard out.
+
+    Args:
+        data: Dict representation of the JSON from a benchmark run to be characterized
+    """
     characterizations = load_data()
 
     scores = []
@@ -130,18 +160,23 @@ def characterize_data(data):
     scores.sort(key = lambda val: val[0])
     print('{0:<10}{1:<10}{2:<20}'.format('Score', 'Provider', 'Node Configuration'))
     for score in scores:
-        print('{0:<10.2f}{1:<10}{2:<20}'.format(score[0], score[1].provider, score[1].node_type))
+        print('{0:<10.2f}{1:<10}{2:<20}'.format(score[0], score[1].provider, score[1].node_configuration))
 
 def load_data():
+    """Loads data for previous runs to compare against
+
+    Returns:
+        List of characterizations
+    """
     characterizations = []
     result_dirs = os.scandir(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'results'))
     providers = [ item for item in result_dirs if item.is_dir() and not item.name == 'minikube']
 
     for provider in providers:
-        for node_type in os.scandir(provider.path):
+        for node_configuration in os.scandir(provider.path):
             node_configurations = {}
 
-            for data in os.scandir(node_type.path):
+            for data in os.scandir(node_configuration.path):
                 name_parts = os.path.splitext(data.name)[0].split('-')
 
                 if len(name_parts) == 2:
@@ -150,7 +185,7 @@ def load_data():
                     key = '-'
 
                 if not key in node_configurations:
-                    characterization = ResultCharacterization(provider.name, node_type.name, key)
+                    characterization = ResultCharacterization(provider.name, node_configuration.name, key)
                     node_configurations[key] = characterization
                 else:
                     characterization = node_configurations[key]
