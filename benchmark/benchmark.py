@@ -153,12 +153,11 @@ def main():
         characterization.characterize_data(result_data)
 
     print('Removing created Kapture resources from the cluster...')
-    subprocess.check_output(['./kapture.sh', namespace, '--delete'], stdout=subprocess.DEVNULL)
+    subprocess.check_output(['./kapture.sh', namespace, '--delete'])
     print('Removing created Prometheus resources from the cluster...')
     os.chdir('benchmark/temp')
     print('Cleaning up created testing namespace...')
-    # This command can be a little squirrely, so we're ignoring the output for now
-    subprocess.call(['./prometheus-recipes.sh', namespace, '--delete'], stdout=subprocess.DEVNULL)
+    subprocess.check_output(['./prometheus-recipes.sh', namespace, '--delete'])
 
 if __name__ == '__main__': 
     main()

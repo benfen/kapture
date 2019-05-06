@@ -26,4 +26,10 @@ if [ "on" == "$redis" ]; then
 	flags="-r"
 fi
 
-$python_command benchmark.py $max_generators $flags
+if [ "on" == "$characterize" ]; then
+	characterize="--characterize"
+else
+	characterize=
+fi
+
+$python_command benchmark.py $max_generators $flags $characterize
