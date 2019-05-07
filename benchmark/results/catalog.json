@@ -3,12 +3,9 @@
         "provider": "gke",
         "data": [
             {
-                "nodes": [
-                    {
-                        "count": 3,
-                        "type": "n1-highcpu-4"
-                    }
-                ],
+                "nodes": {
+                    "n1-highcpu-4": 3
+                },
                 "configuration": {
                     "redis": false
                 },
@@ -24,12 +21,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 3,
-                        "type": "n1-highcpu-4"
-                    }
-                ],
+                "nodes": {
+                    "n1-highcpu-4": 3
+                },
                 "configuration": {
                     "redis": true
                 },
@@ -45,12 +39,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 4,
-                        "type": "n1-highmem-2"
-                    }
-                ],
+                "nodes": {
+                    "n1-highmem-2": 4
+                },
                 "configuration": {
                     "redis": false
                 },
@@ -66,12 +57,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 4,
-                        "type": "n1-highmem-2"
-                    }
-                ],
+                "nodes": {
+                    "n1-highmem-2": 4
+                },
                 "configuration": {
                     "redis": true
                 },
@@ -87,12 +75,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 2,
-                        "type": "n1-standard-8"
-                    }
-                ],
+                "nodes": {
+                    "n1-standard-8": 2
+                },
                 "configuration": {
                     "redis": false
                 },
@@ -108,12 +93,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 2,
-                        "type": "n1-standard-8"
-                    }
-                ],
+                "nodes": {
+                    "n1-standard-1": 8
+                },
                 "configuration": {
                     "redis": true
                 },
@@ -129,12 +111,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 8,
-                        "type": "n1-standard-1"
-                    }
-                ],
+                "nodes": {
+                    "n1-standard-1": 8
+                },
                 "configuration": {
                     "redis": true
                 },
@@ -150,12 +129,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 3,
-                        "type": "n1-standard-2"
-                    }
-                ],
+                "nodes": {
+                    "n1-standard-2": 3
+                },
                 "configuration": {
                     "redis": false
                 },
@@ -171,12 +147,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 3,
-                        "type": "n1-standard-2"
-                    }
-                ],
+                "nodes": {
+                    "n1-standard-2": 3
+                },
                 "configuration": {
                     "redis": true
                 },
@@ -192,12 +165,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 4,
-                        "type": "n1-standard-2"
-                    }
-                ],
+                "nodes": {
+                    "n1-standard-2": 4
+                },
                 "configuration": {
                     "redis": false
                 },
@@ -218,12 +188,9 @@
         "provider": "minikube",
         "data": [
             {
-                "nodes": [
-                    {
-                        "count": 1,
-                        "type": ""
-                    }
-                ],
+                "nodes": {
+                    "minikube": 1
+                },
                 "configuration": {
                     "redis": false
                 },
@@ -239,12 +206,9 @@
                 ]
             },
             {
-                "nodes": [
-                    {
-                        "count": 1,
-                        "type": ""
-                    }
-                ],
+                "nodes": {
+                    "minikube": 1
+                },
                 "configuration": {
                     "redis": true
                 },
