@@ -11,8 +11,8 @@ sharing and access patterns.  Kapture simulates one such production in environme
 stack.  As an example, below is a screenshot of a Kapture run on a single node cluster, where you can observe several different
 types of oscillating resource consumption patterns.
 
-<a href="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X
-"><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a>
+<!-- <a href="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X
+"><img src="https://asciinema.org/a/ujJ5BrANN5cRFfl8hTPm4zT5X.png" width="836"/></a> -->
 
 ## Kapture Tutorial
 
