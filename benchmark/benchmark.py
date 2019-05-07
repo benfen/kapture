@@ -160,6 +160,7 @@ def main():
                 'messages3m': messages3m
             }
 
+            print(json.dumps(data), file=updates, flush=True)
             result_data['data'].append(data)
 
             if messages_declining or last_message_rate > messages2m:
