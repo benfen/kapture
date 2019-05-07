@@ -1,11 +1,17 @@
+# Python 2/3 compatibility
+from __future__ import print_function
+try:
+    from urllib.parse import quote
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import quote
+    from urllib2 import urlopen
+
 import characterization
-from urllib.parse import quote
-from urllib.request import urlopen
 from zipfile import ZipFile
 from time import sleep
 import argparse
 import io
-import requests
 import shutil
 import os
 import subprocess
@@ -21,9 +27,9 @@ def configure_prometheus(namespace):
     """
 
     shutil.rmtree('./temp', ignore_errors=True)
-    result = requests.get('https://codeload.github.com/carbonrelay/prometheus-recipes/zip/master')  
+    result = urlopen('https://codeload.github.com/carbonrelay/prometheus-recipes/zip/master')
 
-    zip = ZipFile(io.BytesIO(result.content))
+    zip = ZipFile(io.BytesIO(result.read()))
     zip.extractall('.')
 
     os.rename('prometheus-recipes-master', 'temp')
@@ -32,9 +38,10 @@ def configure_prometheus(namespace):
     os.chmod('./temp/prometheus-recipes.sh', 0o755)
     os.chmod('./temp/prometheus.sh', 0o755)
 
-    # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
-    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
-    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
+    with open(os.devnull, 'w') as devnull:
+        # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
+        subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=devnull)
+        subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=devnull)
 
 def heartbeat(period, update_file, duration = 270):
     if period <= 0:
@@ -49,7 +56,8 @@ def heartbeat(period, update_file, duration = 270):
                 'memory': top[1]
             }
 
-            print(json.dumps(output), file=update_file, flush=True)
+            print(json.dumps(output), file=update_file)
+            update_file.flush()
             time += period
             sleep(period)
 
@@ -132,7 +140,8 @@ def main():
         if args.redis:
             flags = flags + 'r'
 
-        subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=subprocess.DEVNULL)
+        with open(os.devnull, 'w') as devnull:
+            subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=devnull)
         heartbeat(heartbeat_period, updates, duration=60)
 
         last_message_rate = 0
@@ -160,7 +169,8 @@ def main():
                 'messages3m': messages3m
             }
 
-            print(json.dumps(data), file=updates, flush=True)
+            print(json.dumps(data), file=updates)
+            updates.flush()
             result_data['data'].append(data)
 
             if messages_declining or last_message_rate > messages2m:
