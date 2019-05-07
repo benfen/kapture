@@ -137,12 +137,22 @@
                 },
                 "cpus": 6,
                 "memory": 22.50,
-                "summary": 66.38,
+                "summary": 69.84,
                 "runs": [
                     {
                         "path": "gke/3_n1-standard-2/0.json",
                         "max": 3,
                         "summary": 66.38
+                    }, 
+                    {
+                        "path": "gke/3_n1-standard-2/1.json",
+                        "max": 7,
+                        "summary": 56.57
+                    }, 
+                    {
+                        "path": "gke/3_n1-standard-2/2.json",
+                        "max": 3,
+                        "summary": 86.56
                     }
                 ]
             },
