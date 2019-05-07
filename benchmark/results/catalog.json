@@ -190,6 +190,27 @@
                         "summary": 62.06
                     }
                 ]
+            },
+            {
+                "nodes": [
+                    {
+                        "count": 4,
+                        "type": "n1-standard-2"
+                    }
+                ],
+                "configuration": {
+                    "redis": false
+                },
+                "cpus": 8,
+                "memory": 30.00,
+                "summary": 72.24,
+                "runs": [
+                    {
+                        "path": "gke/4_n1-standard-2/0.json",
+                        "max": 4,
+                        "summary": 72.24
+                    }
+                ]
             }
         ]
     },
