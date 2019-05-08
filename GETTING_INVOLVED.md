@@ -9,7 +9,10 @@ Getting involved in a new project often happens in the following order...
 
 # What are some interesting starter projects for learning how to use kapture?
 
-- Reproduce the existing performance results on your clusters.
+Performance testing of kubernetes clusters can be daunting at first, and if your interested in learning about the
+framework we have in place, then you can get started interactively by trying a few of these starter projects.
+
+- Reproduce the existing performance results on your clusters.  Even minikube can work.
 - Build a new performance test that is relevant to your needs.
 - Look at how changing CPU, memory, and other parameters in the kustomize scripts 
 increase or decrease performance.
