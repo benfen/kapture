@@ -77,7 +77,7 @@ else
 	kubectl apply -k $BASEDIR/.. -n $namespace
 
 	echo "Waiting for at least one kafka instance to startup..."
-	until kubectl exec kafka-0 -- opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server=localhost:9093 > /dev/null 2>&1
+	until kubectl exec kafka-0 -- /opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server=localhost:9093 > /dev/null 2>&1
 	do
 		sleep 2
 	done
