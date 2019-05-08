@@ -1,4 +1,3 @@
-import com.mashape.unirest.http.Unirest
 import io.prometheus.client.Counter
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
@@ -11,7 +10,6 @@ import org.slf4j.LoggerFactory
 import java.util.Properties
 
 private val brokerList: String? = System.getenv("BROKERS")
-private val elasticHost: String? = System.getenv("ELASTIC_HOST")
 private val groupId: String? = System.getenv("GROUP_ID")
 private val redisHost: String? = System.getenv("REDIS_HOST")
 
@@ -96,20 +94,6 @@ fun startListener(mode: MessengerMode) {
         consumer.subscribe(states)
 
         when(mode) {
-            MessengerMode.ELASTIC_LISTEN -> {
-                if (elasticHost == null) {
-                    logger.error("Environment variable 'ELASTIC_HOST' must be defined when the message mode is 'ELASTIC_LISTEN")
-                    System.exit(1)
-                }
-
-                dispatch = { record ->
-                    Unirest.post("http://$elasticHost/${record.topic()}/store")
-                        .header("Content-Type", "application/json")
-                        .body(record.value())
-                        .asStringAsync()
-                        .get()
-                }
-            }
             MessengerMode.REDIS_LISTEN -> {
                 if (redisHost == null) {
                     logger.error("Environment variable 'REDIS_HOST' must be defined when the message mode is 'REDIS_LISTEN")
