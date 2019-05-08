@@ -26,9 +26,9 @@ function tear_down() {
 }
 
 function deploy_elastic_search() {
-	kubectl scale Deployment es-master -n $namespace --replicas 3
-	kubectl scale Deployment es-client -n $namespace --replicas 2
-	kubectl scale StatefulSet es-data -n $namespace --replicas 3
+	kubectl scale Deployment es-master -n $namespace --replicas 1
+	kubectl scale Deployment es-client -n $namespace --replicas 1
+	kubectl scale StatefulSet es-data -n $namespace --replicas 1
 	kubectl scale StatefulSet logstash -n $namespace --replicas 1
 }
 
@@ -76,15 +76,24 @@ else
 
 	kubectl apply -k $BASEDIR/.. -n $namespace
 
+	echo "Waiting for at least one kafka instance to startup..."
+	until kubectl exec kafka-0 -- opt/kafka/bin/kafka-broker-api-versions.sh --bootstrap-server=localhost:9093 > /dev/null 2>&1
+	do
+		sleep 2
+	done
+
 	if [ "on" = $deploy_prometheus ]; then
+		echo "Deploying prometheus connectors..."
 		deploy_prometheus
 	fi
 
 	if [ "on" = $deploy_redis ]; then
+		echo "Deploying Redis..."
 		deploy_redis
 	fi
 
 	if [ "on" = $deploy_elastic_search ]; then
+		echo "Deploying elasticsearch and logstash..."
 		deploy_elastic_search
 	fi
 
