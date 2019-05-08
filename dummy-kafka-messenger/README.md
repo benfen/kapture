@@ -16,8 +16,7 @@ The app is also available in the form of a docker container - `docker run -it be
 
 For configuration, the app will look at environment variables to determine what to do at runtime:
 * `BROKERS` - This variable should contain the comma-separated list of Kafka brokers for the server to dispatch messages to.
-* `ELASTIC_HOST` - Used by the listener.  The address of the elasticsearch server.
 * `GROUP_ID` - Used by the listener.  Identifies the consumer to Kafka.
-* `MESSENGER_MODE` - Indicates whether the server should be listening for messages from Kafka to send to Redis or listen for messages to send to Kafka.  If the value is 'REDIS_LISTEN' it will it will listen to messages from Kafka and send them to Redis.  If, instead, the value if 'ELASTIC_LISTEN', it will send those values to Elasticsearch.  If no value is provided or the value is an empty string, it will function as a load generator.  Note that invalid values - values that are defined but neither 'REDIS_LISTEN' nor 'ELASTIC-LISTEN' - will cause the messenger to error out.
+* `MESSENGER_MODE` - Indicates whether the server should be listening for messages from Kafka to send to Redis or listen for messages to send to Kafka.  If the value is 'REDIS_LISTEN' it will it will listen to messages from Kafka and send them to Redis.  If no value is provided or the value is an empty string, it will function as a load generator.  Note that invalid values - values that are defined but neither 'REDIS_LISTEN' nor 'ELASTIC-LISTEN' - will cause the messenger to error out.
 * `REDIS_HOST` - Used by the listener.  The IP (or DNS name) of the redis server.  This is used to send messages from Kafka to Redis.
 * `STORE_COUNT` - Used by the producer.  Indicates the number of stores.

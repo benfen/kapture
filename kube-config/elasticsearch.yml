@@ -1,4 +1,42 @@
 ---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: elasticsearch-config
+data:
+   elasticsearch.yml: |
+    cluster:
+      initial_master_nodes: ${MASTER_NODE:[]}
+      name: es-cluser
+      remote:
+        connect: false
+
+    node:
+      master: ${NODE_MASTER:false}
+      data: ${NODE_DATA:false}
+      name: ${NODE_NAME}
+      ingest: ${NODE_INGEST:false}
+
+    processors: ${PROCESSORS:1}
+
+    network.host: 0.0.0.0
+
+    path:
+      data: /data/data
+      logs: /data/log
+
+    bootstrap:
+      memory_lock: false
+
+    http:
+      compression: true
+
+    discovery:
+      seed_hosts:
+        - elasticsearch-discovery
+
+    xpack.ml.enabled: false
+---
 apiVersion: apps/v1beta1
 kind: Deployment
 metadata:
@@ -13,7 +51,6 @@ spec:
       labels:
         component: elasticsearch
         role: master
-        kapture: "true"
     spec:
       initContainers:
       - name: init-sysctl
@@ -26,30 +63,24 @@ spec:
           privileged: true
       containers:
       - name: es-master
-        image: quay.io/pires/docker-elasticsearch-kubernetes:6.2.4
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
         env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
         - name: NODE_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: CLUSTER_NAME
-          value: my-es
-        - name: NUMBER_OF_MASTERS
-          value: "2"
         - name: NODE_MASTER
           value: "true"
-        - name: NODE_INGEST
-          value: "false"
-        - name: NODE_DATA
-          value: "false"
         - name: HTTP_ENABLE
           value: "false"
         - name: ES_JAVA_OPTS
           value: -Xms256m -Xmx256m
+        - name: MASTER_NODE
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MASTER_IP
+          value: "[\"$(MASTER_NODE)\"]"
         - name: PROCESSORS
           valueFrom:
             resourceFieldRef:
@@ -60,10 +91,16 @@ spec:
         volumeMounts:
         - name: storage
           mountPath: /data
+        - name: elasticsearch
+          mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          subPath: elasticsearch.yml
       volumes:
-          - emptyDir:
-              medium: ""
-            name: "storage"
+        - emptyDir:
+            medium: ""
+          name: "storage"
+        - name: elasticsearch
+          configMap:
+            name: elasticsearch-config
 ---
 apiVersion: v1
 kind: Service
@@ -97,7 +134,6 @@ spec:
       labels:
         component: elasticsearch
         role: data
-        kapture: "true"
     spec:
       initContainers:
       - name: init-sysctl
@@ -110,24 +146,14 @@ spec:
           privileged: true
       containers:
       - name: es-data
-        image: quay.io/pires/docker-elasticsearch-kubernetes:6.2.4
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
         env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
         - name: NODE_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: CLUSTER_NAME
-          value: my-es
-        - name: NODE_MASTER
-          value: "false"
-        - name: NODE_INGEST
-          value: "false"
-        - name: HTTP_ENABLE
-          value: "false"
+        - name: NODE_DATA
+          value: "true"
         - name: ES_JAVA_OPTS
           value: -Xms256m -Xmx256m
         - name: PROCESSORS
@@ -140,10 +166,16 @@ spec:
         volumeMounts:
         - name: storage
           mountPath: /data
+        - name: elasticsearch
+          mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          subPath: elasticsearch.yml
       volumes:
         - emptyDir:
             medium: ""
           name: storage
+        - name: elasticsearch
+          configMap:
+            name: elasticsearch-config
 ---
 apiVersion: v1
 kind: Service
@@ -175,7 +207,6 @@ spec:
       labels:
         component: elasticsearch
         role: client
-        kapture: "true"
     spec:
       initContainers:
       - name: init-sysctl
@@ -188,28 +219,16 @@ spec:
           privileged: true
       containers:
       - name: es-client
-        image: quay.io/pires/docker-elasticsearch-kubernetes:6.2.4
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.0.0
         env:
-        - name: NAMESPACE
-          valueFrom:
-            fieldRef:
-              fieldPath: metadata.namespace
         - name: NODE_NAME
           valueFrom:
             fieldRef:
               fieldPath: metadata.name
-        - name: CLUSTER_NAME
-          value: my-es
-        - name: NODE_MASTER
-          value: "false"
-        - name: NODE_DATA
-          value: "false"
-        - name: HTTP_ENABLE
+        - name: NODE_INGEST
           value: "true"
         - name: ES_JAVA_OPTS
           value: -Xms256m -Xmx256m
-        - name: NETWORK_HOST
-          value: _site_,_lo_
         - name: PROCESSORS
           valueFrom:
             resourceFieldRef:
@@ -222,10 +241,16 @@ spec:
         volumeMounts:
         - name: storage
           mountPath: /data
+        - name: elasticsearch
+          mountPath: /usr/share/elasticsearch/config/elasticsearch.yml
+          subPath: elasticsearch.yml
       volumes:
-          - emptyDir:
-              medium: ""
-            name: storage
+        - emptyDir:
+            medium: ""
+          name: storage
+        - name: elasticsearch
+          configMap:
+            name: elasticsearch-config
 ---
 apiVersion: v1
 kind: Service
