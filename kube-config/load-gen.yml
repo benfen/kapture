@@ -29,13 +29,17 @@ spec:
         app: data-loader
     spec:
       restartPolicy: Always
+      volumes:
+      - name: shared-data
+        emptyDir: {}
       containers:
       - name: pet-store-generator
-        image: jayunit100/bigpetstore-load-generator
+        image: benfen/bigpetstore-load-generator:latest
+        imagePullPolicy: Always
         command:
           - bash
           - -c
-          - "/opt/PetStoreLoadGenerator-1.0/bin/PetStoreLoadGenerator http://localhost:7000/ $STORE_COUNT $CUSTOMERS $SIMULATION_LENGTH"
+          - "java -jar /opt/bigpetstore-transaction-queue-all-1.0.jar /data $STORE_COUNT $CUSTOMERS $SIMULATION_LENGTH"
         env:
           - name: STORE_COUNT
             valueFrom:
@@ -52,9 +56,12 @@ spec:
               configMapKeyRef:
                 name: kapture-config
                 key: SIMULATION
+        volumeMounts:
+          - name: shared-data
+            mountPath: /data
       - name: load-gen-producer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:v0.4-dev
+        image: benfen/dummy-kafka-messenger:v0.5-dev
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
@@ -62,4 +69,11 @@ spec:
             value: "$(ZK_SVC_SERVICE_HOST):$(ZK_SVC_SERVICE_PORT)"
         ports:
           - containerPort: 7001
+        volumeMounts:
+          - name: shared-data
+            mountPath: /data
+        command:
+          - bash
+          - -c
+          - "/opt/dispatch-messages.sh"
 ---

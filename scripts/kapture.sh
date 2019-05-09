@@ -49,6 +49,8 @@ function deploy_redis() {
 		role=$(kubectl exec redis-master -n $namespace -c sentinel -- bash -c "redis-cli -p 26379 sentinel master mymaster | grep ^role-reported -A 1" 2> /dev/null)
 	done
 
+	sleep 15
+
 	kubectl scale rc redis -n $namespace --replicas $redis_count
 	kubectl scale rc redis-sentinel -n $namespace --replicas 3
 
@@ -72,7 +74,8 @@ else
 	kubectl create configmap -n $namespace kapture-config \
 		--from-literal=STORE_COUNT="$stores" \
 		--from-literal=CUSTOMERS="$customers" \
-		--from-literal=SIMULATION="$simulation_time"
+		--from-literal=SIMULATION="$simulation_time" \
+		--from-literal=BPS_TOPIC="bps-data"
 
 	kubectl apply -k $BASEDIR/.. -n $namespace
 

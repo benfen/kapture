@@ -1,11 +1,11 @@
 resources:
-  - kube-config/logstash.yml
-  - kube-config/elasticsearch.yml
+  - kube-config/zk.yml
   - kube-config/kafka.yml
   - kube-config/load-gen.yml
+  - kube-config/logstash.yml
+  - kube-config/elasticsearch.yml
   - kube-config/redis.yml
   - kube-config/redis-connector.yml
-  - kube-config/zk.yml
 
 images:
   - name: benfen/dummy-kafka-messenger
