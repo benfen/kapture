@@ -53,7 +53,8 @@ def heartbeat(period, update_file, duration = 270):
 
             output = {
                 'cpu': top[0],
-                'memory': top[1]
+                'memory': top[1],
+                'messages': top[2]
             }
 
             print(json.dumps(output), file=update_file)
@@ -71,7 +72,15 @@ def top_nodes():
         A tuple (cpu usage, memory usage) representing current usage by the nodes.
     """
 
-    node_lines = subprocess.check_output(['kubectl', 'top', 'nodes', '--no-headers']).split()
+    node_lines = ""
+    while node_lines == "":
+        try:
+            node_lines = subprocess.check_output(['kubectl', 'top', 'nodes', '--no-headers']).split()
+        except subprocess.CalledProcessError as e:
+            print(e.output)
+            print("Reattempting retrieving node cpu and memory")
+
+    messages = float(prometheus_query('sum(rate(bps_messages_total[1m]))'))
     length = len(node_lines)
 
     cpu = memory = 0
@@ -80,7 +89,7 @@ def top_nodes():
         memory += float(node_lines[index + 4][:-1])
 
     length /= 5
-    return (cpu / length, memory / length)
+    return (cpu / length, memory / length, messages)
 
 def prometheus_query(query):
     """Performs a query against prometheus.
@@ -142,7 +151,6 @@ def main():
 
         with open(os.devnull, 'w') as devnull:
             subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=devnull)
-        heartbeat(heartbeat_period, updates, duration=60)
 
         last_message_rate = 0
         messages_declining = False
@@ -150,13 +158,11 @@ def main():
         while (max_generators <= 0 and not messages_declining) or generators <= max_generators:
             heartbeat(heartbeat_period, updates)
 
-            cpu, memory = top_nodes()
+            cpu, memory, _ = top_nodes()
             network = prometheus_query('sum(rate(node_network_receive_bytes_total[3m]))')
             disk = prometheus_query('sum(rate(node_disk_written_bytes_total[3m]))')
 
-            messages1m = prometheus_query('sum(rate(bps_messages_produced[1m]))')
-            messages2m = prometheus_query('sum(rate(bps_messages_produced[2m]))')
-            messages3m = prometheus_query('sum(rate(bps_messages_produced[3m]))')
+            messages = prometheus_query('sum(rate(bps_messages_total[3m]))')
 
             data = {
                 'generators': generators,
@@ -164,19 +170,17 @@ def main():
                 'memory': memory,
                 'network': network,
                 'disk': disk,
-                'messages1m': messages1m,
-                'messages2m': messages2m,
-                'messages3m': messages3m
+                'messages': messages
             }
 
             print(json.dumps(data), file=updates)
             updates.flush()
             result_data['data'].append(data)
 
-            if messages_declining or last_message_rate > messages2m:
+            if messages_declining or last_message_rate > messages:
                 messages_declining = True
             else:
-                last_message_rate = messages2m
+                last_message_rate = messages
 
             generators += 1
             subprocess.check_output(['kubectl', 'scale', 'Deployment', 'data-loader', '-n', namespace, '--replicas', str(generators)])
