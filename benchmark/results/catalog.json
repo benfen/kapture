@@ -4,178 +4,6 @@
         "data": [
             {
                 "nodes": {
-                    "n1-highcpu-4": 3
-                },
-                "configuration": {
-                    "redis": false
-                },
-                "cpus": 12,
-                "memory": 11.50,
-                "summary": 135.59,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-highcpu-4/0.json",
-                        "max": 3,
-                        "summary": 135.59
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-highcpu-4": 3
-                },
-                "configuration": {
-                    "redis": true
-                },
-                "cpus": 12,
-                "memory": 11.50,
-                "summary": 125.40,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-highcpu-4/0-r.json",
-                        "max": 3,
-                        "summary": 125.40
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-highmem-2": 4
-                },
-                "configuration": {
-                    "redis": false
-                },
-                "cpus": 8,
-                "memory": 52.00,
-                "summary": 91.08,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-highmem-2/0.json",
-                        "max": 4,
-                        "summary": 91.08
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-highmem-2": 4
-                },
-                "configuration": {
-                    "redis": true
-                },
-                "cpus": 8,
-                "memory": 52.00,
-                "summary": 72.35,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-highmem-2/0-r.json",
-                        "max": 4,
-                        "summary": 72.35
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-standard-8": 2
-                },
-                "configuration": {
-                    "redis": false
-                },
-                "cpus": 16,
-                "memory": 60.00,
-                "summary": 122.33,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-standard-8/0.json",
-                        "max": 8,
-                        "summary": 122.33
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-standard-8": 2
-                },
-                "configuration": {
-                    "redis": true
-                },
-                "cpus": 16,
-                "memory": 60.00,
-                "summary": 103.92,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-standard-8/0-r.json",
-                        "max": 8,
-                        "summary": 103.92
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-standard-1": 8
-                },
-                "configuration": {
-                    "redis": true
-                },
-                "cpus": 8,
-                "memory": 30.00,
-                "summary": 62.05,
-                "runs": [
-                    {
-                        "path": "gke/8_n1-standard-1/0-r.json",
-                        "max": 6,
-                        "summary": 62.05
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-standard-2": 3
-                },
-                "configuration": {
-                    "redis": false
-                },
-                "cpus": 6,
-                "memory": 22.50,
-                "summary": 69.84,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-standard-2/0.json",
-                        "max": 3,
-                        "summary": 66.38
-                    }, 
-                    {
-                        "path": "gke/3_n1-standard-2/1.json",
-                        "max": 7,
-                        "summary": 56.57
-                    }, 
-                    {
-                        "path": "gke/3_n1-standard-2/2.json",
-                        "max": 3,
-                        "summary": 86.56
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "n1-standard-2": 3
-                },
-                "configuration": {
-                    "redis": true
-                },
-                "cpus": 6,
-                "memory": 22.50,
-                "summary": 62.06,
-                "runs": [
-                    {
-                        "path": "gke/3_n1-standard-2/0-r.json",
-                        "max": 3,
-                        "summary": 62.06
-                    }
-                ]
-            },
-            {
-                "nodes": {
                     "n1-standard-2": 4
                 },
                 "configuration": {
@@ -183,17 +11,12 @@
                 },
                 "cpus": 8,
                 "memory": 30.00,
-                "summary": 74.79,
+                "summary": 957.96,
                 "runs": [
                     {
                         "path": "gke/4_n1-standard-2/0.json",
                         "max": 4,
-                        "summary": 72.24
-                    },
-                    {
-                        "path": "gke/4_n1-standard-2/1.json",
-                        "max": 4,
-                        "summary": 77.33
+                        "summary": 957.96
                     }
                 ]
             }
@@ -210,31 +33,13 @@
                     "redis": false
                 },
                 "cpus": 5,
-                "memory": 8.79,
-                "summary": 134.70,
+                "memory": 8.20,
+                "summary": 1279.47,
                 "runs": [
                     {
                         "path": "minikube/0.json",
-                        "max": 2,
-                        "summary": 134.70
-                    }
-                ]
-            },
-            {
-                "nodes": {
-                    "minikube": 1
-                },
-                "configuration": {
-                    "redis": true
-                },
-                "cpus": 5,
-                "memory": 8.79,
-                "summary": 132.23,
-                "runs": [
-                    {
-                        "path": "minikube/0-r.json",
-                        "max": 2,
-                        "summary": 132.23
+                        "max": 3,
+                        "summary": 1279.47
                     }
                 ]
             }

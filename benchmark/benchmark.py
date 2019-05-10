@@ -80,7 +80,7 @@ def top_nodes():
             print(e.output)
             print("Reattempting retrieving node cpu and memory")
 
-    messages = float(prometheus_query('sum(rate(bps_messages_total[1m]))'))
+    messages = float(prometheus_query('avg(rate(bps_messages_total[1m]))'))
     length = len(node_lines)
 
     cpu = memory = 0
@@ -170,7 +170,7 @@ def main():
             network = prometheus_query('sum(rate(node_network_receive_bytes_total[3m]))')
             disk = prometheus_query('sum(rate(node_disk_written_bytes_total[3m]))')
 
-            messages = prometheus_query('sum(rate(bps_messages_total[3m]))')
+            messages = prometheus_query('avg(rate(bps_messages_total[3m]))')
 
             data = {
                 'generators': generators,
