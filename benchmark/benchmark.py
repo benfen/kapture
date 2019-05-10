@@ -95,7 +95,8 @@ def prometheus_query(query):
     """Performs a query against prometheus.
 
     Utilizes kubectl to execute a command within the prometheus container.  Assumes that the query given
-    only returns one value and only returns that value.
+    only returns one value and only returns that value.  If the query given does not return a value, this
+    will return -1 instead of erroring out.
 
     Args:
         query - Prometheus QL query to make.  Should only fetch one value.
@@ -109,7 +110,14 @@ def prometheus_query(query):
 
     parsed_response = json.loads(response)
 
-    return float(parsed_response['data']['result'][0]['value'][1])
+    # Make sure that if prometheus doesn't have the data that we just return peacefully
+    result = parsed_response['data']['result']
+    if len(result) > 0:
+        value = result[0]['value']
+        if len(value) > 1:
+            return value[1]
+
+    return -1
 
 def main():
     parser = argparse.ArgumentParser()
