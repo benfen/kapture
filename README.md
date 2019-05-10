@@ -4,7 +4,7 @@ If you build applications or ship kubernetes products, you need a way to determi
 
 If you're new to performance and load testing on kubernetes... check out our [recent demo of the first Kapture demo for Sig Big Data](https://zoom.us/recording/play/e1GXJ5V4DHLkSShbdeJCQwNg_m4icnLcAD_O0rX6xLb71n635GyaqK3ehc7Pr4bm?startTime=1556730127000) which provides a comprehensive introduction to this project.
 
-## What's is a realistic workload? 
+## What's is a realistic workload?
 
 A production SaaS or Data center cluster will feature a broad range of workloads, often many of them using different resource
 sharing and access patterns.  Kapture simulates one such production in environment: the enterprise data driven application
@@ -29,8 +29,8 @@ applications are deployed in a real kubernetes environment.
 Its easy !
 
 ```
-./kapture.sh perf-test 3 # run kapture in the perf-test namespace, with a relative scale of 3 replicas.
-```
+./kapture.sh perf-test 3 -erp # run kapture in the perf-test namespace, with a relative scale of 3 replicas and using elasticsearch, redis and prometheus
+``` 
 
 And compare your results to the data in the [benchmarks](https://github.com/carbonrelay/kapture/tree/master/benchmark/results).
 
@@ -75,7 +75,7 @@ Take a look at the [`data`](benchmark/README.md)!
 # Detailed Usage
 
 ## Your first time ?
- 
+
 As shown eariler, to run kapture, just download this repo, cd to it, and run it.
 If you want to tune the simulation parameters for the input data generators, or what components are processing them, just run
 
@@ -99,13 +99,13 @@ To increase the amount of load on the system, run: `kubectl scale Deployment dat
 
 ## What if I want to test a more advanced scenario ?
 
-Kapture is not overengineered to support a myriad of situations.  We expect engineers and developers to 
+Kapture is not overengineered to support a myriad of situations.  We expect engineers and developers to
 use this framework and modify the YAMLs as required.  Out of the box it does one thing, very well: generate
 realistic load for an enterprise grade application with a message queue and scalable key value store.
 
 ## So, what if you want to do something more advanced ?
 
-Hack it ! The YAML recipes are all in this repository so that you can build your own new tests on top of 
+Hack it ! The YAML recipes are all in this repository so that you can build your own new tests on top of
 kapture.  Over time, please do file issues if you feel strongly that we should modularize/helmify our deployments
 to support a broader range of test types.
 
@@ -132,7 +132,7 @@ Once that has been done, you can configure your cluster to provide metrics to pr
 
 Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take care of the rest.
 
-# WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU 
+# WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU
 
 As popular as Golang is in the infrastructure universe, the fact is that enterprises ship Java code at massive scales,
 and the goal of Kapture is to simulate enterprise enviornments for upstream kubernetes load and scale testing.
@@ -147,9 +147,9 @@ serviced by other scale and density tests in the upstream Kuberentes community.
 
 - Dockerization of the kapture container with
   - kubectl (poor mans operator)
-  - gradle : to build kafka connectors 
+  - gradle : to build kafka connectors
   - jvm : to support running bps, gradle, etc
-  
+
 # License
 
 All source in this Repo is Apache Commmons 2.0 licensed, please contribute ideas, code, whatever.  It would be awesome if,
