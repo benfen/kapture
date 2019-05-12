@@ -1,6 +1,6 @@
 #!/bin/sh
 
-apk add --upgrade redis inotify-tools
-wget -P /opt http://apache.claz.org/kafka/2.2.0/kafka_2.12-2.2.0.tgz
-mkdir -p /opt/kafka
-tar -zxvf /opt/kafka_2.12-2.2.0.tgz -C /opt/kafka --strip-components=1
+apt-get update -y
+apt-get install inotify-tools python3 python3-pip redis-server redis-sentinel -y
+pip3 install --upgrade pip
+pip3 install prometheus_client

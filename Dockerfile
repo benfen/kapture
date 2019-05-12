@@ -1,4 +1,4 @@
-FROM anapsix/alpine-java:latest
+FROM gcr.io/google_samples/k8skafka:v1
 
 ADD ./scripts/fetch-deps.sh /opt
 RUN /opt/fetch-deps.sh
