@@ -18,9 +18,9 @@ while True:
         parts = item.split(":")
         past = values.get(parts[1], 0)
 
-    current_value = int(parts[2])
-    diff = current_value - past
+        current_value = int(parts[2])
+        diff = current_value - past
 
-    bps_messages.labels(id=parts[1]).inc(diff)
-    values[parts[1]] = current_value
+        bps_messages.labels(id=parts[1]).inc(diff)
+        values[parts[1]] = current_value
     time.sleep(5)

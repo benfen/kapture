@@ -22,6 +22,7 @@ spec:
   containers:
   - name: kafka-metrics
     image: carbonrelay/kapture:dev-alt-load-gen
+    imagePullPolicy: Always
     command:
       - python3
       - /opt/kafka-metrics.py
