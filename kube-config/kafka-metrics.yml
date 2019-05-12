@@ -1,46 +1,4 @@
 ---
-# Use a custom metrics outputter for Kafka since the JMX metrics are a little unstable
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kafka-metrics-config
-data:
-    metrics.py: |
-      from prometheus_client import start_http_server, Counter
-      import subprocess
-      import time
-
-      # Create a metric to track bps messages
-      bps_messages = Counter('bps_messages', 'Total number of Big Pet store messages received by Kafka', ['id'])
-
-      if __name__ == '__main__':
-        # Start up the server to expose the metrics.
-        start_http_server(8000)
-        values = {}
-
-        while True:
-          output = subprocess.check_output(['/opt/kafka/bin/kafka-run-class.sh', 'kafka.tools.GetOffsetShell',
-            '--broker-list', 'kafka-svc:9093', '--topic', 'bps-data', '--time', '-1']).decode("utf-8")
-
-          for item in output.split():
-            parts = item.split(":")
-            past = values.get(parts[1], 0)
-
-            current_value = int(parts[2])
-            diff = current_value - past
-
-            bps_messages.labels(id=parts[1]).inc(diff)
-            values[parts[1]] = current_value
-          time.sleep(5)
-
-    startup.sh: |
-      apk add --upgrade python3
-      pip3 install prometheus_client
-      wget -P /opt http://apache.claz.org/kafka/2.2.0/kafka_2.12-2.2.0.tgz
-      mkdir -p /opt/kafka
-      tar -zxvf /opt/kafka_2.12-2.2.0.tgz -C /opt/kafka --strip-components=1
-      python3 /scripts/metrics.py
----
 apiVersion: v1
 kind: Service
 metadata:
@@ -63,17 +21,10 @@ metadata:
 spec:
   containers:
   - name: kafka-metrics
-    image: anapsix/alpine-java:latest
+    image: carbonrelay/kapture:dev-alt-load-gen
     command:
-      - sh 
-      - /scripts/startup.sh
+      - python3
+      - /opt/kafka-metrics.py
     ports:
       - containerPort: 8000
-    volumeMounts:
-      - name: kafka-metrics
-        mountPath: /scripts/
-  volumes:
-    - name: kafka-metrics
-      configMap:
-        name: kafka-metrics-config
 ---
