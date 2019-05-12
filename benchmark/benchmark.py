@@ -170,7 +170,7 @@ def main():
             network = prometheus_query('sum(rate(node_network_receive_bytes_total[3m]))')
             disk = prometheus_query('sum(rate(node_disk_written_bytes_total[3m]))')
 
-            messages = prometheus_query('avg(rate(bps_messages_total[3m]))')
+            messages = float(prometheus_query('avg(rate(bps_messages_total[3m]))'))
 
             data = {
                 'generators': generators,
