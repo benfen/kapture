@@ -61,12 +61,10 @@ spec:
             mountPath: /data
       - name: load-gen-producer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:v0.5-dev
+        image: carbonrelay/kapture:dev-alt-load-gen
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
-          - name: ZOOKEEPER_URL
-            value: "$(ZK_SVC_SERVICE_HOST):$(ZK_SVC_SERVICE_PORT)"
         ports:
           - containerPort: 7001
         volumeMounts:

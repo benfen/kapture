@@ -30,7 +30,7 @@ spec:
       containers:
       - name: redis-consumer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:v0.5-dev
+        image: carbonrelay/kapture:dev-alt-load-gen
         env:
           - name: BROKERS
             value: "kafka-svc:9093"

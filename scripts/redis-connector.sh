@@ -8,7 +8,7 @@ while :
 do
     host="$(get_host)"
     echo "Fetched Redis host: $host"
-    /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server kafka-svc:9093 --topic bps-data | \
+    /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server $BROKERS --topic bps-data | \
         awk '{ split($0, a, "dateTime\":"); split(a[2], b, ",\"") ; gsub("\"", "\\\"", $0) ; printf "set %s \"%s\"\n",b[1],$0 }' | \
         redis-cli -x -h $host &
     PID=$!
