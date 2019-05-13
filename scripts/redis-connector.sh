@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 function get_host() {
     redis-cli -p 26379 -h $SENTINEL_HOST INFO | grep "address=.*:6379" | grep -o "[0-9]\+.[0-9]\+.[0-9]\+.[0-9]\+"
