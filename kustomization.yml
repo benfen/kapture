@@ -9,7 +9,7 @@ resources:
 
 images:
   - name: carbonrelay/kapture
-    newTag: dev-alt-load-gen
+    newTag: dev-master
 
 patchesStrategicMerge:
   - examples/default-resources.yml
