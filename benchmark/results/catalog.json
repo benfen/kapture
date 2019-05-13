@@ -4,6 +4,23 @@
         "data": [
             {
                 "nodes": {
+                    "n1-highmem-4": 3
+                },
+                "configuration": {
+                    "redis": false
+                },
+                "cpus": 12,
+                "memory": 78.00,
+                "summary": 1038.82,
+                "runs": [
+                    {
+                        "path": "gke/3_n1-highmem-4/0.json",
+                        "max": 6,
+                        "summary": 1038.82
+                    }
+                ]
+            }, {
+                "nodes": {
                     "n1-standard-2": 3
                 },
                 "configuration": {
@@ -21,6 +38,23 @@
                         "path": "gke/3_n1-standard-2/1.json",
                         "max": 3,
                         "summary": 808.80
+                    }
+                ]
+            }, {
+                "nodes": {
+                    "n1-highcpu-4": 4
+                },
+                "configuration": {
+                    "redis": false
+                },
+                "cpus": 16,
+                "memory": 14.40,
+                "summary": 1109.19,
+                "runs": [
+                    {
+                        "path": "gke/4_n1-highcpu-4/0.json",
+                        "max": 5,
+                        "summary": 1109.19
                     }
                 ]
             }, {
