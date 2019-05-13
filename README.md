@@ -132,12 +132,12 @@ Once that has been done, you can configure your cluster to provide metrics to pr
 
 Just run `./kapture.sh kapture-spam-my-namespace --delete`!  Kapture will take care of the rest.
 
-# WHY IS THIS JAVA EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU
+# WHY ISN'T THIS GO EVERYTHING RELATED TO CONTAINERS SHOULD BE GO WHAT IS WRONG WITH YOU
 
-As popular as Golang is in the infrastructure universe, the fact is that enterprises ship Java code at massive scales,
+As popular as Golang is in the infrastructure universe, the fact is that enterprises ship various kinds of code at massive scales,
 and the goal of Kapture is to simulate enterprise enviornments for upstream kubernetes load and scale testing.
 
-So, yeah, we've got some java in here.
+So, yeah, we've got some stuff that isn't Go in here.
 
 The goal of Kapture is tightly focused on simulating enterprise kubernetes applications at large scales, anything
 largely outside of that relm, including generic load testing for performance SLAs and so on, might be more well

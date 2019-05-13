@@ -25,7 +25,7 @@ def load_results(results):
     for data in results:
             # Some of the data captured is post-decline in Kapture.  Since we're using a simplw linear model,
         # that could mess up the comparison.  As such, ignore those values that follow an apparent drop-off.
-        current_messages = float(data['messages2m'])
+        current_messages = float(data['messages'])
         if last_messages > current_messages:
             break
         last_messages = current_messages
@@ -106,7 +106,7 @@ class ResultCharacterization:
                 self.memory.append(item['memory'])
                 self.network.append(item['network'])
                 self.disk.append(item['disk'])
-                self.messages.append(item['messages2m'])
+                self.messages.append(item['messages'])
 
     def compare(self, result):
         """Compare the provided result to this characterization.
@@ -129,7 +129,7 @@ class ResultCharacterization:
             sum += determinator.distance_to_line((item['generators'], item['network']), self.network_regression) ** 2 / 10
             sum += determinator.distance_to_line((item['generators'], item['disk']), self.disk_regression) ** 2 / 10
 
-            sum += determinator.distance_to_line((item['generators'], item['messages2m']), self.messages_regression) ** 2
+            sum += determinator.distance_to_line((item['generators'], item['messages']), self.messages_regression) ** 2
 
         return sum
 

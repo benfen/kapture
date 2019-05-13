@@ -30,16 +30,18 @@ spec:
       containers:
       - name: redis-consumer
         imagePullPolicy: Always
-        image: benfen/dummy-kafka-messenger:v0.4-dev
+        image: carbonrelay/kapture:dev-alt-load-gen
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
           - name: GROUP_ID
             value: "redis-consumer"
-          - name: MESSENGER_MODE
-            value: "REDIS_LISTEN"
-          - name: REDIS_HOST
-            value: "redis-sentinel:26379"
+          - name: SENTINEL_HOST
+            value: "redis-sentinel"
         ports:
           - containerPort: 7001
+        command:
+          - bash
+          - -c
+          - "/opt/redis-connector.sh"
 ---
