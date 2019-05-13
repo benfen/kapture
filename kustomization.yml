@@ -8,8 +8,8 @@ resources:
   - kube-config/redis-connector.yml
 
 images:
-  - name: benfen/dummy-kafka-messenger
-    newTag: v0.5-dev
+  - name: carbonrelay/kapture
+    newTag: dev-alt-load-gen
 
 patchesStrategicMerge:
   - examples/default-resources.yml
