@@ -11,12 +11,16 @@
                 },
                 "cpus": 8,
                 "memory": 30.00,
-                "summary": 891.17,
+                "summary": 849.99,
                 "runs": [
                     {
                         "path": "gke/3_n1-standard-2/0.json",
                         "max": 2,
                         "summary": 891.17
+                    }, {
+                        "path": "gke/3_n1-standard-2/1.json",
+                        "max": 3,
+                        "summary": 808.80
                     }
                 ]
             }, {
@@ -28,12 +32,16 @@
                 },
                 "cpus": 8,
                 "memory": 30.00,
-                "summary": 957.96,
+                "summary": 909.64,
                 "runs": [
                     {
                         "path": "gke/4_n1-standard-2/0.json",
                         "max": 4,
                         "summary": 957.96
+                    }, {
+                        "path": "gke/4_n1-standard-2/1.json",
+                        "max": 4,
+                        "summary": 861.32
                     }
                 ]
             }, {
