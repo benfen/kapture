@@ -17,3 +17,6 @@ framework we have in place, then you can get started interactively by trying a f
 - Look at how changing CPU, memory, and other parameters in the kustomize scripts 
 increase or decrease performance.
 - If your ambitous, extend the project to include a new database or data sink of some sort.
+
+# Once I've used Kapture to do something useful, what can I contribute next? 
+
