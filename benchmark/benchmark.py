@@ -27,12 +27,12 @@ def configure_prometheus(namespace):
     """
 
     shutil.rmtree('./temp', ignore_errors=True)
-    result = urlopen('https://codeload.github.com/carbonrelay/prometheus-recipes/zip/master')
+    result = urlopen('https://github.com/carbonrelay/prometheus-recipes/archive/0.0.1.zip')
 
     zip = ZipFile(io.BytesIO(result.read()))
     zip.extractall('.')
 
-    os.rename('prometheus-recipes-master', 'temp')
+    os.rename('prometheus-recipes-0.0.1', 'temp')
 
     # ZipFile's extractall method messes up files permissions, so we need to add execute permissions back.
     os.chmod('./temp/prometheus-recipes.sh', 0o755)
@@ -40,7 +40,7 @@ def configure_prometheus(namespace):
 
     with open(os.devnull, 'w') as devnull:
         # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
-        subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=devnull)
+        subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'])
         subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=devnull)
 
 def heartbeat(period, update_file, duration = 270):
@@ -104,7 +104,7 @@ def prometheus_query(query):
     Returns:
         A single float representing the result of the provided query.
     """
-    query_url = 'http://localhost:9090/api/v1/query?query=' + quote(query, safe='~@#$&()*!+=:;,.?/\'')
+    query_url = 'http://localhost:9090/prometheus/api/v1/query?query=' + quote(query, safe='~@#$&()*!+=:;,.?/\'')
     response = subprocess.check_output(['kubectl', 'exec', 'prometheus-k8s-0', '-n', 'monitoring', '-c', 'prometheus',
         '--', 'wget', '-O', '-', '-q', query_url])
 
@@ -157,8 +157,7 @@ def main():
         if args.redis:
             flags = flags + 'r'
 
-        with open(os.devnull, 'w') as devnull:
-            subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=devnull)
+        subprocess.check_output(['./kapture.sh', namespace, '1', flags])
 
         last_message_rate = 0
         messages_declining = False
