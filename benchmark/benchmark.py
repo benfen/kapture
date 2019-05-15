@@ -200,7 +200,7 @@ def main():
 
     if update_catalog:
         print('Updating catalog with new values')
-        append_to_catalog('./benchmark/temp/results.json', './benchmark/results/catalog.json')
+        append_to_catalog('./benchmark/temp/results.json', './benchmark/results')
 
     if characterize:
         print('\nCharacterizing data from benchmark\n')

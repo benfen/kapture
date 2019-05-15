@@ -4,6 +4,15 @@ import subprocess
 import os
 
 def get_node_statistics():
+    """Fetches node information for a cluster
+
+    Returns:
+        A tuple in the form (provider, nodes, cpu, memory) where
+            provider - Name of the cluster provider (e.g. gke)
+            nodes - A dict mapping the name of the type of node to the count of that node
+            cpu - Total amount of cpus in the cluster
+            memory - Total amount of memory (in GB) in the cluster
+    """
     node_data = json.loads(subprocess.check_output(['kubectl', 'get', 'nodes', '-o', 'json']))
 
     if 'gke' in node_data['items'][0]['metadata']['name']:
@@ -36,14 +45,34 @@ def get_node_statistics():
     return (provider, nodes, cpu, memory)
 
 def get_config_identifier(nodes):
+    """Generate an identifer for a configuration of nodes
+
+    Takes in a list of nodes within a cluster and generates a consistent identifier for that configuration.
+
+    Args:
+        nodes - Dict mapping node names (e.g. n1-standard-2) to the number of nodes of that type present in the cluster
+
+    Returns:
+        A string identifier for the node configuration of the cluster
+    """
     name = ''
     for node in sorted(nodes.keys()):
         name += '{}_{}_'.format(nodes[node], node)
 
     return name.rstrip('_')
 
-def append_to_catalog(result_path, catalog_path):
-    with open(result_path) as r, open(catalog_path) as c:
+def append_to_catalog(data_path, result_dir):
+    """Updates the data in the results directory
+
+    Takes in data stored in the result path and uses that to update the catalog as well as the other data
+    stored in the result directory.
+
+    Args:
+        data_path - Path to the file containing data for the run to be added to the catalog
+        result_dir - Path to the directory containing the results
+    """
+    catalog_path = os.path.join(result_dir, 'catalog.json')
+    with open(data_path) as r, open(catalog_path) as c:
         catalog = json.load(c)
         results = json.load(r)
 
@@ -95,8 +124,8 @@ def append_to_catalog(result_path, catalog_path):
                 }
                 provider['data'].append(item)
 
-            output_file = os.path.join('results', run['path'])
+            output_file = os.path.join(result_dir, run['path'])
             os.makedirs(os.path.dirname(output_file), exist_ok=True)
-            shutil.copyfile(result_path, output_file)
+            shutil.copyfile(data_path, output_file)
             with open(catalog_path, 'w') as c:
                 json.dump(catalog, c, sort_keys=True, indent=4)
