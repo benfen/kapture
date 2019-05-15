@@ -51,9 +51,7 @@ spec:
         command:
         - sh
         - -c
-        - "wget https://repo1.maven.org/maven2/io/prometheus/jmx/jmx_prometheus_javaagent/0.9/jmx_prometheus_javaagent-0.9.jar -P /opt && \
-          wget https://raw.githubusercontent.com/prometheus/jmx_exporter/master/example_configs/kafka-0-8-2.yml -P /opt && \
-          exec kafka-server-start.sh /opt/kafka/config/server.properties --override broker.id=${HOSTNAME##*-} \
+        - "exec kafka-server-start.sh /opt/kafka/config/server.properties --override broker.id=${HOSTNAME##*-} \
           --override listeners=PLAINTEXT://:9093 \
           --override zookeeper.connect=zk-svc:2181 \
           --override log.dir=/var/lib/kafka \
@@ -142,7 +140,7 @@ spec:
         - name: KAFKA_HEAP_OPTS
           value : "-Xmx512M -Xms512M"
         - name: KAFKA_OPTS
-          value: "-Dlogging.level=INFO -javaagent:/opt/jmx_prometheus_javaagent-0.9.jar=7071:/opt/kafka-0-8-2.yml"
+          value: "-Dlogging.level=INFO"
         volumeMounts:
         - name: datadir
           mountPath: /var/lib/kafka

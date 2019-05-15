@@ -2,6 +2,7 @@ import determinator
 import json
 import os
 from sys import argv
+from os.path import join
 
 def load_results(results):
     """Loads data from a results array
@@ -24,7 +25,7 @@ def load_results(results):
     for data in results:
             # Some of the data captured is post-decline in Kapture.  Since we're using a simplw linear model,
         # that could mess up the comparison.  As such, ignore those values that follow an apparent drop-off.
-        current_messages = float(data['messages2m'])
+        current_messages = float(data['messages'])
         if last_messages > current_messages:
             break
         last_messages = current_messages
@@ -105,7 +106,7 @@ class ResultCharacterization:
                 self.memory.append(item['memory'])
                 self.network.append(item['network'])
                 self.disk.append(item['disk'])
-                self.messages.append(item['messages2m'])
+                self.messages.append(item['messages'])
 
     def compare(self, result):
         """Compare the provided result to this characterization.
@@ -128,7 +129,7 @@ class ResultCharacterization:
             sum += determinator.distance_to_line((item['generators'], item['network']), self.network_regression) ** 2 / 10
             sum += determinator.distance_to_line((item['generators'], item['disk']), self.disk_regression) ** 2 / 10
 
-            sum += determinator.distance_to_line((item['generators'], item['messages2m']), self.messages_regression) ** 2
+            sum += determinator.distance_to_line((item['generators'], item['messages']), self.messages_regression) ** 2
 
         return sum
 
@@ -169,15 +170,21 @@ def load_data():
         List of characterizations
     """
     characterizations = []
-    result_dirs = os.scandir(os.path.join(os.path.dirname(os.path.realpath(__file__)), 'results'))
-    providers = [ item for item in result_dirs if item.is_dir() and not item.name == 'minikube']
+    basedir = join(os.path.dirname(__file__), 'results')
+    result_dirs = os.listdir(basedir)
+    providers = []
+    for item in result_dirs:
+        if not item == 'minikube' and os.path.isdir(join(basedir, item)):
+            providers.append(item)
 
     for provider in providers:
-        for node_configuration in os.scandir(provider.path):
+        provider_dir = join(basedir, provider)
+        for node_configuration in os.listdir(provider_dir):
             node_configurations = {}
 
-            for data in os.scandir(node_configuration.path):
-                name_parts = os.path.splitext(data.name)[0].split('-')
+            config_dir = join(provider_dir, node_configuration)
+            for data in os.listdir(config_dir):
+                name_parts = os.path.splitext(data)[0].split('-')
 
                 if len(name_parts) == 2:
                     key = name_parts[1]
@@ -185,12 +192,12 @@ def load_data():
                     key = '-'
 
                 if not key in node_configurations:
-                    characterization = ResultCharacterization(provider.name, node_configuration.name, key)
+                    characterization = ResultCharacterization(provider, node_configuration, key)
                     node_configurations[key] = characterization
                 else:
                     characterization = node_configurations[key]
 
-                characterization.add_data(data.path)
+                characterization.add_data(join(config_dir, data))
 
             characterizations.extend(node_configurations.values())
 

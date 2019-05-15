@@ -1,11 +1,17 @@
+# Python 2/3 compatibility
+from __future__ import print_function
+try:
+    from urllib.parse import quote
+    from urllib.request import urlopen
+except ImportError:
+    from urllib import quote
+    from urllib2 import urlopen
+
 import characterization
-from urllib.parse import quote
-from urllib.request import urlopen
 from zipfile import ZipFile
 from time import sleep
 import argparse
 import io
-import requests
 import shutil
 import os
 import subprocess
@@ -21,20 +27,21 @@ def configure_prometheus(namespace):
     """
 
     shutil.rmtree('./temp', ignore_errors=True)
-    result = requests.get('https://codeload.github.com/carbonrelay/prometheus-recipes/zip/master')  
+    result = urlopen('https://github.com/carbonrelay/prometheus-recipes/archive/0.0.1.zip')
 
-    zip = ZipFile(io.BytesIO(result.content))
+    zip = ZipFile(io.BytesIO(result.read()))
     zip.extractall('.')
 
-    os.rename('prometheus-recipes-master', 'temp')
+    os.rename('prometheus-recipes-0.0.1', 'temp')
 
     # ZipFile's extractall method messes up files permissions, so we need to add execute permissions back.
     os.chmod('./temp/prometheus-recipes.sh', 0o755)
     os.chmod('./temp/prometheus.sh', 0o755)
 
-    # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
-    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
-    subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=subprocess.DEVNULL)
+    with open(os.devnull, 'w') as devnull:
+        # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
+        subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'])
+        subprocess.check_output(['./temp/prometheus-recipes.sh', namespace, '-npk'], stderr=devnull)
 
 def heartbeat(period, update_file, duration = 270):
     if period <= 0:
@@ -46,10 +53,12 @@ def heartbeat(period, update_file, duration = 270):
 
             output = {
                 'cpu': top[0],
-                'memory': top[1]
+                'memory': top[1],
+                'messages': top[2]
             }
 
-            print(json.dumps(output), file=update_file, flush=True)
+            print(json.dumps(output), file=update_file)
+            update_file.flush()
             time += period
             sleep(period)
 
@@ -63,7 +72,15 @@ def top_nodes():
         A tuple (cpu usage, memory usage) representing current usage by the nodes.
     """
 
-    node_lines = subprocess.check_output(['kubectl', 'top', 'nodes', '--no-headers']).split()
+    node_lines = ""
+    while node_lines == "":
+        try:
+            node_lines = subprocess.check_output(['kubectl', 'top', 'nodes', '--no-headers']).split()
+        except subprocess.CalledProcessError as e:
+            print(e.output)
+            print("Reattempting retrieving node cpu and memory")
+
+    messages = prometheus_query('avg(rate(bps_messages_total[1m]))')
     length = len(node_lines)
 
     cpu = memory = 0
@@ -72,13 +89,14 @@ def top_nodes():
         memory += float(node_lines[index + 4][:-1])
 
     length /= 5
-    return (cpu / length, memory / length)
+    return (cpu / length, memory / length, messages)
 
 def prometheus_query(query):
     """Performs a query against prometheus.
 
     Utilizes kubectl to execute a command within the prometheus container.  Assumes that the query given
-    only returns one value and only returns that value.
+    only returns one value and only returns that value.  If the query given does not return a value, this
+    will return -1 instead of erroring out.
 
     Args:
         query - Prometheus QL query to make.  Should only fetch one value.
@@ -86,13 +104,20 @@ def prometheus_query(query):
     Returns:
         A single float representing the result of the provided query.
     """
-    query_url = 'http://localhost:9090/api/v1/query?query=' + quote(query, safe='~@#$&()*!+=:;,.?/\'')
+    query_url = 'http://localhost:9090/prometheus/api/v1/query?query=' + quote(query, safe='~@#$&()*!+=:;,.?/\'')
     response = subprocess.check_output(['kubectl', 'exec', 'prometheus-k8s-0', '-n', 'monitoring', '-c', 'prometheus',
         '--', 'wget', '-O', '-', '-q', query_url])
 
     parsed_response = json.loads(response)
 
-    return float(parsed_response['data']['result'][0]['value'][1])
+    # Make sure that if prometheus doesn't have the data that we just return peacefully
+    result = parsed_response['data']['result']
+    if len(result) > 0:
+        value = result[0]['value']
+        if len(value) > 1:
+            return float(value[1])
+
+    return -1
 
 def main():
     parser = argparse.ArgumentParser()
@@ -132,8 +157,7 @@ def main():
         if args.redis:
             flags = flags + 'r'
 
-        subprocess.check_output(['./kapture.sh', namespace, '1', flags], stderr=subprocess.DEVNULL)
-        heartbeat(heartbeat_period, updates, duration=60)
+        subprocess.check_output(['./kapture.sh', namespace, '1', flags])
 
         last_message_rate = 0
         messages_declining = False
@@ -141,13 +165,11 @@ def main():
         while (max_generators <= 0 and not messages_declining) or generators <= max_generators:
             heartbeat(heartbeat_period, updates)
 
-            cpu, memory = top_nodes()
+            cpu, memory, _ = top_nodes()
             network = prometheus_query('sum(rate(node_network_receive_bytes_total[3m]))')
             disk = prometheus_query('sum(rate(node_disk_written_bytes_total[3m]))')
 
-            messages1m = prometheus_query('sum(rate(bps_messages_produced[1m]))')
-            messages2m = prometheus_query('sum(rate(bps_messages_produced[2m]))')
-            messages3m = prometheus_query('sum(rate(bps_messages_produced[3m]))')
+            messages = prometheus_query('avg(rate(bps_messages_total[3m]))')
 
             data = {
                 'generators': generators,
@@ -155,17 +177,17 @@ def main():
                 'memory': memory,
                 'network': network,
                 'disk': disk,
-                'messages1m': messages1m,
-                'messages2m': messages2m,
-                'messages3m': messages3m
+                'messages': messages
             }
 
+            print(json.dumps(data), file=updates)
+            updates.flush()
             result_data['data'].append(data)
 
-            if messages_declining or last_message_rate > messages2m:
+            if messages_declining or last_message_rate > messages:
                 messages_declining = True
             else:
-                last_message_rate = messages2m
+                last_message_rate = messages
 
             generators += 1
             subprocess.check_output(['kubectl', 'scale', 'Deployment', 'data-loader', '-n', namespace, '--replicas', str(generators)])

@@ -18,7 +18,7 @@ results
      └─ node_configuration2
          └─ 0.json
          └─ 1.json
-         └─ 2-r.json
+         └─ 0-r.json
 ```
 
 Providers are somthing like gke or minikube.  Configurations are listed in the format `${node_count}_${node_type}` and indicate the nodes used.  For example, a configuration using one "standard" node and two "other" nodes, would be called `1_standard_2_other`.  Inside of each configuration are all the runs performed using that configuration.  Each run is name with an increasing index followed (optionally) by any additional configuration flags used.  For example, `2-r.json` indicates a run that had Redis configured.
@@ -83,15 +83,7 @@ In the summary column, the max number of load generators to produce a decline in
 
 | Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
 |-|-|-|-|-|-|-|-|
-| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | No | 66.38 msg/node/s (3) | [data](./results/gke/3_n1-standard-2/0.json) |
-| 0.4 | 3 | n1-standard-2 | 6 | 22.50GB | Yes | 62.06 msg/node/s (3) | [data](./results/gke/3_n1-standard-2/1-r.json) |
-| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | No | 135.59 msg/node/s (3) | [data](./results/gke/3_n1-highcpu-4/0.json) |
-| 0.4 | 3 | n1-highcpu-4 | 12 | 10.80GB | Yes | 125.40 msg/node/s (3) | [data](./results/gke/3_n1-highcpu-4/1-r.json) |
-| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | No | 91.08 msg/node/s (4) | [data](./results/gke/3_n1-highmem-2/0.json) |
-| 0.4 | 4 | n1-highmem-2 | 8 | 52.00GB | Yes | 72.35 msg/node/s (4) | [data](./results/gke/3_n1-highmem-2/1-r.json) |
-| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | No | 122.33 msg/node/s (8) | [data](./results/gke/2_n1-standard-8/0.json) |
-| 0.4 | 2 | n1-standard-8 | 16 | 60.00GB | Yes | 103.92 msg/node/s (8) | [data](./results/gke/2_n1-standard-8/1-r.json) |
-| 0.4 | 8 | n1-standard-1 | 8 | 30.00GB | Yes | 62.05 msg/node/s (6) | [data](./results/gke/8_n1-standard-1/0-r.json) |
+| 0.5 | 4 | n1-standard-2 | 8 | 30.00GB | No | 957.96 msg/node/s (4) | [data](./results/gke/4_n1-standard-2/0.json) |
 
 ## Minikube
 
@@ -99,5 +91,4 @@ The MacBook Pro used for testing had 8 cores (2.6 GHz Intel Core i7), 16 GB of m
 
 | Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
 |-|-|-|-|-|-|-|-|
-| 0.4 | 1 | MacBook Pro | 5 | 8.79GB | No | 134.70 msg/node/s (2) | [data](./results/minikube/0.json) |
-| 0.4 | 1 | MacBook Pro | 5 | 8.79GB | Yes | 132.23 msg/node/s (2) | [data](./results/minikube/1-r.json) |
+| 0.5 | 1 | MacBook Pro | 5 | 8.20GB | No | 1279.47 msg/node/s (3) | [data](./results/minikube/0.json) |

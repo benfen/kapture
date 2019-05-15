@@ -2,19 +2,6 @@
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: kafka-metrics
-spec:
-  endpoints:
-  - interval: 60s
-    port: metrics
-    scrapeTimeout: 45s
-  selector:
-    matchLabels:
-      app: kafka
----
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
   name: redis-connector-metrics
 spec:
   endpoints:
@@ -34,5 +21,5 @@ spec:
     port: metrics
   selector:
     matchLabels:
-      app: datagen
+      metrics: kafka
 ---
