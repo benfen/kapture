@@ -1,3 +1,13 @@
+# Using Kapture to learn Kubernetes
+
+Kapture is a great tool for learning K8s, here are some exersizes to get you started.
+
+- First, make sure you know the basics of K8s.  This can be gleaned from online tutorials, for example, by going through and deploying the guestbook application: https://kubernetes.io/docs/tutorials/stateless-application/guestbook/.
+- Reproduce the benchmarks on your own hardware.  
+- Measure timing differences between PVCs and the standard deployment.
+- Install prometheus and determine what the performance bottlenecks are in the out of the box deployment.
+- Try to overcome the bottlneck, and then, calculate your max transaction throughput.
+
 # This section is for newcomers to the project.
 
 Getting involved in a new project often happens in the following order...
