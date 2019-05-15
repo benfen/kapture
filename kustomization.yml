@@ -9,7 +9,7 @@ resources:
 
 images:
   - name: carbonrelay/kapture
-    newTag: catalog
+    newTag: "dev-catalog"
 
 patchesStrategicMerge:
   - examples/default-resources.yml

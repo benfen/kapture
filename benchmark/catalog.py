@@ -41,8 +41,8 @@ def get_config_identifier(nodes):
 
     return name.rstrip('_')
 
-def append_to_catalog():
-    with open('temp/results.json') as r, open('results/catalog.json') as c:
+def append_to_catalog(result_path, catalog_path):
+    with open(result_path) as r, open(catalog_path) as c:
         catalog = json.load(c)
         results = json.load(r)
 
@@ -94,6 +94,6 @@ def append_to_catalog():
                 }
                 provider['data'].append(item)
 
-            shutil.copyfile('temp/results.json', '{}/{}'.format('results', run['path']))
-            with open('results/catalog.json', 'w') as c:
+            shutil.copyfile(result_path, '{}/{}'.format('results', run['path']))
+            with open(catalog_path, 'w') as c:
                 json.dump(catalog, c, sort_keys=True, indent=4)
