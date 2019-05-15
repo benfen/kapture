@@ -1,6 +1,7 @@
 import shutil
 import json
 import subprocess
+import os
 
 def get_node_statistics():
     node_data = json.loads(subprocess.check_output(['kubectl', 'get', 'nodes', '-o', 'json']))
@@ -75,7 +76,7 @@ def append_to_catalog(result_path, catalog_path):
             flag_string.rstrip("-")
 
             run = {
-                'path': '{}/{}/{}{}.json'.format(node_stats[0], get_config_identifier(node_stats[1]), runs, flag_string),
+                'path': os.path.join(node_stats[0], get_config_identifier(node_stats[1]), '{}{}.json'.format(runs, flag_string)),
                 'max': max,
                 'summary': summary
             }
@@ -94,6 +95,8 @@ def append_to_catalog(result_path, catalog_path):
                 }
                 provider['data'].append(item)
 
-            shutil.copyfile(result_path, '{}/{}'.format('results', run['path']))
+            output_file = os.path.join('results', run['path'])
+            os.makedirs(os.path.dirname(output_file), exist_ok=True)
+            shutil.copyfile(result_path, output_file)
             with open(catalog_path, 'w') as c:
                 json.dump(catalog, c, sort_keys=True, indent=4)
