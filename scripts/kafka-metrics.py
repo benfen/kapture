@@ -3,16 +3,28 @@ import subprocess
 import time
 
 # Create a metric to track bps messages
-bps_messages = Counter('bps_messages', 'Total number of Big Pet store messages received by Kafka', ['id'])
+bps_messages = Counter(
+    "bps_messages", "Total number of Big Pet store messages received by Kafka", ["id"]
+)
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Start up the server to expose the metrics.
     start_http_server(8000)
     values = {}
 
 while True:
-    output = subprocess.check_output(['/opt/kafka/bin/kafka-run-class.sh', 'kafka.tools.GetOffsetShell',
-        '--broker-list', 'kafka-svc:9093', '--topic', 'bps-data', '--time', '-1']).decode("utf-8")
+    output = subprocess.check_output(
+        [
+            "/opt/kafka/bin/kafka-run-class.sh",
+            "kafka.tools.GetOffsetShell",
+            "--broker-list",
+            "kafka-svc:9093",
+            "--topic",
+            "bps-data",
+            "--time",
+            "-1",
+        ]
+    ).decode("utf-8")
 
     for item in output.split():
         parts = item.split(":")
