@@ -8,7 +8,8 @@ except ImportError:
     from urllib import quote
     from urllib2 import urlopen
 
-import characterization
+from catalog import append_to_catalog
+from characterization import characterize_data
 from zipfile import ZipFile
 from time import sleep
 import argparse
@@ -169,6 +170,11 @@ def main():
         + "than or equal to 0, the heartbeat will not trigger; this is the default behavior",
     )
     parser.add_argument(
+        "--update-catalog",
+        action="store_true",
+        help="Update the catalog.json with data from this run and also persist the data into the results folder",
+    )
+    parser.add_argument(
         "--heartbeat",
         type=int,
         default=-1,
@@ -180,6 +186,7 @@ def main():
     heartbeat_period = int(args.heartbeat)
     max_generators = int(args.generators)
     characterize = args.characterize
+    update_catalog = args.update_catalog
     namespace = "test"
 
     configure_prometheus(namespace)
@@ -245,10 +252,16 @@ def main():
                 ]
             )
 
-        results.write(json.dumps(result_data))
+        json.dump(result_data, results, indent=4)
+
+    if update_catalog:
+        print("Updating catalog with new values")
+        append_to_catalog("./benchmark/temp/results.json", "./benchmark/results")
 
     if characterize:
-        characterization.characterize_data(result_data)
+        print("\nCharacterizing data from benchmark\n")
+        characterize_data(result_data)
+        print("\n")
 
     print("Removing created Kapture resources from the cluster...")
     subprocess.check_output(["./kapture.sh", namespace, "--delete"])

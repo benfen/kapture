@@ -1,141 +1,166 @@
 [
     {
-        "provider": "gke",
         "data": [
             {
-                "nodes": {
-                    "n1-highmem-4": 3
-                },
                 "configuration": {
                     "redis": false
                 },
                 "cpus": 12,
-                "memory": 78.00,
-                "summary": 1038.82,
+                "memory": 78.0,
+                "nodes": {
+                    "n1-highmem-4": 3
+                },
                 "runs": [
                     {
-                        "path": "gke/3_n1-highmem-4/0.json",
                         "max": 6,
+                        "path": "gke/3_n1-highmem-4/0.json",
                         "summary": 1038.82
                     }
-                ]
-            }, {
-                "nodes": {
-                    "n1-standard-2": 3
-                },
+                ],
+                "summary": 1038.82
+            },
+            {
                 "configuration": {
                     "redis": false
                 },
                 "cpus": 8,
-                "memory": 30.00,
-                "summary": 849.99,
+                "memory": 30.0,
+                "nodes": {
+                    "n1-standard-2": 3
+                },
                 "runs": [
                     {
-                        "path": "gke/3_n1-standard-2/0.json",
                         "max": 2,
+                        "path": "gke/3_n1-standard-2/0.json",
                         "summary": 891.17
-                    }, {
-                        "path": "gke/3_n1-standard-2/1.json",
+                    },
+                    {
                         "max": 3,
-                        "summary": 808.80
+                        "path": "gke/3_n1-standard-2/1.json",
+                        "summary": 808.8
                     }
-                ]
-            }, {
-                "nodes": {
-                    "n1-standard-4": 4
-                },
+                ],
+                "summary": 849.99
+            },
+            {
                 "configuration": {
                     "redis": false
                 },
                 "cpus": 12,
-                "memory": 45.00,
-                "summary": 1116.66,
+                "memory": 45.0,
+                "nodes": {
+                    "n1-standard-4": 4
+                },
                 "runs": [
                     {
-                        "path": "gke/4_n1-standard-4/0.json",
                         "max": 5,
+                        "path": "gke/4_n1-standard-4/0.json",
                         "summary": 1116.66
                     }
-                ]
-            }, {
-                "nodes": {
-                    "n1-highcpu-4": 4
-                },
+                ],
+                "summary": 1116.66
+            },
+            {
                 "configuration": {
                     "redis": false
                 },
                 "cpus": 16,
-                "memory": 14.40,
-                "summary": 1109.19,
+                "memory": 14.4,
+                "nodes": {
+                    "n1-highcpu-4": 4
+                },
                 "runs": [
                     {
-                        "path": "gke/4_n1-highcpu-4/0.json",
                         "max": 5,
+                        "path": "gke/4_n1-highcpu-4/0.json",
                         "summary": 1109.19
                     }
-                ]
-            }, {
-                "nodes": {
-                    "n1-standard-2": 4
-                },
+                ],
+                "summary": 1109.19
+            },
+            {
                 "configuration": {
                     "redis": false
                 },
                 "cpus": 8,
-                "memory": 30.00,
-                "summary": 909.64,
-                "runs": [
-                    {
-                        "path": "gke/4_n1-standard-2/0.json",
-                        "max": 4,
-                        "summary": 957.96
-                    }, {
-                        "path": "gke/4_n1-standard-2/1.json",
-                        "max": 4,
-                        "summary": 861.32
-                    }
-                ]
-            }, {
+                "memory": 30.0,
                 "nodes": {
                     "n1-standard-2": 4
                 },
+                "runs": [
+                    {
+                        "max": 4,
+                        "path": "gke/4_n1-standard-2/0.json",
+                        "summary": 957.96
+                    },
+                    {
+                        "max": 4,
+                        "path": "gke/4_n1-standard-2/1.json",
+                        "summary": 861.32
+                    }
+                ],
+                "summary": 909.64
+            },
+            {
                 "configuration": {
                     "redis": true
                 },
                 "cpus": 8,
-                "memory": 30.00,
-                "summary": 669.87,
+                "memory": 30.0,
+                "nodes": {
+                    "n1-standard-2": 4
+                },
                 "runs": [
                     {
-                        "path": "gke/4_n1-standard-2/0-r.json",
                         "max": 4,
+                        "path": "gke/4_n1-standard-2/0-r.json",
                         "summary": 669.87
                     }
-                ]
+                ],
+                "summary": 669.87
+            },
+            {
+                "configuration": {
+                    "redis": true
+                },
+                "cpus": 6,
+                "memory": 21.91,
+                "nodes": {
+                    "n1-standard-2": 3
+                },
+                "runs": [
+                    {
+                        "max": 3,
+                        "path": "gke/3_n1-standard-2/0-r.json",
+                        "summary": 907.0176249002939
+                    }
+                ],
+                "summary": 907.0176249002939
             }
-        ]
+        ],
+        "provider": "gke"
     },
     {
-        "provider": "minikube",
         "data": [
             {
-                "nodes": {
-                    "minikube": 1
-                },
                 "configuration": {
                     "redis": false
                 },
                 "cpus": 5,
-                "memory": 8.20,
-                "summary": 1279.47,
+                "memory": 8.2,
+                "nodes": {
+                    "minikube": 1
+                },
                 "runs": [
                     {
-                        "path": "minikube/0.json",
                         "max": 3,
+                        "path": "minikube/0.json",
                         "summary": 1279.47
                     }
-                ]
+                ],
+                "summary": 1279.47
             }
-        ]
+        ],
+        "provider": "minikube"
     }
 ]
