@@ -1,5 +1,6 @@
 from math import sqrt
 
+
 def distance_to_line(point, line):
     """Calculates the shortest distance from the given point to the line.
 
@@ -18,6 +19,7 @@ def distance_to_line(point, line):
 
     return abs(a * x + b * y + c) / sqrt(a ** 2 + b ** 2)
 
+
 def simple_linear_regression(x_arr, y_arr):
     """Performs a simple linear regression
 
@@ -33,10 +35,10 @@ def simple_linear_regression(x_arr, y_arr):
 
     sum_x = sum(x_arr)
     sum_y = sum(y_arr)
-    sum_x_squared = sum( [ x_arr[i] ** 2 for i in range(points) ] )
-    dot_product = sum( [ x_arr[i] * y_arr[i] for i in range(points) ] )
+    sum_x_squared = sum([x_arr[i] ** 2 for i in range(points)])
+    dot_product = sum([x_arr[i] * y_arr[i] for i in range(points)])
 
-    denominator = (points * sum_x_squared - sum_x ** 2)
+    denominator = points * sum_x_squared - sum_x ** 2
     a = (sum_y * sum_x_squared - sum_x * dot_product) / denominator
     b = (points * dot_product - sum_x * sum_y) / denominator
 
