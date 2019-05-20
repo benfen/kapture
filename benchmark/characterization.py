@@ -4,6 +4,7 @@ import os
 from sys import argv
 from os.path import join
 
+
 def load_results(results):
     """Loads data from a results array
 
@@ -23,20 +24,21 @@ def load_results(results):
     last_messages = 0
 
     for data in results:
-            # Some of the data captured is post-decline in Kapture.  Since we're using a simplw linear model,
+        # Some of the data captured is post-decline in Kapture.  Since we're using a simplw linear model,
         # that could mess up the comparison.  As such, ignore those values that follow an apparent drop-off.
-        current_messages = float(data['messages'])
+        current_messages = float(data["messages"])
         if last_messages > current_messages:
             break
         last_messages = current_messages
 
-        cpu.append(float(data['cpu']))
-        memory.append(float(data['memory']))
-        network.append(float(data['network']))
-        disk.append(float(data['disk']))
+        cpu.append(float(data["cpu"]))
+        memory.append(float(data["memory"]))
+        network.append(float(data["network"]))
+        disk.append(float(data["disk"]))
         messages.append(current_messages)
 
     return (cpu, memory, network, disk, messages)
+
 
 class ResultCharacterization:
     """Data container for performance characterizing metrics from a Kapture result
@@ -76,7 +78,7 @@ class ResultCharacterization:
         """
         self.provider = provider
         self.node_configuration = node_configuration
-        self.redis_enabled = 'r' in configuration
+        self.redis_enabled = "r" in configuration
 
         self.generators = []
         self.cpu = []
@@ -100,13 +102,13 @@ class ResultCharacterization:
         with open(results) as f:
             data = json.load(f)
 
-            for item in data['data']:
-                self.generators.append(item['generators'])
-                self.cpu.append(item['cpu'])
-                self.memory.append(item['memory'])
-                self.network.append(item['network'])
-                self.disk.append(item['disk'])
-                self.messages.append(item['messages'])
+            for item in data["data"]:
+                self.generators.append(item["generators"])
+                self.cpu.append(item["cpu"])
+                self.memory.append(item["memory"])
+                self.network.append(item["network"])
+                self.disk.append(item["disk"])
+                self.messages.append(item["messages"])
 
     def compare(self, result):
         """Compare the provided result to this characterization.
@@ -121,15 +123,42 @@ class ResultCharacterization:
             self.create_regressions()
 
         sum = 0
-        for item in result['data']:
-            sum += determinator.distance_to_line((item['generators'], item['cpu']), self.cpu_regression) ** 2
-            sum += determinator.distance_to_line((item['generators'], item['memory']), self.memory_regression) ** 2
+        for item in result["data"]:
+            sum += (
+                determinator.distance_to_line(
+                    (item["generators"], item["cpu"]), self.cpu_regression
+                )
+                ** 2
+            )
+            sum += (
+                determinator.distance_to_line(
+                    (item["generators"], item["memory"]), self.memory_regression
+                )
+                ** 2
+            )
 
             # Quick patch.  Network and disk are much larger values and seem to contribute much more.
-            sum += determinator.distance_to_line((item['generators'], item['network']), self.network_regression) ** 2 / 10
-            sum += determinator.distance_to_line((item['generators'], item['disk']), self.disk_regression) ** 2 / 10
+            sum += (
+                determinator.distance_to_line(
+                    (item["generators"], item["network"]), self.network_regression
+                )
+                ** 2
+                / 10
+            )
+            sum += (
+                determinator.distance_to_line(
+                    (item["generators"], item["disk"]), self.disk_regression
+                )
+                ** 2
+                / 10
+            )
 
-            sum += determinator.distance_to_line((item['generators'], item['messages']), self.messages_regression) ** 2
+            sum += (
+                determinator.distance_to_line(
+                    (item["generators"], item["messages"]), self.messages_regression
+                )
+                ** 2
+            )
 
         return sum
 
@@ -138,11 +167,22 @@ class ResultCharacterization:
 
         Note that this will simply overwrite any pre-existing regressions that may have existed 
         """
-        self.cpu_regression = determinator.simple_linear_regression(self.generators, self.cpu)
-        self.memory_regression = determinator.simple_linear_regression(self.generators, self.memory)
-        self.network_regression = determinator.simple_linear_regression(self.generators, self.network)
-        self.disk_regression = determinator.simple_linear_regression(self.generators, self.disk)
-        self.messages_regression = determinator.simple_linear_regression(self.generators, self.messages)
+        self.cpu_regression = determinator.simple_linear_regression(
+            self.generators, self.cpu
+        )
+        self.memory_regression = determinator.simple_linear_regression(
+            self.generators, self.memory
+        )
+        self.network_regression = determinator.simple_linear_regression(
+            self.generators, self.network
+        )
+        self.disk_regression = determinator.simple_linear_regression(
+            self.generators, self.disk
+        )
+        self.messages_regression = determinator.simple_linear_regression(
+            self.generators, self.messages
+        )
+
 
 def characterize_data(data):
     """Characterizes the data provided based on known results.
@@ -155,13 +195,22 @@ def characterize_data(data):
     characterizations = load_data()
 
     scores = []
-    for c in [ ch for ch in characterizations if ch.redis_enabled == data['configuration']['redis'] ]:
+    for c in [
+        ch
+        for ch in characterizations
+        if ch.redis_enabled == data["configuration"]["redis"]
+    ]:
         scores.append((c.compare(data), c))
 
-    scores.sort(key = lambda val: val[0])
-    print('{0:<10}{1:<10}{2:<20}'.format('Score', 'Provider', 'Node Configuration'))
+    scores.sort(key=lambda val: val[0])
+    print("{0:<10}{1:<10}{2:<20}".format("Score", "Provider", "Node Configuration"))
     for score in scores:
-        print('{0:<10.2f}{1:<10}{2:<20}'.format(score[0], score[1].provider, score[1].node_configuration))
+        print(
+            "{0:<10.2f}{1:<10}{2:<20}".format(
+                score[0], score[1].provider, score[1].node_configuration
+            )
+        )
+
 
 def load_data():
     """Loads data for previous runs to compare against
@@ -170,11 +219,11 @@ def load_data():
         List of characterizations
     """
     characterizations = []
-    basedir = join(os.path.dirname(__file__), 'results')
+    basedir = join(os.path.dirname(__file__), "results")
     result_dirs = os.listdir(basedir)
     providers = []
     for item in result_dirs:
-        if not item == 'minikube' and os.path.isdir(join(basedir, item)):
+        if not item == "minikube" and os.path.isdir(join(basedir, item)):
             providers.append(item)
 
     for provider in providers:
@@ -184,15 +233,17 @@ def load_data():
 
             config_dir = join(provider_dir, node_configuration)
             for data in os.listdir(config_dir):
-                name_parts = os.path.splitext(data)[0].split('-')
+                name_parts = os.path.splitext(data)[0].split("-")
 
                 if len(name_parts) == 2:
                     key = name_parts[1]
                 else:
-                    key = '-'
+                    key = "-"
 
                 if not key in node_configurations:
-                    characterization = ResultCharacterization(provider, node_configuration, key)
+                    characterization = ResultCharacterization(
+                        provider, node_configuration, key
+                    )
                     node_configurations[key] = characterization
                 else:
                     characterization = node_configurations[key]
@@ -203,9 +254,11 @@ def load_data():
 
     return characterizations
 
+
 def main():
     with open(os.path.abspath(argv[1])) as f:
         characterize_data(json.load(f))
 
-if __name__ == '__main__': 
+
+if __name__ == "__main__":
     main()
