@@ -2,7 +2,7 @@ FROM gcr.io/google_samples/k8skafka:v1
 
 RUN apt-get update -y
 RUN apt-get install inotify-tools python3 python3-pip redis-server redis-sentinel -y
-RUN pip3 install prometheus_client psycopg2
+RUN pip3 install prometheus_client psycopg2-binary
 
 ADD ./scripts/dispatch-messages.sh /opt
 ADD ./scripts/generate-topics.sh /opt
