@@ -20,16 +20,21 @@ function tear_down() {
 	# Attempt to wipe everything out, even the stuff not being used.  Drop the error like we just don't care.
 	kubectl delete -f $BASEDIR/../kube-config -n $namespace --ignore-not-found
 
-	kubectl delete configmaps kapture-config -n $namespace --ignore-not-found
+	kubectl delete configmaps kapture-config -n $namespace
 
 	exit 0
 }
 
 function deploy_elastic_search() {
-	kubectl scale Deployment es-master -n $namespace --replicas 1
-	kubectl scale Deployment es-client -n $namespace --replicas 1
-	kubectl scale StatefulSet es-data -n $namespace --replicas 1
+	kubectl scale Deployment es-master -n $namespace --replicas 3
+	kubectl scale Deployment es-client -n $namespace --replicas 2
+	kubectl scale StatefulSet es-data -n $namespace --replicas 3
 	kubectl scale StatefulSet logstash -n $namespace --replicas 1
+}
+
+function deploy_postgres() {
+	kubectl scale Deployment postgres -n $namespace --replicas 1
+	kubectl scale Deployment postgres-connector -n $namespace --replicas 1 
 }
 
 function deploy_prometheus() {
@@ -99,6 +104,11 @@ else
 	if [ "on" = $deploy_elastic_search ]; then
 		echo "Deploying elasticsearch and logstash..."
 		deploy_elastic_search
+	fi
+
+	if [ "on" = $deploy_postgres ]; then
+		echo "Deploying Postgres..."
+		deploy_postgres
 	fi
 
 	echo "Scaling load generators now to $load_generators..."

@@ -12,20 +12,30 @@ spec:
   selector:
     metrics: kafka
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: kafka-metrics
   labels:
     metrics: kafka
 spec:
-  containers:
-  - name: kafka-metrics
-    image: carbonrelay/kapture:dev-alt-load-gen
-    imagePullPolicy: Always
-    command:
-      - python3
-      - /opt/kafka-metrics.py
-    ports:
-      - containerPort: 8000
+  replicas: 1
+  selector:
+    matchLabels:
+      metrics: kafka
+  template:
+    metadata:
+      name: kafka-metrics
+      labels:
+        metrics: kafka
+    spec:
+      containers:
+      - name: kafka-metrics
+        image: carbonrelay/kapture:dev-alt-load-gen
+        imagePullPolicy: Always
+        command:
+          - python3
+          - /opt/kafka-metrics.py
+        ports:
+          - containerPort: 8000
 ---

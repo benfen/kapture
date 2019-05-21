@@ -9,6 +9,7 @@ ADD ./scripts/generate-topics.sh /opt
 ADD ./scripts/redis-connector.sh /opt
 ADD ./scripts/kafka-metrics.py /opt
 ADD ./scripts/postgres-connector.py /opt
+ADD ./scripts/postgres-connector.sh /opt
 
 WORKDIR /opt
 

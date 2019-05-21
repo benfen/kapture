@@ -5,6 +5,6 @@ _data.txt
 .gradle
 __pycache__
 *.pyc
+venv/
 
-dummy-kafka-messenger/build/
 benchmark/temp
