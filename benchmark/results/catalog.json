@@ -3,6 +3,7 @@
         "data": [
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 12,
@@ -21,6 +22,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 8,
@@ -44,6 +46,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 12,
@@ -62,6 +65,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 16,
@@ -80,6 +84,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 8,
@@ -103,6 +108,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": true
                 },
                 "cpus": 8,
@@ -121,6 +127,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": true
                 },
                 "cpus": 6,
@@ -136,6 +143,30 @@
                     }
                 ],
                 "summary": 907.0176249002939
+            },
+            {
+                "configuration": {
+                    "elasticsearch": true,
+                    "redis": false
+                },
+                "cpus": 6,
+                "memory": 21.91,
+                "nodes": {
+                    "n1-standard-2": 3
+                },
+                "runs": [
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-standard-2/0-e.json",
+                        "summary": 871.6072573980546
+                    },
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-standard-2/1-e.json",
+                        "summary": 884.6329966329967
+                    }
+                ],
+                "summary": 878.1201270155257
             }
         ],
         "provider": "gke"
@@ -144,6 +175,7 @@
         "data": [
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 5,

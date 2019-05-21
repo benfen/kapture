@@ -110,7 +110,9 @@ def append_to_catalog(data_path, result_dir):
                     break
 
             flag_string = "-"
-            if results["configuration"]["redis"]:
+            if results["configuration"].get("elasticsearch", False):
+                flag_string += "e"
+            if results["configuration"].get("redis", False):
                 flag_string += "r"
             flag_string.rstrip("-")
 

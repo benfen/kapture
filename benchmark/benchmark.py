@@ -162,6 +162,12 @@ def main():
         help="Include Redis in Kapture as part of the test",
     )
     parser.add_argument(
+        "-e",
+        "--elasticsearch",
+        action="store_true",
+        help="Include Elasticsearch (and Logstash) in Kapture as part of the test",
+    )
+    parser.add_argument(
         "--characterize",
         action="store_true",
         help="Configures a heartbeat for Kapture to use while waiting for the benchmark.  The heartbeat specifies the "
@@ -196,7 +202,7 @@ def main():
     with open("./benchmark/temp/results.json", "w") as results, open(
         "./benchmark/temp/updates.json", "w"
     ) as updates:
-        result_data = {"configuration": {"redis": args.redis}, "data": []}
+        result_data = {"configuration": {"elasticsearch": args.elasticsearch, "redis": args.redis}, "data": []}
 
         flags = "-p"
         if args.redis:
