@@ -10,7 +10,7 @@ spec:
   ports:
     - port: 5432
   selector:
-    name: postgres
+    app: postgres
 ---
 apiVersion: v1
 kind: ConfigMap
@@ -22,7 +22,7 @@ data:
   POSTGRES_DB: postgresdb
   POSTGRES_USER: postgresadmin
   POSTGRES_PASSWORD: admin123
-  PGDATA: /pgdata
+  PGDATA: /pgdata/data
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -37,39 +37,39 @@ spec:
     requests:
       storage: 5Gi
 ---
-apiVersion: v1
-kind: Pod
+apiVersion: apps/v1
+kind: Deployment
 metadata:
   name: postgres
   labels:
-    name: postgres
+    app: postgres
 spec:
-  initContainers:
-    - name: volume-mount-hack
-      image: alpine
-      command:
-        - sh
-        - -c
-        - "chmod -R 700 /pgdata"
-      volumeMounts:
-        - mountPath: /pgdata
-          name: postgredb
-  containers:
-    - name: postgres
-      image: postgres:10.4
-      imagePullPolicy: Always
-      ports:
-        - containerPort: 5432
-      envFrom:
-        - configMapRef:
-            name: postgres-config
-      volumeMounts:
-        - mountPath: /pgdata
-          name: postgredb
-  volumes:
-    - name: postgredb
-      persistentVolumeClaim:
-        claimName: postgres-pv-claim
+  # There should never be more than 1 replica of this pod due to the volume being ReadWriteOnce
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:10.4
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - configMapRef:
+                name: postgres-config
+          volumeMounts:
+            - mountPath: /pgdata
+              name: postgredb
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -92,11 +92,13 @@ spec:
         command:
           - bash
           - -c
-          - "sleep 1000000000000"
+          - "./postgres-connector.sh"
         envFrom:
         - configMapRef:
             name: postgres-config
         env:
           - name: DB_HOST
             value: postgres-svc
+          - name: BROKERS
+            value: "kafka-svc:9093"
 ---

@@ -6,10 +6,11 @@ resources:
   - kube-config/elasticsearch.yml
   - kube-config/redis.yml
   - kube-config/redis-connector.yml
+  - kube-config/postgres.yml
 
 images:
   - name: carbonrelay/kapture
-    newTag: "dev-master"
+    newTag: "dev-postgresql"
 
 patchesStrategicMerge:
   - examples/default-resources.yml
