@@ -62,7 +62,7 @@ function deploy_redis() {
 
 	echo "Waiting for Redis slaves to register with the master (this may take some time)..."
 	slaves=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info | grep ^connected_slaves" 2> /dev/null)
-	until echo $slaves | grep -m 1 "connected_slaves:[^0]" ; do
+	until echo $slaves | grep -m 1 "connected_slaves:3" ; do
 		sleep 2
 		# kubectl gives an error when the container isn't ready that really doesn't matter, so it just gets dropped on the floor.
 		slaves=$(kubectl exec redis-master -n $namespace -c master -- bash -c "redis-cli info | grep ^connected_slaves" 2> /dev/null)
