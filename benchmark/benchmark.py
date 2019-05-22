@@ -44,8 +44,8 @@ def configure_prometheus(namespace):
     os.chmod("./temp/prometheus.sh", 0o755)
 
     # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
-    subprocess.check_output(["./temp/prometheus-recipes.sh", namespace, "-npk"])
-    subprocess.check_output(["./temp/prometheus-recipes.sh", namespace, "-npk"])
+    subprocess.call(["./temp/prometheus-recipes.sh", namespace, "-npk"])
+    subprocess.call(["./temp/prometheus-recipes.sh", namespace, "-npk"])
 
 
 def heartbeat(period, update_file, duration=270):
