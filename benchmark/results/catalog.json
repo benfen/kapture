@@ -259,6 +259,37 @@
                     }
                 ],
                 "summary": 1076.8819670369332
+            },
+            {
+                "configuration": {
+                    "elasticsearch": false,
+                    "redis": false
+                },
+                "cpus": 20,
+                "memory": 72.56,
+                "nodes": {
+                    "n1-highcpu-4": 2,
+                    "n1-highmem-4": 2,
+                    "n1-standard-2": 2
+                },
+                "runs": [
+                    {
+                        "max": 4,
+                        "path": "gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/0.json",
+                        "summary": 1058.40268203925
+                    },
+                    {
+                        "max": 4,
+                        "path": "gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/1.json",
+                        "summary": 867.0907911399863
+                    },
+                    {
+                        "max": 3,
+                        "path": "gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/2.json",
+                        "summary": 1078.9353535353534
+                    }
+                ],
+                "summary": 1001.47627557153
             }
         ],
         "provider": "gke"
