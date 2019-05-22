@@ -230,6 +230,35 @@
                     }
                 ],
                 "summary": 242.437809926113
+            },
+            {
+                "configuration": {
+                    "elasticsearch": false,
+                    "redis": false
+                },
+                "cpus": 12,
+                "memory": 10.39,
+                "nodes": {
+                    "n1-highcpu-4": 3
+                },
+                "runs": [
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-highcpu-4/0.json",
+                        "summary": 1212.121212121212
+                    },
+                    {
+                        "max": 3,
+                        "path": "gke/3_n1-highcpu-4/1.json",
+                        "summary": 1053.7723905723906
+                    },
+                    {
+                        "max": 5,
+                        "path": "gke/3_n1-highcpu-4/2.json",
+                        "summary": 964.7522984171969
+                    }
+                ],
+                "summary": 1076.8819670369332
             }
         ],
         "provider": "gke"
