@@ -198,9 +198,14 @@
                         "max": 1,
                         "path": "gke/3_n1-standard-2/0-er.json",
                         "summary": 800.6464646464647
+                    },
+                    {
+                        "max": 1,
+                        "path": "gke/3_n1-standard-2/1-er.json",
+                        "summary": 983.7355559506198
                     }
                 ],
-                "summary": 800.6464646464647
+                "summary": 892.1910102985422
             },
             {
                 "configuration": {

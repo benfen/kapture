@@ -1,0 +1,24 @@
+{
+    "configuration": {
+        "elasticsearch": true,
+        "redis": true
+    },
+    "data": [
+        {
+            "generators": 1,
+            "cpu": 42.666666666666664,
+            "memory": 61.0,
+            "network": 16647314.535992183,
+            "disk": 5270350.506666666,
+            "messages": 983.7355559506198
+        },
+        {
+            "generators": 2,
+            "cpu": 72.33333333333333,
+            "memory": 69.33333333333333,
+            "network": 12671954.412161063,
+            "disk": 5011770.134688636,
+            "messages": 723.5811283095559
+        }
+    ]
+}
