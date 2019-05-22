@@ -169,9 +169,19 @@
                         "max": 3,
                         "path": "gke/3_n1-standard-2/0-e.json",
                         "summary": 308.09675231706814
+                    },
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-standard-2/1-e.json",
+                        "summary": 441.11985882655637
+                    },
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-standard-2/2-e.json",
+                        "summary": 236.94359923414632
                     }
                 ],
-                "summary": 308.09675231706814
+                "summary": 328.7200701259236
             }
         ],
         "provider": "gke"
