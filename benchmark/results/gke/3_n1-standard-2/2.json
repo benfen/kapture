@@ -1,0 +1,40 @@
+{
+    "configuration": {
+        "elasticsearch": false,
+        "redis": false
+    },
+    "data": [
+        {
+            "generators": 1,
+            "cpu": 39.333333333333336,
+            "memory": 86.0,
+            "network": 14019258.726666668,
+            "disk": 5624299.52,
+            "messages": 737.4363636363635
+        },
+        {
+            "generators": 2,
+            "cpu": 62.333333333333336,
+            "memory": 91.0,
+            "network": 26845391.707967766,
+            "disk": 11826044.555106929,
+            "messages": 1642.6155555555556
+        },
+        {
+            "generators": 3,
+            "cpu": 90.0,
+            "memory": 93.66666666666667,
+            "network": 29390128.3764332,
+            "disk": 13151547.745267227,
+            "messages": 2204.7959595959596
+        },
+        {
+            "generators": 4,
+            "cpu": 103.0,
+            "memory": 94.66666666666667,
+            "network": 24924719.23272363,
+            "disk": 12626380.208858874,
+            "messages": 0.0
+        }
+    ]
+}

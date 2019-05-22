@@ -43,12 +43,9 @@ def configure_prometheus(namespace):
     os.chmod("./temp/prometheus-recipes.sh", 0o755)
     os.chmod("./temp/prometheus.sh", 0o755)
 
-    with open(os.devnull, "w") as devnull:
-        # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
-        subprocess.check_output(["./temp/prometheus-recipes.sh", namespace, "-npk"])
-        subprocess.check_output(
-            ["./temp/prometheus-recipes.sh", namespace, "-npk"], stderr=devnull
-        )
+    # Script occasionally fails to deploy one or two things on the first pass.  Do it twice.
+    subprocess.check_output(["./temp/prometheus-recipes.sh", namespace, "-npk"])
+    subprocess.check_output(["./temp/prometheus-recipes.sh", namespace, "-npk"])
 
 
 def heartbeat(period, update_file, duration=270):
@@ -202,11 +199,16 @@ def main():
     with open("./benchmark/temp/results.json", "w") as results, open(
         "./benchmark/temp/updates.json", "w"
     ) as updates:
-        result_data = {"configuration": {"elasticsearch": args.elasticsearch, "redis": args.redis}, "data": []}
+        result_data = {
+            "configuration": {"elasticsearch": args.elasticsearch, "redis": args.redis},
+            "data": [],
+        }
 
         flags = "-p"
         if args.redis:
             flags = flags + "r"
+        if args.elasticsearch:
+            flags = flags + "e"
 
         subprocess.check_output(["./kapture.sh", namespace, "1", flags])
 

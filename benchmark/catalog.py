@@ -114,7 +114,7 @@ def append_to_catalog(data_path, result_dir):
                 flag_string += "e"
             if results["configuration"].get("redis", False):
                 flag_string += "r"
-            flag_string.rstrip("-")
+            flag_string = flag_string.rstrip("-")
 
             run = {
                 "path": os.path.join(
