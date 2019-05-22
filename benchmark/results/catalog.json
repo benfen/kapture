@@ -201,6 +201,30 @@
                     }
                 ],
                 "summary": 800.6464646464647
+            },
+            {
+                "configuration": {
+                    "elasticsearch": false,
+                    "redis": false
+                },
+                "cpus": 8,
+                "memory": 28.9,
+                "nodes": {
+                    "n1-standard-1": 8
+                },
+                "runs": [
+                    {
+                        "max": 3,
+                        "path": "gke/8_n1-standard-1/0.json",
+                        "summary": 202.22673096333708
+                    },
+                    {
+                        "max": 4,
+                        "path": "gke/8_n1-standard-1/1.json",
+                        "summary": 282.6488888888889
+                    }
+                ],
+                "summary": 242.437809926113
             }
         ],
         "provider": "gke"
