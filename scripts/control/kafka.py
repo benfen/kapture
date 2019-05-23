@@ -52,6 +52,9 @@ class KafkaManager:
         )
         evaluate_request(
             self.v1_apps_api.delete_namespaced_stateful_set(
-                namespace=self.namespace, name=get_name(self.kafka), async_req=True
+                namespace=self.namespace,
+                name=get_name(self.kafka),
+                async_req=True,
+                propagation_policy="Background",
             )
         )

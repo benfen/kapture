@@ -1,0 +1,89 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-gen-svc
+  labels:
+    app: datagen
+spec:
+  ports:
+    - port: 7001
+      targetPort: 7001
+      name: metrics
+  selector:
+    app: data-loader
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-loader
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: data-loader
+  template:
+    metadata:
+      labels:
+        app: data-loader
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: "app"
+                      operator: In
+                      values: 
+                      - data-loader
+                topologyKey: kubernetes.io/hostname
+      restartPolicy: Always
+      volumes:
+      - name: shared-data
+        emptyDir: {}
+      containers:
+      - name: pet-store-generator
+        image: benfen/bigpetstore-load-generator:latest
+        imagePullPolicy: Always
+        command:
+          - bash
+          - -c
+          - "java -jar /opt/bigpetstore-transaction-queue-all-1.0.jar /data $STORE_COUNT $CUSTOMERS $SIMULATION_LENGTH"
+        env:
+          - name: STORE_COUNT
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: STORE_COUNT
+          - name: CUSTOMERS
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: CUSTOMERS
+          - name: SIMULATION_LENGTH
+            valueFrom:
+              configMapKeyRef:
+                name: kapture-config
+                key: SIMULATION
+        volumeMounts:
+          - name: shared-data
+            mountPath: /data
+      - name: load-gen-producer
+        imagePullPolicy: Always
+        image: carbonrelay/kapture:dev-alt-load-gen
+        env:
+          - name: BROKERS
+            value: "kafka-svc:9093"
+        ports:
+          - containerPort: 7001
+        volumeMounts:
+          - name: shared-data
+            mountPath: /data
+        command:
+          - bash
+          - -c
+          - "/opt/dispatch-messages.sh"
+---
