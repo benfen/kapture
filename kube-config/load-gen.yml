@@ -28,6 +28,18 @@ spec:
       labels:
         app: data-loader
     spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+            - weight: 1
+              podAffinityTerm:
+                labelSelector:
+                  matchExpressions:
+                    - key: "app"
+                      operator: In
+                      values: 
+                      - data-loader
+                topologyKey: kubernetes.io/hostname
       restartPolicy: Always
       volumes:
       - name: shared-data

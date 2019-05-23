@@ -1,3 +1,5 @@
+#!/bin/bash
+
 BASEDIR=$(dirname $0)
 
 function exit_if_bad() {

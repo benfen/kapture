@@ -47,4 +47,9 @@ export deploy_elastic_search=$_arg_deploy_elastic_search
 export deploy_postgres=$_arg_deploy_postgres
 export delete=$_arg_delete
 
-./scripts/kapture.sh
+BASEDIR=$(dirname $0)
+
+(
+    cd $BASEDIR
+    ./scripts/kapture.sh
+)

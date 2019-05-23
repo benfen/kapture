@@ -141,6 +141,8 @@ spec:
           value : "-Xmx512M -Xms512M"
         - name: KAFKA_OPTS
           value: "-Dlogging.level=INFO"
+        - name: LOG_DIR
+          value: /var/lib/kafka
         volumeMounts:
         - name: datadir
           mountPath: /var/lib/kafka
