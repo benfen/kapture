@@ -1,4 +1,6 @@
 from kubernetes import client
+from kubernetes.stream import stream
+from time import sleep
 from yaml import safe_load_all
 
 from util import evaluate_request, get_name
@@ -36,6 +38,26 @@ class KafkaManager:
             ),
             allowed_statuses=[409],
         )
+
+        kafka_started=False
+        while not kafka_started:
+            try:
+                stream(
+                    self.v1_api.connect_get_namespaced_pod_exec,
+                    "kafka-0",
+                    self.namespace,
+                    command=[
+                        "/opt/kafka/bin/kafka-broker-api-versions.sh",
+                        "--bootstrap-server=localhost:9093"
+                    ],
+                    stderr=False,
+                    stdin=False,
+                    stdout=True,
+                    tty=False,
+                )
+                kafka_started=True
+            except Exception as _:
+                sleep(2)
 
     def delete(self):
         evaluate_request(

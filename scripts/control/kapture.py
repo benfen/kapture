@@ -1,9 +1,10 @@
 from kubernetes import client, config
 import os
 
-from zk import ZookeeperManager
 from kafka import KafkaManager
 from load_gen import LoadGenManager
+from redis import RedisManager
+from zk import ZookeeperManager
 from util import evaluate_request
 
 
@@ -46,15 +47,19 @@ def main():
     namespace = "test"
     zookeeper = ZookeeperManager(namespace)
     kafka = KafkaManager(namespace)
+    redis = RedisManager(namespace)
     load_gen = LoadGenManager(namespace)
+
     if os.environ.get("delete") is None:
         initialize_namespace(namespace)
         zookeeper.create()
         kafka.create()
+        redis.create()
         load_gen.create()
     else:
         zookeeper.delete()
         kafka.delete()
+        redis.delete()
         load_gen.delete()
 
 

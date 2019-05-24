@@ -29,7 +29,7 @@ class RedisManager:
             self.redis_slave_controller = redis_yml[2]
             self.redis_sentinel_controller = redis_yml[3]
             self.redis_metrics_service = redis_yml[4]
-            self.redis_metrics = redis_yml[5]
+            self.redis_connector = redis_yml[5]
 
         self.namespace = namespace
         self.v1_api = client.CoreV1Api()
@@ -129,6 +129,23 @@ class RedisManager:
             namespace=self.namespace, name=get_name(self.redis_master)
         )
 
+        evaluate_request(
+            self.v1_api.create_namespaced_service(
+                namespace=self.namespace,
+                body=self.redis_metrics_service,
+                async_req=True,
+            ),
+            allowed_statuses=[409],
+        )
+        evaluate_request(
+            self.v1_apps_api.create_namespaced_deployment(
+                namespace=self.namespace,
+                body=self.redis_connector,
+                async_req=True,
+            ),
+            allowed_statuses=[409],
+        )
+
     def delete(self):
         evaluate_request(
             self.v1_api.delete_namespaced_pod(
@@ -157,6 +174,22 @@ class RedisManager:
             self.v1_api.delete_namespaced_replication_controller(
                 namespace=self.namespace,
                 name=get_name(self.redis_sentinel_controller),
+                async_req=True,
+                propagation_policy="Background",
+            )
+        )
+
+        evaluate_request(
+            self.v1_api.delete_namespaced_service(
+                namespace=self.namespace,
+                name=get_name(self.redis_metrics_service),
+                async_req=True
+            )
+        )
+        evaluate_request(
+            self.v1_apps_api.delete_namespaced_deployment(
+                namespace=self.namespace,
+                name=get_name(self.redis_connector),
                 async_req=True,
                 propagation_policy="Background",
             )
