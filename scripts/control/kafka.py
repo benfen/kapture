@@ -44,20 +44,21 @@ class KafkaManager:
         kafka_started = False
         while not kafka_started:
             try:
-                stream(
+                out = stream(
                     self.v1_api.connect_get_namespaced_pod_exec,
-                    "kafka-0",
+                    "zk-0",
                     self.namespace,
                     command=[
-                        "/opt/kafka/bin/kafka-broker-api-versions.sh",
-                        "--bootstrap-server=localhost:9093",
+                        "bash",
+                        "-c",
+                        "echo dump | nc localhost 2181 | grep brokers",
                     ],
                     stderr=False,
                     stdin=False,
                     stdout=True,
                     tty=False,
                 )
-                kafka_started = True
+                kafka_started = len(out.split()) == 3
             except Exception as _:
                 sleep(2)
 

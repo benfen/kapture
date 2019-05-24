@@ -38,7 +38,7 @@ class RedisManager:
     def __wait_for_redis_master(self):
         sentinel_started = False
         while not sentinel_started:
-            sleep(1)
+            sleep(2)
             try:
                 out = exec_redis_command(
                     get_name(self.redis_master),
@@ -59,7 +59,7 @@ class RedisManager:
 
         master_started = False
         while not master_started:
-            sleep(1)
+            sleep(2)
             try:
                 out = exec_redis_command(
                     get_name(self.redis_master),
@@ -74,7 +74,7 @@ class RedisManager:
     def __wait_for_redis_slaves(self):
         slaves_started = False
         while not slaves_started:
-            sleep(1)
+            sleep(2)
             try:
                 out = exec_redis_command(
                     get_name(self.redis_master),
