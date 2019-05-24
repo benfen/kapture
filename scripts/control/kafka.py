@@ -13,11 +13,13 @@ class KafkaManager:
             self.kafka_service = kafka_yml[0]
             self.kafka_pdb = kafka_yml[1]
             self.kafka = kafka_yml[2]
+            self.kafka_metrics_service = kafka_yml[3]
+            self.kafka_metrics = kafka_yml[4]
 
         self.namespace = namespace
         self.v1_api = client.CoreV1Api()
         self.v1_policy_api = client.PolicyV1beta1Api()
-        self.v1_apps_api = client.AppsV1beta1Api()
+        self.v1_apps_api = client.AppsV1Api()
 
     def create(self):
         evaluate_request(
@@ -59,6 +61,19 @@ class KafkaManager:
             except Exception as _:
                 sleep(2)
 
+        evaluate_request(
+            self.v1_api.create_namespaced_service(
+                namespace=self.namespace, body=self.kafka_metrics_service, async_req=True
+            ),
+            allowed_statuses=[409]
+        )
+        evaluate_request(
+            self.v1_apps_api.create_namespaced_deployment(
+                namespace=self.namespace, body=self.kafka_metrics, async_req=True
+            ),
+            allowed_statuses=[409]
+        )
+
     def delete(self):
         evaluate_request(
             self.v1_api.delete_namespaced_service(
@@ -79,4 +94,14 @@ class KafkaManager:
                 async_req=True,
                 propagation_policy="Background",
             )
+        )
+        evaluate_request(
+            self.v1_api.delete_namespaced_service(
+                namespace=self.namespace, name=get_name(self.kafka_metrics_service), async_req=True
+            )
+        )
+        evaluate_request(
+            self.v1_apps_api.delete_namespaced_deployment(
+                namespace=self.namespace, name=get_name(self.kafka_metrics), async_req=True
+            ),
         )
