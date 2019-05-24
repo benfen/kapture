@@ -4,6 +4,7 @@ import os
 from elasticsearch import ElasticsearchManager
 from kafka import KafkaManager
 from load_gen import LoadGenManager
+from postgres import PostgresManager
 from redis import RedisManager
 from zk import ZookeeperManager
 from util import evaluate_request
@@ -50,6 +51,7 @@ def main():
     kafka = KafkaManager(namespace)
     redis = RedisManager(namespace)
     elasticsearch = ElasticsearchManager(namespace)
+    postgres = PostgresManager(namespace)
     load_gen = LoadGenManager(namespace)
 
     if os.environ.get("delete") is None:
@@ -58,12 +60,14 @@ def main():
         kafka.create()
         redis.create()
         elasticsearch.create()
+        postgres.create()
         load_gen.create()
     else:
         zookeeper.delete()
         kafka.delete()
         redis.delete()
         elasticsearch.delete()
+        postgres.delete()
         load_gen.delete()
 
 
