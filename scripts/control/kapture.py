@@ -1,6 +1,7 @@
 from kubernetes import client, config
 import os
 
+from elasticsearch import ElasticsearchManager
 from kafka import KafkaManager
 from load_gen import LoadGenManager
 from redis import RedisManager
@@ -48,6 +49,7 @@ def main():
     zookeeper = ZookeeperManager(namespace)
     kafka = KafkaManager(namespace)
     redis = RedisManager(namespace)
+    elasticsearch = ElasticsearchManager(namespace)
     load_gen = LoadGenManager(namespace)
 
     if os.environ.get("delete") is None:
@@ -55,11 +57,13 @@ def main():
         zookeeper.create()
         kafka.create()
         redis.create()
+        elasticsearch.create()
         load_gen.create()
     else:
         zookeeper.delete()
         kafka.delete()
         redis.delete()
+        elasticsearch.delete()
         load_gen.delete()
 
 

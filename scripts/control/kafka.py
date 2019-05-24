@@ -41,7 +41,7 @@ class KafkaManager:
             allowed_statuses=[409],
         )
 
-        kafka_started=False
+        kafka_started = False
         while not kafka_started:
             try:
                 stream(
@@ -50,28 +50,30 @@ class KafkaManager:
                     self.namespace,
                     command=[
                         "/opt/kafka/bin/kafka-broker-api-versions.sh",
-                        "--bootstrap-server=localhost:9093"
+                        "--bootstrap-server=localhost:9093",
                     ],
                     stderr=False,
                     stdin=False,
                     stdout=True,
                     tty=False,
                 )
-                kafka_started=True
+                kafka_started = True
             except Exception as _:
                 sleep(2)
 
         evaluate_request(
             self.v1_api.create_namespaced_service(
-                namespace=self.namespace, body=self.kafka_metrics_service, async_req=True
+                namespace=self.namespace,
+                body=self.kafka_metrics_service,
+                async_req=True,
             ),
-            allowed_statuses=[409]
+            allowed_statuses=[409],
         )
         evaluate_request(
             self.v1_apps_api.create_namespaced_deployment(
                 namespace=self.namespace, body=self.kafka_metrics, async_req=True
             ),
-            allowed_statuses=[409]
+            allowed_statuses=[409],
         )
 
     def delete(self):
@@ -97,11 +99,15 @@ class KafkaManager:
         )
         evaluate_request(
             self.v1_api.delete_namespaced_service(
-                namespace=self.namespace, name=get_name(self.kafka_metrics_service), async_req=True
+                namespace=self.namespace,
+                name=get_name(self.kafka_metrics_service),
+                async_req=True,
             )
         )
         evaluate_request(
             self.v1_apps_api.delete_namespaced_deployment(
-                namespace=self.namespace, name=get_name(self.kafka_metrics), async_req=True
-            ),
+                namespace=self.namespace,
+                name=get_name(self.kafka_metrics),
+                async_req=True,
+            )
         )

@@ -18,7 +18,7 @@ class ZookeeperManager:
         self.namespace = namespace
         self.v1_api = client.CoreV1Api()
         self.v1_policy_api = client.PolicyV1beta1Api()
-        self.v1_apps_api = client.AppsV1beta1Api()
+        self.v1_apps_api = client.AppsV1Api()
 
     def create(self):
         evaluate_request(
@@ -46,22 +46,20 @@ class ZookeeperManager:
             allowed_statuses=[409],
         )
 
-        zk_started=False
+        zk_started = False
         while not zk_started:
             try:
                 stream(
                     self.v1_api.connect_get_namespaced_pod_exec,
                     "zk-0",
                     self.namespace,
-                    command=[
-                        "zkOk.sh"
-                    ],
+                    command=["zkOk.sh"],
                     stderr=False,
                     stdin=False,
                     stdout=True,
                     tty=False,
                 )
-                zk_started=True
+                zk_started = True
             except Exception as _:
                 sleep(2)
 

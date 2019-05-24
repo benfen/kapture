@@ -139,9 +139,7 @@ class RedisManager:
         )
         evaluate_request(
             self.v1_apps_api.create_namespaced_deployment(
-                namespace=self.namespace,
-                body=self.redis_connector,
-                async_req=True,
+                namespace=self.namespace, body=self.redis_connector, async_req=True
             ),
             allowed_statuses=[409],
         )
@@ -183,7 +181,7 @@ class RedisManager:
             self.v1_api.delete_namespaced_service(
                 namespace=self.namespace,
                 name=get_name(self.redis_metrics_service),
-                async_req=True
+                async_req=True,
             )
         )
         evaluate_request(
