@@ -2,7 +2,7 @@ FROM gcr.io/google_samples/k8skafka:v1
 
 RUN apt-get update -y
 RUN apt-get install inotify-tools python3 python3-pip redis-server redis-sentinel -y
-RUN pip3 install prometheus_client psycopg2-binary
+RUN pip3 install kubernetes prometheus_client psycopg2-binary
 RUN ["mkdir", "-p", "/opt/kapture"]
 
 ADD ./scripts/container/dispatch-messages.sh /opt
