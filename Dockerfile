@@ -12,8 +12,8 @@ ADD ./scripts/container/kafka-metrics.py /opt
 ADD ./scripts/container/postgres-connector.py /opt
 ADD ./scripts/container/postgres-connector.sh /opt
 
-ADD ./scripts/control/*.py /opt/kapture
-ADD ./scripts/control/*.yml /opt/kapture
+ADD ./scripts/control/*.py /opt/kapture/
+ADD ./scripts/control/*.yml /opt/kapture/
 
 WORKDIR /opt
 
