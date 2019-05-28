@@ -1,5 +1,6 @@
 from kubernetes import client, config
 import os
+from yaml import safe_load
 
 from elasticsearch import ElasticsearchManager
 from kafka import KafkaManager
@@ -40,6 +41,8 @@ def initialize_namespace(namespace, store_count=250, customers=5000, simulation=
         allowed_statuses=[409],
     )
 
+def load_config():
+    return safe_load(os.environ["kapture_config"])
 
 def main():
     try:
@@ -47,7 +50,8 @@ def main():
     except Exception as _:
         config.load_incluster_config()
 
-    namespace = "test"
+    kapture_config = load_config()
+    namespace = kapture_config["namespace"]
     zookeeper = ZookeeperManager(namespace)
     kafka = KafkaManager(namespace)
     redis = RedisManager(namespace)
@@ -56,7 +60,7 @@ def main():
     prometheus = PrometheusManager(namespace)
     load_gen = LoadGenManager(namespace)
 
-    if os.environ.get("delete") is None:
+    if kapture_config["action"] is "create":
         initialize_namespace(namespace)
         zookeeper.create()
         kafka.create()
@@ -65,7 +69,7 @@ def main():
         postgres.create()
         prometheus.create()
         load_gen.create()
-    else:
+    elif kapture_config["action"] is "delete":
         load_gen.delete()
         prometheus.delete()
         postgres.delete()
