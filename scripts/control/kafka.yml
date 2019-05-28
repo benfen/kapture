@@ -191,3 +191,16 @@ spec:
         ports:
           - containerPort: 8000
 ---
+# Deployment of this PVC is dictated by the python controller
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Block
+  resources:
+    requests:
+      storage: 10Gi
+---

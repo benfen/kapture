@@ -7,7 +7,7 @@ from util import evaluate_request, get_name
 
 
 class KafkaManager:
-    def __init__(self, namespace):
+    def __init__(self, namespace, config):
         with open("kafka.yml") as f:
             kafka_yml = list(safe_load_all(f))
             self.kafka_service = kafka_yml[0]
@@ -15,13 +15,31 @@ class KafkaManager:
             self.kafka = kafka_yml[2]
             self.kafka_metrics_service = kafka_yml[3]
             self.kafka_metrics = kafka_yml[4]
+            self.kafka_pvc = kafka_yml[5]
 
+        self.config = config
         self.namespace = namespace
         self.v1_api = client.CoreV1Api()
         self.v1_policy_api = client.PolicyV1beta1Api()
         self.v1_apps_api = client.AppsV1Api()
+        self.__configure_kafka()
+
+    def __configure_kafka(self):
+        if self.config.usePersistentVolume:
+            volumes = self.kafka["spec"]["template"]["spec"]["volumes"]
+            empty_dir = volumes.pop(0)
+            pvc = client.V1PersistentVolumeClaimVolumeSource(empty_dir["name"])
+            volumes.push(pvc.to_dict())
 
     def create(self):
+        if self.config.usePersistentVolume:
+            evaluate_request(
+                self.v1_api.create_namespaced_persistent_volume_claim(
+                    namespace=self.namespace, body=self.kafka_pvc, async_req=True
+                ),
+                allowed_statuses=[409],
+            )
+
         evaluate_request(
             self.v1_api.create_namespaced_service(
                 namespace=self.namespace, body=self.kafka_service, async_req=True
@@ -110,5 +128,10 @@ class KafkaManager:
                 namespace=self.namespace,
                 name=get_name(self.kafka_metrics),
                 async_req=True,
+            )
+        )
+        evaluate_request(
+            self.v1_api.delete_namespaced_persistent_volume_claim(
+                namespace=self.namespace, name=get_name(self.kafka_pvc), async_req=True
             )
         )

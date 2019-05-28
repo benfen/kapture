@@ -41,8 +41,10 @@ def initialize_namespace(namespace, store_count=250, customers=5000, simulation=
         allowed_statuses=[409],
     )
 
+
 def load_config():
     return safe_load(os.environ["kapture_config"])
+
 
 def main():
     try:
@@ -53,14 +55,14 @@ def main():
     kapture_config = load_config()
     namespace = kapture_config["namespace"]
     zookeeper = ZookeeperManager(namespace)
-    kafka = KafkaManager(namespace)
+    kafka = KafkaManager(namespace, kapture_config["kafka"])
     redis = RedisManager(namespace)
     elasticsearch = ElasticsearchManager(namespace)
     postgres = PostgresManager(namespace)
     prometheus = PrometheusManager(namespace)
-    load_gen = LoadGenManager(namespace)
+    load_gen = LoadGenManager(namespace, kapture_config["loadGen"])
 
-    if kapture_config["action"] is "create":
+    if kapture_config["action"] == "create":
         initialize_namespace(namespace)
         zookeeper.create()
         kafka.create()
@@ -69,7 +71,7 @@ def main():
         postgres.create()
         prometheus.create()
         load_gen.create()
-    elif kapture_config["action"] is "delete":
+    elif kapture_config["action"] == "delete":
         load_gen.delete()
         prometheus.delete()
         postgres.delete()
