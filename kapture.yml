@@ -27,33 +27,6 @@ metadata:
   namespace: kapture-control
 ---
 apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: kapture-config
-  namespace: kapture-control
-  labels:
-    config: kapture
-data:
-  kapture_config: |
-    action: delete
-    control:
-      namespace: kapture-control
-      name: control
-    elasticsearch:
-      deploy: False
-    kafka:
-      usePersistentVolume: False
-    loadGen:
-      bpsReplicas: 0
-    postgres:
-      deploy: False
-    prometheus:
-      deploy: False
-    redis:
-      deploy: False
-    namespace: test
----
-apiVersion: v1
 kind: Pod
 metadata:
   name: control

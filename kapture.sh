@@ -1,5 +1,31 @@
 #!/bin/bash
 
+#!/bin/bash
+
+set -e
+
+BASEDIR=$(dirname $0)
+
+(
+	cd $BASEDIR
+
+    if [[ ! -z "$(command -v python3)" ]]; then
+		python_command=python3
+	elif [[ ! -z $(command -v python) ]]; then
+		python_command=python
+	elif [[ ! -z $(command -v py) ]]; then
+		python_command=py
+	else
+		echo "Unable to locate python on this machine.  Please install python or provide a path to a python installation on your machine to use the benchmark tool."
+		exit 1
+	fi
+
+	$python_command kapture.py "$@"
+)
+
+
+exit 0
+
 # Created by argbash-init v2.8.0
 # Rearrange the order of options below according to what you would like to see in the help message.
 # ARG_OPTIONAL_SINGLE([stores],[s],[Number of stores to initialize the BigPetStore with.  Will correspond to the number of Kafka topcis that will be generated],[250])

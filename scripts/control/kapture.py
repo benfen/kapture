@@ -1,6 +1,6 @@
+import json
 from kubernetes import client, config
 import os
-from yaml import safe_load
 
 from elasticsearch import ElasticsearchManager
 from kafka import KafkaManager
@@ -50,7 +50,7 @@ def initialize_namespace(namespace, store_count=250, customers=5000, simulation=
 def load_config():
     """Load kapture configuration
     """
-    return safe_load(os.environ["kapture_config"])
+    return json.loads(os.environ["kapture_config"])
 
 
 def main():
