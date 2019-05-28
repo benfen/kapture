@@ -51,7 +51,7 @@ def configure_prometheus(namespace):
         )
 
 
-def heartbeat(period, update_file, duration=270):
+def heartbeat(period, update_file, duration=300):
     if period <= 0:
         sleep(duration)
     else:
