@@ -21,7 +21,7 @@ def exec_redis_command(name, namespace, command):
 
 
 class RedisManager:
-    def __init__(self, namespace):
+    def __init__(self, namespace, config):
         with open("redis.yml") as f:
             redis_yml = list(safe_load_all(f))
             self.redis_master = redis_yml[0]
@@ -31,6 +31,7 @@ class RedisManager:
             self.redis_metrics_service = redis_yml[4]
             self.redis_connector = redis_yml[5]
 
+        self.config = config
         self.namespace = namespace
         self.v1_api = client.CoreV1Api()
         self.v1_apps_api = client.AppsV1Api()
@@ -87,6 +88,10 @@ class RedisManager:
             slaves_started = "connected_slaves:3" in out
 
     def create(self):
+        # Check to see if this isn't meant to deploy first
+        if not self.config["deploy"]:
+            return
+
         redis_pods = self.v1_api.list_namespaced_pod(
             namespace=self.namespace, label_selector="name=redis"
         )

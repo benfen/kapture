@@ -68,10 +68,10 @@ def main():
     namespace = kapture_config["namespace"]
     zookeeper = ZookeeperManager(namespace)
     kafka = KafkaManager(namespace, kapture_config["kafka"])
-    redis = RedisManager(namespace)
-    elasticsearch = ElasticsearchManager(namespace)
-    postgres = PostgresManager(namespace)
-    prometheus = PrometheusManager(namespace)
+    redis = RedisManager(namespace, kapture_config["redis"])
+    elasticsearch = ElasticsearchManager(namespace, kapture_config["elasticsearch"])
+    postgres = PostgresManager(namespace, kapture_config["postgres"])
+    prometheus = PrometheusManager(namespace, kapture_config["prometheus"])
     load_gen = LoadGenManager(namespace, kapture_config["loadGen"])
 
     if kapture_config["action"] == "create":

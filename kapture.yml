@@ -35,11 +35,22 @@ metadata:
     config: kapture
 data:
   kapture_config: |
-    action: create
+    action: delete
+    control:
+      namespace: kapture-control
+      name: control
+    elasticsearch:
+      deploy: False
     kafka:
       usePersistentVolume: False
     loadGen:
       bpsReplicas: 0
+    postgres:
+      deploy: False
+    prometheus:
+      deploy: False
+    redis:
+      deploy: False
     namespace: test
 ---
 apiVersion: v1
@@ -49,7 +60,7 @@ metadata:
   namespace: kapture-control
 spec:
   serviceAccountName: kapture-service-account
-  restartPolicy: Never
+  restartPolicy: OnFailure
   containers:
   - name: kapture-control
     imagePullPolicy: Always

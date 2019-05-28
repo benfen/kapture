@@ -5,12 +5,13 @@ from util import evaluate_request, get_name
 
 
 class PrometheusManager:
-    def __init__(self, namespace):
+    def __init__(self, namespace, config):
         with open("prometheus.yml") as f:
             prometheus_yml = list(safe_load_all(f))
             self.redis_metrics = prometheus_yml[0]
             self.bps_metrics = prometheus_yml[1]
 
+        self.config = config
         self.namespace = namespace
         self.custom_objects_api = client.CustomObjectsApi()
         self.group = "monitoring.coreos.com"
@@ -18,6 +19,9 @@ class PrometheusManager:
         self.plural = "servicemonitors"
 
     def create(self):
+        # Check to see if this isn't meant to deploy first
+        if not self.config["deploy"]:
+            return
         evaluate_request(
             self.custom_objects_api.create_namespaced_custom_object(
                 namespace=self.namespace,

@@ -5,7 +5,7 @@ from util import evaluate_request, get_name
 
 
 class PostgresManager:
-    def __init__(self, namespace):
+    def __init__(self, namespace, config):
         with open("postgres.yml") as f:
             postgres_yml = list(safe_load_all(f))
             self.postgres_service = postgres_yml[0]
@@ -14,11 +14,15 @@ class PostgresManager:
             self.postgres = postgres_yml[3]
             self.postgres_connector = postgres_yml[4]
 
+        self.config = config
         self.namespace = namespace
         self.v1_api = client.CoreV1Api()
         self.v1_apps_api = client.AppsV1Api()
 
     def create(self):
+        # Check to see if this isn't meant to deploy first
+        if not self.config["deploy"]:
+            return
         evaluate_request(
             self.v1_api.create_namespaced_service(
                 namespace=self.namespace, body=self.postgres_service, async_req=True
