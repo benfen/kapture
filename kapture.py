@@ -50,11 +50,6 @@ def main():
         action="store_true",
         help="Deploy postgres as part of Kapture",
     )
-    parser.add_argument(
-        "--load-gen-count",
-        dest="generators",
-        help="Number of load generators to create to place load on the cluster",
-    )
     args = parser.parse_args()
 
     if args.delete:
@@ -87,24 +82,21 @@ def main():
         ]
     )
 
-    if not args.delete:
-        subprocess.call(['kubectl', 'create', 'ns', control_namespace])
-        subprocess.call(
-            [
-                "kubectl",
-                "create",
-                "configmap",
-                "-n",
-                control_namespace,
-                "kapture-config",
-                "--from-literal",
-                "kapture_config={}".format(json.dumps(config)),
-            ]
-        )
+    subprocess.call(['kubectl', 'create', 'ns', control_namespace])
+    subprocess.call(
+        [
+            "kubectl",
+            "create",
+            "configmap",
+            "-n",
+            control_namespace,
+            "kapture-config",
+            "--from-literal",
+            "kapture_config={}".format(json.dumps(config)),
+        ]
+    )
 
-        subprocess.call(["kubectl", "create", "-f", "kapture.yml"])
-    else:
-        subprocess.call(["kubectl", "delete", "-f", "kapture.yml"])
+    subprocess.call(["kubectl", "create", "-f", "kapture.yml"])
 
 
 if __name__ == "__main__":
