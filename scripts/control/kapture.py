@@ -13,6 +13,11 @@ from util import evaluate_request
 
 
 def initialize_namespace(namespace, store_count=250, customers=5000, simulation=2500):
+    """Initialize namespace and config map for kapture
+
+    Sets up the namespace and config map for Kapture to use.  If they already exist, this method
+    will quietly do nothing.
+    """
     api = client.CoreV1Api()
     evaluate_request(
         api.create_namespace(
@@ -43,12 +48,17 @@ def initialize_namespace(namespace, store_count=250, customers=5000, simulation=
 
 
 def load_config():
+    """Load kapture configuration
+    """
     return safe_load(os.environ["kapture_config"])
 
 
 def main():
     # Update the directory to make sure filepaths to the yml files are correct
     os.chdir(os.path.dirname(__file__))
+
+    # Attempt to load configuration from normal location and then from the cluster location
+    # This is done to allow this script to be run locally for testing as well
     try:
         config.load_kube_config()
     except Exception as _:

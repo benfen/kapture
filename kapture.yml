@@ -57,7 +57,7 @@ spec:
     command:
       - bash
       - -c
-      - "sleep 10000000000000"
+      - "python3 kapture/kapture.py"
     envFrom:
       - configMapRef:
           name: kapture-config

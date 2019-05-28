@@ -25,6 +25,11 @@ class KafkaManager:
         self.__configure_kafka()
 
     def __configure_kafka(self):
+        """Modifies kube config items for Kafka based on the internal configuration
+
+        Currently, the update to kafka include:
+            - Configuring Kafka to use a persistent volume claim
+        """
         if self.config["usePersistentVolume"]:
             volumes = self.kafka["spec"]["template"]["spec"]["volumes"]
             empty_dir = volumes.pop(0)
@@ -32,12 +37,23 @@ class KafkaManager:
             volumes.push(pvc.to_dict())
 
     def create(self):
-        if self.config.usePersistentVolume:
+        """Create kafka items in the cluster.
+
+        Creates all the parts of the kafka deployment in the cluster.  If items already exist in
+        the cluster, those items will be quietly ignored.
+        """
+        if self.config["usePersistentVolume"]:
             evaluate_request(
                 self.v1_api.create_namespaced_persistent_volume_claim(
                     namespace=self.namespace, body=self.kafka_pvc, async_req=True
                 ),
                 allowed_statuses=[409],
+            )
+        else:
+            evaluate_request(
+                self.v1_api.delete_namespaced_persistent_volume_claim(
+                    namespace=self.namespace, name=get_name(self.kafka_pvc), async_req=True
+                )
             )
 
         evaluate_request(
@@ -59,6 +75,7 @@ class KafkaManager:
             allowed_statuses=[409],
         )
 
+        # Wait for Kafka to register itself with zookeeper before proceeding
         kafka_started = False
         while not kafka_started:
             try:
@@ -96,6 +113,11 @@ class KafkaManager:
         )
 
     def delete(self):
+        """Delete all Kafka artifacts within the cluster
+
+        Removes all the Kafka artifacts within the cluster safely - if something does not already
+        exist within the cluster, it will be ignored.
+        """
         evaluate_request(
             self.v1_api.delete_namespaced_service(
                 namespace=self.namespace,
