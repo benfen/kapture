@@ -25,7 +25,7 @@ class KafkaManager:
         self.__configure_kafka()
 
     def __configure_kafka(self):
-        if self.config.usePersistentVolume:
+        if self.config["usePersistentVolume"]:
             volumes = self.kafka["spec"]["template"]["spec"]["volumes"]
             empty_dir = volumes.pop(0)
             pvc = client.V1PersistentVolumeClaimVolumeSource(empty_dir["name"])

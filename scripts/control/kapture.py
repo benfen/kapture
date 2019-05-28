@@ -47,6 +47,8 @@ def load_config():
 
 
 def main():
+    # Update the directory to make sure filepaths to the yml files are correct
+    os.chdir(os.path.dirname(__file__))
     try:
         config.load_kube_config()
     except Exception as _:
