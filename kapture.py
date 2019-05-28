@@ -72,7 +72,7 @@ def main():
         "prometheus": {"deploy": args.deploy_prometheus},
         "redis": {"deploy": args.deploy_redis},
     }
-    print(json.dumps(config))
+
     control_namespace = "kapture-control"
     # Make sure that a previous configmap doesn't already exist
     subprocess.call(
@@ -88,6 +88,7 @@ def main():
     )
 
     if not args.delete:
+        subprocess.call(['kubectl', 'create', 'ns', control_namespace])
         subprocess.call(
             [
                 "kubectl",
@@ -97,7 +98,7 @@ def main():
                 control_namespace,
                 "kapture-config",
                 "--from-literal",
-                "kapture_config='{}'".format(json.dumps(config)),
+                "kapture_config={}".format(json.dumps(config)),
             ]
         )
 

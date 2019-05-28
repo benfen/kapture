@@ -92,6 +92,14 @@ def main():
         kafka.delete()
         zookeeper.delete()
 
+    # If configuration is provided for the control pod/namespace, clean it up on the way out
+    control = kapture_config.get('control', None)
+    if control is not None:
+        client.CoreV1Api().delete_namespaced_pod(
+            name=control["name"],
+            namespace=control["namespace"]
+        )
+
 
 if __name__ == "__main__":
     main()
