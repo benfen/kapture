@@ -48,6 +48,7 @@ class ResultCharacterization:
     Attributes:
         provider: A string naming the provider used by this characterization
         node_configuration: A string naming the type of node used by this characterization
+        elastic_enabled: Boolean indicated whether Elasticsearch is enabled
         redis_enabled: Boolean indicating whether Redis is enabled
 
         generators: Part of the six data lists.  Indicates number of generators for a given data point.
@@ -78,6 +79,7 @@ class ResultCharacterization:
         """
         self.provider = provider
         self.node_configuration = node_configuration
+        self.elastic_enabled = "e" in configuration
         self.redis_enabled = "r" in configuration
 
         self.generators = []
@@ -199,6 +201,7 @@ def characterize_data(data):
         ch
         for ch in characterizations
         if ch.redis_enabled == data["configuration"]["redis"]
+        and ch.elastic_enabled == data["configuration"]["elasticsearch"]
     ]:
         scores.append((c.compare(data), c))
 

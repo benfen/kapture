@@ -3,6 +3,7 @@
         "data": [
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 12,
@@ -21,6 +22,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 8,
@@ -41,14 +43,20 @@
                     },
                     {
                         "max": 3,
-                        "path": "gke/3_n1-standard-2/2-.json",
-                        "summary": 820.7533909845985
+                        "path": "gke/3_n1-standard-2/2.json",
+                        "summary": 764.1413131313133
+                    },
+                    {
+                        "max": 3,
+                        "path": "gke/3_n1-standard-2/3-.json",
+                        "summary": 990.5598720644422
                     }
                 ],
-                "summary": 840.2444636615328
+                "summary": 863.6702962989389
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 12,
@@ -67,6 +75,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 16,
@@ -85,6 +94,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 8,
@@ -108,6 +118,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": true
                 },
                 "cpus": 8,
@@ -126,6 +137,7 @@
             },
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": true
                 },
                 "cpus": 6,
@@ -141,6 +153,143 @@
                     }
                 ],
                 "summary": 907.0176249002939
+            },
+            {
+                "configuration": {
+                    "elasticsearch": true,
+                    "redis": false
+                },
+                "cpus": 6,
+                "memory": 21.91,
+                "nodes": {
+                    "n1-standard-2": 3
+                },
+                "runs": [
+                    {
+                        "max": 3,
+                        "path": "gke/3_n1-standard-2/0-e.json",
+                        "summary": 308.09675231706814
+                    },
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-standard-2/1-e.json",
+                        "summary": 441.11985882655637
+                    },
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-standard-2/2-e.json",
+                        "summary": 236.94359923414632
+                    }
+                ],
+                "summary": 328.7200701259236
+            },
+            {
+                "configuration": {
+                    "elasticsearch": true,
+                    "redis": true
+                },
+                "cpus": 6,
+                "memory": 21.91,
+                "nodes": {
+                    "n1-standard-2": 3
+                },
+                "runs": [
+                    {
+                        "max": 1,
+                        "path": "gke/3_n1-standard-2/0-er.json",
+                        "summary": 800.6464646464647
+                    },
+                    {
+                        "max": 1,
+                        "path": "gke/3_n1-standard-2/1-er.json",
+                        "summary": 983.7355559506198
+                    }
+                ],
+                "summary": 892.1910102985422
+            },
+            {
+                "configuration": {
+                    "elasticsearch": false,
+                    "redis": false
+                },
+                "cpus": 8,
+                "memory": 28.9,
+                "nodes": {
+                    "n1-standard-1": 8
+                },
+                "runs": [
+                    {
+                        "max": 3,
+                        "path": "gke/8_n1-standard-1/0.json",
+                        "summary": 202.22673096333708
+                    },
+                    {
+                        "max": 4,
+                        "path": "gke/8_n1-standard-1/1.json",
+                        "summary": 282.6488888888889
+                    }
+                ],
+                "summary": 242.437809926113
+            },
+            {
+                "configuration": {
+                    "elasticsearch": false,
+                    "redis": false
+                },
+                "cpus": 12,
+                "memory": 10.39,
+                "nodes": {
+                    "n1-highcpu-4": 3
+                },
+                "runs": [
+                    {
+                        "max": 2,
+                        "path": "gke/3_n1-highcpu-4/0.json",
+                        "summary": 1212.121212121212
+                    },
+                    {
+                        "max": 3,
+                        "path": "gke/3_n1-highcpu-4/1.json",
+                        "summary": 1053.7723905723906
+                    },
+                    {
+                        "max": 5,
+                        "path": "gke/3_n1-highcpu-4/2.json",
+                        "summary": 964.7522984171969
+                    }
+                ],
+                "summary": 1076.8819670369332
+            },
+            {
+                "configuration": {
+                    "elasticsearch": false,
+                    "redis": false
+                },
+                "cpus": 20,
+                "memory": 72.56,
+                "nodes": {
+                    "n1-highcpu-4": 2,
+                    "n1-highmem-4": 2,
+                    "n1-standard-2": 2
+                },
+                "runs": [
+                    {
+                        "max": 4,
+                        "path": "gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/0.json",
+                        "summary": 1058.40268203925
+                    },
+                    {
+                        "max": 4,
+                        "path": "gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/1.json",
+                        "summary": 867.0907911399863
+                    },
+                    {
+                        "max": 3,
+                        "path": "gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/2.json",
+                        "summary": 1078.9353535353534
+                    }
+                ],
+                "summary": 1001.47627557153
             }
         ],
         "provider": "gke"
@@ -149,6 +298,7 @@
         "data": [
             {
                 "configuration": {
+                    "elasticsearch": false,
                     "redis": false
                 },
                 "cpus": 5,
