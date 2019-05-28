@@ -18,7 +18,7 @@ class LoadGenManager:
         self.__config_load_gen()
 
     def __config_load_gen(self):
-        self.load_gen_deployment["spec"]["replicas"] = self.config.bpsReplicas
+        self.load_gen_deployment["spec"]["replicas"] = self.config["bpsReplicas"]
 
     def create(self):
         evaluate_request(
