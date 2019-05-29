@@ -26,6 +26,11 @@ def main():
         help="Deploy elasticsearch and logstash as part of Kapture",
     )
     parser.add_argument(
+        "--kafka-persistent-volume",
+        action="store_true",
+        help="Use the default persistent volume to store the Kafka topics",
+    )
+    parser.add_argument(
         "-r",
         "--deploy-redis",
         action="store_true",
@@ -61,7 +66,7 @@ def main():
         "namespace": args.namespace,
         "control": {"namespace": "kapture-control", "name": "control"},
         "elasticsearch": {"deploy": args.deploy_elasticsearch},
-        "kafka": {"usePersistentVolume": False},
+        "kafka": {"usePersistentVolume": args.kafka_persistent_volume},
         "loadGen": {"bpsReplicas": args.generators},
         "postgres": {"deploy": args.deploy_postgres},
         "prometheus": {"deploy": args.deploy_prometheus},
