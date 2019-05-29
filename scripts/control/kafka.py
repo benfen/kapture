@@ -24,6 +24,7 @@ class KafkaManager:
         config - Configuration options for the Kafka resources in the cluster
         namespace - Namespace to deploy the Kafka resources into
     """
+
     def __init__(self, namespace, config):
         """Initializes the Kafka manager
 
@@ -78,7 +79,9 @@ class KafkaManager:
         else:
             evaluate_request(
                 self.__v1_api.delete_namespaced_persistent_volume_claim(
-                    namespace=self.__namespace, name=get_name(self.kafka_pvc), async_req=True
+                    namespace=self.__namespace,
+                    name=get_name(self.kafka_pvc),
+                    async_req=True,
                 )
             )
 
@@ -153,7 +156,9 @@ class KafkaManager:
         )
         evaluate_request(
             self.__v1_policy_api.delete_namespaced_pod_disruption_budget(
-                namespace=self.__namespace, name=get_name(self.kafka_pdb), async_req=True
+                namespace=self.__namespace,
+                name=get_name(self.kafka_pdb),
+                async_req=True,
             )
         )
         evaluate_request(
@@ -180,6 +185,8 @@ class KafkaManager:
         )
         evaluate_request(
             self.__v1_api.delete_namespaced_persistent_volume_claim(
-                namespace=self.__namespace, name=get_name(self.kafka_pvc), async_req=True
+                namespace=self.__namespace,
+                name=get_name(self.kafka_pvc),
+                async_req=True,
             )
         )

@@ -17,7 +17,13 @@ class ZookeeperManager:
         zk_pdb - JSON representation of the pod disruption budget for the zookeeper instances
         zk - JSON representation of the deployment for running Zookeeper
     """
+
     def __init__(self, namespace):
+        """Initializes the Zookeeper manager with configuration from the Zookeeper yml file
+
+        Args:
+            namespace - Namespace to deploy the Zookeeper resources to; string
+        """
         with open("zk.yml") as f:
             zk_yml = list(safe_load_all(f))
             self.zk_service = zk_yml[0]
@@ -84,7 +90,9 @@ class ZookeeperManager:
         """
         evaluate_request(
             self.__v1_api.delete_namespaced_service(
-                namespace=self.__namespace, name=get_name(self.zk_service), async_req=True
+                namespace=self.__namespace,
+                name=get_name(self.zk_service),
+                async_req=True,
             )
         )
         evaluate_request(

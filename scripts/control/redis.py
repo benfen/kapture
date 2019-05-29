@@ -46,7 +46,14 @@ class RedisManager:
         redis_metrics_service - JSON representation of the service used to access Redis metrics
         redis_connector - JSON representation of the pod used to connect Kafka to Redis
     """
+
     def __init__(self, namespace, config):
+        """Initializes the Redis manager with configuration from the Redis yml file
+
+        Args:
+            namespace - Namespace to deploy the Redis resources to; string
+            config - Configuration options for the Redis resources; dict
+        """
         with open("redis.yml") as f:
             redis_yml = list(safe_load_all(f))
             self.redis_master = redis_yml[0]
