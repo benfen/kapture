@@ -60,8 +60,12 @@ class KafkaManager:
         if self.__config["usePersistentVolume"]:
             volumes = self.kafka["spec"]["template"]["spec"]["volumes"]
             empty_dir = volumes.pop(0)
-            pvc = client.V1PersistentVolumeClaimVolumeSource(empty_dir["name"])
-            volumes.append(pvc.to_dict())
+            volumes.append({
+                "name": empty_dir["name"],
+                "persistentVolumeClaim": {
+                    "claimName": get_name(self.kafka_pvc)
+                }
+            })
 
     def create(self):
         """Create kafka items in the cluster.
