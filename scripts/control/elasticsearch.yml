@@ -37,7 +37,7 @@ data:
 
     xpack.ml.enabled: false
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: es-master
@@ -45,7 +45,11 @@ metadata:
     component: elasticsearch
     role: master
 spec:
-  replicas: 0
+  replicas: 3
+  selector:
+    matchLabels:
+      component: elasticsearch
+      role: master
   template:
     metadata:
       labels:
@@ -119,7 +123,7 @@ spec:
     protocol: TCP
   clusterIP: None
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: es-data
@@ -128,7 +132,11 @@ metadata:
     role: data
 spec:
   serviceName: elasticsearch-data
-  replicas: 0
+  replicas: 3
+  selector:
+    matchLabels:
+      component: elasticsearch
+      role: data
   template:
     metadata:
       labels:
@@ -193,7 +201,7 @@ spec:
     component: elasticsearch
     role: data
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: es-client
@@ -201,7 +209,11 @@ metadata:
     component: elasticsearch
     role: client
 spec:
-  replicas: 0
+  selector:
+    matchLabels:
+      component: elasticsearch
+      role: client
+  replicas: 2
   template:
     metadata:
       labels:

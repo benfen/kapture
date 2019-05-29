@@ -9,56 +9,7 @@ data:
       kafka {
         bootstrap_servers => ["kafka-svc:9093"]
         decorate_events => true
-        topics => ["ak",
-            "al",
-            "ar",
-            "az",
-            "ca",
-            "co",
-            "ct",
-            "de",
-            "fl",
-            "ga",
-            "hi",
-            "ia",
-            "id",
-            "il",
-            "in",
-            "ks",
-            "ky",
-            "la",
-            "ma",
-            "md",
-            "me",
-            "mi",
-            "mn",
-            "mo",
-            "ms",
-            "mt",
-            "nc",
-            "nd",
-            "ne",
-            "nh",
-            "nj",
-            "nm",
-            "nv",
-            "ny",
-            "oh",
-            "ok",
-            "or",
-            "pa",
-            "ri",
-            "sc",
-            "sd",
-            "tn",
-            "tx",
-            "ut",
-            "va",
-            "vt",
-            "wa",
-            "wi",
-            "wv",
-            "wy"]
+        topics => ["bps-data"]
       }
     }
 
@@ -92,7 +43,7 @@ spec:
   ports:
   - port: 9600
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: logstash
@@ -100,7 +51,10 @@ metadata:
     app: logstash
 spec:
   serviceName: logstash
-  replicas: 0
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logstash
   template:
     metadata:
       labels:

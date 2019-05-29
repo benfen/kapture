@@ -25,13 +25,17 @@ spec:
       app: kafka
   minAvailable: 2
 ---
-apiVersion: apps/v1beta1
+apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: kafka
 spec:
   serviceName: kafka-svc
   replicas: 3
+  selector:
+    matchLabels:
+      app: kafka
+      kapture: "true"
   template:
     metadata:
       labels:
@@ -54,7 +58,7 @@ spec:
         - "exec kafka-server-start.sh /opt/kafka/config/server.properties --override broker.id=${HOSTNAME##*-} \
           --override listeners=PLAINTEXT://:9093 \
           --override zookeeper.connect=zk-svc:2181 \
-          --override log.dir=/var/lib/kafka \
+          --override log.dirs=/var/lib/kafka/${HOSTNAME##*-} \
           --override auto.create.topics.enable=true \
           --override auto.leader.rebalance.enable=true \
           --override background.threads=10 \
@@ -141,7 +145,62 @@ spec:
           value : "-Xmx512M -Xms512M"
         - name: KAFKA_OPTS
           value: "-Dlogging.level=INFO"
+        - name: LOG_DIR
+          value: /var/lib/kafka
         volumeMounts:
         - name: datadir
           mountPath: /var/lib/kafka
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kafka-metrics-svc
+  labels:
+    metrics: kafka
+spec:
+  ports:
+    - port: 8000
+      name: metrics
+  selector:
+    metrics: kafka
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kafka-metrics
+  labels:
+    metrics: kafka
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      metrics: kafka
+  template:
+    metadata:
+      name: kafka-metrics
+      labels:
+        metrics: kafka
+    spec:
+      containers:
+      - name: kafka-metrics
+        image: carbonrelay/kapture:dev-alt-load-gen
+        imagePullPolicy: Always
+        command:
+          - python3
+          - /opt/kafka-metrics.py
+        ports:
+          - containerPort: 8000
+---
+# Deployment of this PVC is dictated by the python controller
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kafka-volume
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Block
+  resources:
+    requests:
+      storage: 10Gi
 ---

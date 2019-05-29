@@ -48,7 +48,7 @@ def configure_prometheus(namespace):
     subprocess.call(["./temp/prometheus-recipes.sh", namespace, "-npk"])
 
 
-def heartbeat(period, update_file, duration=270):
+def heartbeat(period, update_file, duration=300):
     if period <= 0:
         sleep(duration)
     else:

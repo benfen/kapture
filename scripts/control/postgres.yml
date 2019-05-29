@@ -45,7 +45,7 @@ metadata:
     app: postgres
 spec:
   # There should never be more than 1 replica of this pod due to the volume being ReadWriteOnce
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: postgres
@@ -76,7 +76,7 @@ kind: Deployment
 metadata:
   name: postgres-connector
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: postgres-connector
