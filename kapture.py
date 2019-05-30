@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 import json
+import os
 import subprocess
 
 
@@ -18,6 +19,12 @@ def main():
         nargs="?",
         help="The maximum number of generators to run as part of this test.  "
         + "If the number is less than 1, it will run until it observes a decrease in the message throughput in Kafka",
+    )
+    parser.add_argument(
+        "--control-locally",
+        action="store_true",
+        help="Flag to indiciate whether the controller should be deployed within the cluster or run locally.  If the "
+        + "flag is passed, then the python controller will be run locally",
     )
     parser.add_argument(
         "-e",
@@ -64,7 +71,6 @@ def main():
     config = {
         "action": action,
         "namespace": args.namespace,
-        "control": {"namespace": "kapture-control", "name": "control"},
         "elasticsearch": {"deploy": args.deploy_elasticsearch},
         "kafka": {"usePersistentVolume": args.kafka_persistent_volume},
         "loadGen": {"bpsReplicas": args.generators},
@@ -73,35 +79,41 @@ def main():
         "redis": {"deploy": args.deploy_redis},
     }
 
-    control_namespace = "kapture-control"
-    # Make sure that a previous configmap doesn't already exist
-    subprocess.call(
-        [
-            "kubectl",
-            "delete",
-            "configmap",
-            "-n",
-            control_namespace,
-            "kapture-config",
-            "--ignore-not-found",
-        ]
-    )
+    if args.control_locally:
+        import scripts.control.kapture as kap
+        os.environ["kapture_config"]=json.dumps(config)
+        kap.main()
+    else:
+        control_namespace = "kapture-control"
+        config["control"]={"namespace": control_namespace, "name": "control"},
+        # Make sure that a previous configmap doesn't already exist
+        subprocess.call(
+            [
+                "kubectl",
+                "delete",
+                "configmap",
+                "-n",
+                control_namespace,
+                "kapture-config",
+                "--ignore-not-found",
+            ]
+        )
 
-    subprocess.call(['kubectl', 'create', 'ns', control_namespace])
-    subprocess.call(
-        [
-            "kubectl",
-            "create",
-            "configmap",
-            "-n",
-            control_namespace,
-            "kapture-config",
-            "--from-literal",
-            "kapture_config={}".format(json.dumps(config)),
-        ]
-    )
+        subprocess.call(['kubectl', 'create', 'ns', control_namespace])
+        subprocess.call(
+            [
+                "kubectl",
+                "create",
+                "configmap",
+                "-n",
+                control_namespace,
+                "kapture-config",
+                "--from-literal",
+                "kapture_config={}".format(json.dumps(config)),
+            ]
+        )
 
-    subprocess.call(["kubectl", "create", "-f", "kapture.yml"])
+        subprocess.call(["kubectl", "create", "-k", "."])
 
 
 if __name__ == "__main__":

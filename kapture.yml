@@ -37,7 +37,7 @@ spec:
   containers:
   - name: kapture-control
     imagePullPolicy: Always
-    image: carbonrelay/kapture:dev-storage
+    image: carbonrelay/kapture:dev-master
     command:
       - bash
       - -c
