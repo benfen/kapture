@@ -54,14 +54,22 @@ class KafkaManager:
     def __configure_kafka(self):
         """Modifies kube config items for Kafka based on the internal configuration
 
-        Currently, the update to kafka include:
+        Currently, the updates to kafka include:
             - Configuring Kafka to use a persistent volume claim
+            - Modifying the Kafka metrics container to use the correct version of the Kapture container
         """
         if self.__config["usePersistentVolume"]:
             volumes = self.kafka["spec"]["template"]["spec"]["volumes"]
             empty_dir = volumes.pop(0)
-            pvc = client.V1PersistentVolumeClaimVolumeSource(empty_dir["name"])
-            volumes.push(pvc.to_dict())
+            volumes.append(
+                {
+                    "name": empty_dir["name"],
+                    "persistentVolumeClaim": {"claimName": get_name(self.kafka_pvc)},
+                }
+            )
+        self.kafka_metrics["spec"]["template"]["spec"]["containers"][0]["image"] = (
+            "carbonrelay/kapture:" + self.__config["kapture_version"]
+        )
 
     def create(self):
         """Create kafka items in the cluster.

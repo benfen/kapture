@@ -1,6 +1,9 @@
 import json
 from kubernetes import client, config
 import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))
 
 from elasticsearch import ElasticsearchManager
 from kafka import KafkaManager
@@ -50,6 +53,9 @@ def initialize_namespace(namespace, store_count=250, customers=5000, simulation=
 def load_config():
     """Load kapture configuration from the environment variable
 
+    Returns:
+        Dict holding the JSON-ified kapture configuration
+
     Raises:
         JSONDecodeError - If the value stored in the environment variable is not a valid JSON string
     """
@@ -58,7 +64,7 @@ def load_config():
 
 def main():
     # Update the directory to make sure filepaths to the yml files are correct
-    os.chdir(os.path.dirname(__file__))
+    os.chdir(os.path.dirname(os.path.realpath(__file__)))
 
     # Attempt to load configuration from normal location and then from the cluster location
     # This is done to allow this script to be run locally for testing as well
@@ -68,6 +74,7 @@ def main():
         config.load_incluster_config()
 
     kapture_config = load_config()
+
     namespace = kapture_config["namespace"]
     zookeeper = ZookeeperManager(namespace)
     kafka = KafkaManager(namespace, kapture_config["kafka"])

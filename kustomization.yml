@@ -1,0 +1,6 @@
+resources:
+  - kapture.yml
+
+images:
+  - name: carbonrelay/kapture
+    newTag: "dev-master"

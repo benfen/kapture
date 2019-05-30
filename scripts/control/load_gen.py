@@ -29,12 +29,16 @@ class LoadGenManager:
         self.__namespace = namespace
         self.__v1_api = client.CoreV1Api()
         self.__v1_apps_api = client.AppsV1Api()
+
         self.__config_load_gen()
 
     def __config_load_gen(self):
         """Uses the configuration stored in this instance to modify the loaded yml
         """
         self.load_gen_deployment["spec"]["replicas"] = self.__config["bpsReplicas"]
+        self.load_gen_deployment["spec"]["template"]["spec"]["containers"][0][
+            "image"
+        ] = self.__config["kapture_version"]
 
     def create(self):
         """Creates the load generation resources in the cluster

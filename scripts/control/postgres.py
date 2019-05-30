@@ -39,6 +39,18 @@ class PostgresManager:
         self.__v1_api = client.CoreV1Api()
         self.__v1_apps_api = client.AppsV1Api()
 
+        self.__configure_postgres()
+
+    def __configure_postgres(self):
+        """Configure Postgres for deployment to the cluster
+
+        The modifications to Postgres include:
+            - Updating the version tag for the Kapture tag
+        """
+        self.postgres_connector["spec"]["template"]["spec"]["containers"][0][
+            "image"
+        ] = ("carbonrelay/kapture:" + self.__config["kapture_version"])
+
     def create(self):
         """Creates the Postgres resources in the cluster
         """

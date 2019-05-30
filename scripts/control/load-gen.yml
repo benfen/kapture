@@ -73,7 +73,7 @@ spec:
             mountPath: /data
       - name: load-gen-producer
         imagePullPolicy: Always
-        image: carbonrelay/kapture:dev-alt-load-gen
+        image: carbonrelay/kapture:dev-master
         env:
           - name: BROKERS
             value: "kafka-svc:9093"
