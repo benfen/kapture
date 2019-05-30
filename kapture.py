@@ -14,7 +14,7 @@ def load_kapture_version():
         Version tag for Kapture as a string
     """
     with open("kustomization.yml") as k:
-        return k.read().split("newTag:")[1].split("\"")[1]
+        return k.read().split("newTag:")[1].split('"')[1]
 
 
 def main():
@@ -86,20 +86,27 @@ def main():
         "action": action,
         "namespace": args.namespace,
         "elasticsearch": {"deploy": args.deploy_elasticsearch},
-        "kafka": {"usePersistentVolume": args.kafka_persistent_volume, "kapture_version": kapture_version},
+        "kafka": {
+            "usePersistentVolume": args.kafka_persistent_volume,
+            "kapture_version": kapture_version,
+        },
         "loadGen": {"bpsReplicas": args.generators, "kapture_version": kapture_version},
-        "postgres": {"deploy": args.deploy_postgres, "kapture_version": kapture_version},
+        "postgres": {
+            "deploy": args.deploy_postgres,
+            "kapture_version": kapture_version,
+        },
         "prometheus": {"deploy": args.deploy_prometheus},
         "redis": {"deploy": args.deploy_redis, "kapture_version": kapture_version},
     }
 
     if args.control_locally:
         import scripts.control.kapture as kap
-        os.environ["kapture_config"]=json.dumps(config)
+
+        os.environ["kapture_config"] = json.dumps(config)
         kap.main()
     else:
         control_namespace = "kapture-control"
-        config["control"]={"namespace": control_namespace, "name": "control"},
+        config["control"] = {"namespace": control_namespace, "name": "control"}
         # Make sure that a previous configmap doesn't already exist
         subprocess.call(
             [
@@ -113,7 +120,7 @@ def main():
             ]
         )
 
-        subprocess.call(['kubectl', 'create', 'ns', control_namespace])
+        subprocess.call(["kubectl", "create", "ns", control_namespace])
         subprocess.call(
             [
                 "kubectl",
