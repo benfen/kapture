@@ -68,6 +68,18 @@ class RedisManager:
         self.__v1_api = client.CoreV1Api()
         self.__v1_apps_api = client.AppsV1Api()
 
+        self.__configure_redis()
+
+    def __configure_redis(self):
+        """Configures the Redis for the cluster
+
+        The modifications to Redis include:
+            - Updating the version tag for the Kapture container
+        """
+        self.redis_connector["spec"]["template"]["spec"]["containers"][0]["image"] = (
+            "carbonrelay/kapture:" + self.__config["kapture_version"]
+        )
+
     def __wait_for_redis_master(self):
         """Waits for the Redis master to startup
 

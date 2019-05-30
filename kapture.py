@@ -4,6 +4,19 @@ import os
 import subprocess
 
 
+def load_kapture_version():
+    """Load the version of the Kapture container
+
+    Searches through the kustomization.yml file in this directory for the version tag stored inside and retrieves that.
+    It's kind of a hack, but it keeps it down to one place to change the version for the Kapture containers.
+
+    Returns:
+        Version tag for Kapture as a string
+    """
+    with open("kustomization.yml") as k:
+        return k.read().split("newTag:")[1].split("\"")[1]
+
+
 def main():
     parser = ArgumentParser()
     parser.add_argument("namespace", help="The namespace to deploy Kapture to")
@@ -68,15 +81,16 @@ def main():
         action = "delete"
     else:
         action = "create"
+    kapture_version = load_kapture_version()
     config = {
         "action": action,
         "namespace": args.namespace,
         "elasticsearch": {"deploy": args.deploy_elasticsearch},
-        "kafka": {"usePersistentVolume": args.kafka_persistent_volume},
-        "loadGen": {"bpsReplicas": args.generators},
-        "postgres": {"deploy": args.deploy_postgres},
+        "kafka": {"usePersistentVolume": args.kafka_persistent_volume, "kapture_version": kapture_version},
+        "loadGen": {"bpsReplicas": args.generators, "kapture_version": kapture_version},
+        "postgres": {"deploy": args.deploy_postgres, "kapture_version": kapture_version},
         "prometheus": {"deploy": args.deploy_prometheus},
-        "redis": {"deploy": args.deploy_redis},
+        "redis": {"deploy": args.deploy_redis, "kapture_version": kapture_version},
     }
 
     if args.control_locally:

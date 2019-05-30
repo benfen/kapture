@@ -53,6 +53,9 @@ def initialize_namespace(namespace, store_count=250, customers=5000, simulation=
 def load_config():
     """Load kapture configuration from the environment variable
 
+    Returns:
+        Dict holding the JSON-ified kapture configuration
+
     Raises:
         JSONDecodeError - If the value stored in the environment variable is not a valid JSON string
     """
@@ -71,6 +74,7 @@ def main():
         config.load_incluster_config()
 
     kapture_config = load_config()
+
     namespace = kapture_config["namespace"]
     zookeeper = ZookeeperManager(namespace)
     kafka = KafkaManager(namespace, kapture_config["kafka"])
