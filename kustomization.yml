@@ -3,4 +3,4 @@ resources:
 
 images:
   - name: carbonrelay/kapture
-    newTag: "dev-master"
+    newTag: "dev-storage"

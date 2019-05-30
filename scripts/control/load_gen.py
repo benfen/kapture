@@ -36,9 +36,9 @@ class LoadGenManager:
         """Uses the configuration stored in this instance to modify the loaded yml
         """
         self.load_gen_deployment["spec"]["replicas"] = self.__config["bpsReplicas"]
-        self.load_gen_deployment["spec"]["template"]["spec"]["containers"][0][
+        self.load_gen_deployment["spec"]["template"]["spec"]["containers"][1][
             "image"
-        ] = self.__config["kapture_version"]
+        ] = "carbonrelay/kapture:" + self.__config["kapture_version"]
 
     def create(self):
         """Creates the load generation resources in the cluster

@@ -4,6 +4,7 @@ from time import sleep
 from yaml import safe_load_all
 
 from util import evaluate_request, get_name
+from volumes import VolumeManager
 
 
 class KafkaManager:
@@ -18,8 +19,6 @@ class KafkaManager:
         kafka - JSON representation of the kafka deployment resource
         kafka_metrics_service - JSON representation of the service used for kafka metrics
         kafka_metrics - JSON representation of the deployment used to serve kafka metrics
-        kafka_pvc - JSON representation of the persistent volume claim used by Kafka.  This resource
-            is only deployed when the configuration passed in calls for it.
 
         config - Configuration options for the Kafka resources in the cluster
         namespace - Namespace to deploy the Kafka resources into
@@ -42,13 +41,14 @@ class KafkaManager:
             self.kafka = kafka_yml[2]
             self.kafka_metrics_service = kafka_yml[3]
             self.kafka_metrics = kafka_yml[4]
-            self.kafka_pvc = kafka_yml[5]
 
         self.__config = config
         self.__namespace = namespace
         self.__v1_api = client.CoreV1Api()
         self.__v1_policy_api = client.PolicyV1beta1Api()
         self.__v1_apps_api = client.AppsV1Api()
+
+        self.__volume = VolumeManager(self.__namespace, name="kafka")
         self.__configure_kafka()
 
     def __configure_kafka(self):
@@ -64,7 +64,7 @@ class KafkaManager:
             volumes.append(
                 {
                     "name": empty_dir["name"],
-                    "persistentVolumeClaim": {"claimName": get_name(self.kafka_pvc)},
+                    "persistentVolumeClaim": {"claimName": self.__volume.volume_claim_name},
                 }
             )
         self.kafka_metrics["spec"]["template"]["spec"]["containers"][0]["image"] = (
@@ -78,20 +78,7 @@ class KafkaManager:
         the cluster, those items will be quietly ignored.
         """
         if self.__config["usePersistentVolume"]:
-            evaluate_request(
-                self.__v1_api.create_namespaced_persistent_volume_claim(
-                    namespace=self.__namespace, body=self.kafka_pvc, async_req=True
-                ),
-                allowed_statuses=[409],
-            )
-        else:
-            evaluate_request(
-                self.__v1_api.delete_namespaced_persistent_volume_claim(
-                    namespace=self.__namespace,
-                    name=get_name(self.kafka_pvc),
-                    async_req=True,
-                )
-            )
+            self.__volume.create()
 
         evaluate_request(
             self.__v1_api.create_namespaced_service(
@@ -191,10 +178,4 @@ class KafkaManager:
                 async_req=True,
             )
         )
-        evaluate_request(
-            self.__v1_api.delete_namespaced_persistent_volume_claim(
-                namespace=self.__namespace,
-                name=get_name(self.kafka_pvc),
-                async_req=True,
-            )
-        )
+        self.__volume.delete()

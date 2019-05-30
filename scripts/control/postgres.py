@@ -49,7 +49,7 @@ class PostgresManager:
         """
         self.postgres_connector["spec"]["template"]["spec"]["containers"][0][
             "image"
-        ] = ("carbonrelay/kapture:" + self.__config["kapture_version"])
+        ] = "carbonrelay/kapture:" + self.__config["kapture_version"]
 
     def create(self):
         """Creates the Postgres resources in the cluster
