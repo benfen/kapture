@@ -1,3 +1,6 @@
+# __Thie code should be considered deprecated__
+
+
 # Example c(K)ustomizations
 
 This directory has examples of how you can modify kapture to suit your needs for differnt performance tests.

@@ -93,6 +93,10 @@ By default, Kapture doesn't deploy Redis as part of its minimalistic approach.  
 
 Elasticsearch operates in the same manner as Redis - if you want to deploy Elasticsearch just run `./kapture.sh kapture-spam-my-namespace 3 --deploy-elastic-search` to get Kapture running with a basic Elasticsearch configuration.
 
+### Deploying Postgres
+
+It's just as easy to deploy Postgres as the other add-ons - just run `./kapture.sh kapture-spam-my-namepsace 3 --deploy-postgres` and you're set!
+
 ## How do I scale up the load?
 
 To increase the amount of load on the system, run: `kubectl scale Deployment data-loader --replicas $REPLICA_COUNT -n kapture-spam-my-namespace`.
@@ -117,10 +121,6 @@ The possibilities are endless !
 - Increase the CPU and Memory parameters for Kafka
 - Change the memory foot print or scaling factor of Redis
 - Add a different load generator container than BigPetStore
-
-### Can I Kustomize my Kapture?
-
-You bet!  Check out the [`examples`](examples/README.md) for how you can use [`Kustomize`][1] to create all kinds of different configurations for Kapture!
 
 ## What if want Prometheus metrics?
 
@@ -154,5 +154,3 @@ serviced by other scale and density tests in the upstream Kuberentes community.
 
 All source in this Repo is Apache Commmons 2.0 licensed, please contribute ideas, code, whatever.  It would be awesome if,
 eventually we were able to support 10 or 15 different databases.
-
-[1]: https://kustomize.io/
