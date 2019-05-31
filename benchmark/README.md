@@ -21,19 +21,18 @@ results
          └─ 0-r.json
 ```
 
-Providers are somthing like gke or minikube.  Configurations are listed in the format `${node_count}_${node_type}` and indicate the nodes used.  For example, a configuration using one "standard" node and two "other" nodes, would be called `1_standard_2_other`.  Inside of each configuration are all the runs performed using that configuration.  Each run is name with an increasing index followed (optionally) by any additional configuration flags used.  For example, `2-r.json` indicates a run that had Redis configured.
+Providers are somthing like gke or minikube.  Configurations are listed in the format `${node_count}_${node_type}` and indicate the nodes used.  For example, a configuration using one "standard" node and two "other" nodes, would be called `1_standard_2_other`.  Inside of each configuration are all the runs performed using that configuration.  Each run is name with an increasing index followed (optionally) by any additional configuration flags used.  For example, `0-r.json` indicates a run that had Redis configured.
 
 Kapture is open source, so feel free to reuse this data in other experiements or whitepapers that you might be producing around Kubernetes performance.  Please do cite us though, as we're a new project and are working hard to grow mindshare
 and increase contributions from like minded K8's engineers.
 
 ## Method
 
-- All tests were run using the [`default-resources.yml`](../examples/default-resources.yml) configuration.  
-- Tests were run using: `./benchmark.sh [-r]` (all tests were run with the default speed).  
+- Tests were run using: `./benchmark.sh [-r]`
 - If you want more fine-grained control over a test run, try using `./benchmark.sh $iterations [flags]` 
   - This will override the default benchmark heuristic for when to stop.
 
-Output from test runs is placed at `benchmark/temp/results.json` in the same format as the files in the `results` directory. 
+Output from test runs is placed at `benchmark/temp/results.json` in the same format as the files in the `results` directory.  There is a second file located next to this called `updates.json`.  This file is periodically updated with results from the run whenever the load generators are scaled __or__ if you have enabled the `heartbeat` configuration option, it will be updated approximately every `n` seconds.
 
 __The benchmark script does not attempt to preserve or protect data from previous runs - it will simply delete any existing data__.
 
@@ -81,14 +80,25 @@ In the summary column, the max number of load generators to produce a decline in
 
 ## GKE
 
-| Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
-|-|-|-|-|-|-|-|-|
-| 0.5 | 4 | n1-standard-2 | 8 | 30.00GB | No | 957.96 msg/node/s (4) | [data](./results/gke/4_n1-standard-2/0.json) |
+| Node Configuration | Virtual CPUs | Memory | Elasticsearch | Redis | Summary | Full Results |
+|-|-|-|-|-|-|-|
+| 3_n1-highmem-4 | 12 | 78.0GB | No | No | 1038.82 msg/node/s | [0](./results/gke/3_n1-highmem-4/0.json) |
+| 3_n1-standard-2 | 8 | 30.0GB | No | No | 863.6702962989389 msg/node/s | [0](./results/gke/3_n1-standard-2/0.json), [1](./results/gke/3_n1-standard-2/1.json), [2](./results/gke/3_n1-standard-2/2.json), [3](./results/gke/3_n1-standard-2/3-.json) |
+| 4_n1-standard-4 | 12 | 45.0GB | No | No | 1116.66 msg/node/s | [0](./results/gke/4_n1-standard-4/0.json) |
+| 4_n1-highcpu-4 | 16 | 14.4GB | No | No | 1109.19 msg/node/s | [0](./results/gke/4_n1-highcpu-4/0.json) |
+| 4_n1-standard-2 | 8 | 30.0GB | No | No | 909.64 msg/node/s | [0](./results/gke/4_n1-standard-2/0.json), [1](./results/gke/4_n1-standard-2/1.json) |
+| 4_n1-standard-2 | 8 | 30.0GB | No | Yes | 669.87 msg/node/s | [0](./results/gke/4_n1-standard-2/0-r.json) |
+| 3_n1-standard-2 | 6 | 21.91GB | No | Yes | 907.0176249002939 msg/node/s | [0](./results/gke/3_n1-standard-2/0-r.json) |
+| 3_n1-standard-2 | 6 | 21.91GB | Yes | No | 328.7200701259236 msg/node/s | [0](./results/gke/3_n1-standard-2/0-e.json), [1](./results/gke/3_n1-standard-2/1-e.json), [2](./results/gke/3_n1-standard-2/2-e.json) |
+| 3_n1-standard-2 | 6 | 21.91GB | Yes | Yes | 892.1910102985422 msg/node/s | [0](./results/gke/3_n1-standard-2/0-er.json), [1](./results/gke/3_n1-standard-2/1-er.json) |
+| 8_n1-standard-1 | 8 | 28.9GB | No | No | 242.437809926113 msg/node/s | [0](./results/gke/8_n1-standard-1/0.json), [1](./results/gke/8_n1-standard-1/1.json) |
+| 3_n1-highcpu-4 | 12 | 10.39GB | No | No | 1076.8819670369332 msg/node/s | [0](./results/gke/3_n1-highcpu-4/0.json), [1](./results/gke/3_n1-highcpu-4/1.json), [2](./results/gke/3_n1-highcpu-4/2.json) |
+| 2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2 | 20 | 72.56GB | No | No | 1001.47627557153 msg/node/s | [0](./results/gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/0.json), [1](./results/gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/1.json), [2](./results/gke/2_n1-highcpu-4_2_n1-highmem-4_2_n1-standard-2/2.json) |
 
 ## Minikube
 
 The MacBook Pro used for testing had 8 cores (2.6 GHz Intel Core i7), 16 GB of memory (2400 MHz DDR4), and an SSD.  Minikube itself was run using the [`hyperkit`](https://github.com/kubernetes/minikube/blob/master/docs/drivers.md#hyperkit-driver) driver.
 
-| Kapture Version | Nodes | Type | Virtual CPUs | Memory | Redis | Summary | Full Results |
-|-|-|-|-|-|-|-|-|
-| 0.5 | 1 | MacBook Pro | 5 | 8.20GB | No | 1279.47 msg/node/s (3) | [data](./results/minikube/0.json) |
+| Node Configuration | Virtual CPUs | Memory | Elasticsearch | Redis | Summary | Full Results |
+|-|-|-|-|-|-|-|
+| 1_MacBookPro | 5 | 8.20GB | No | No | 1279.47 msg/node/s (3) | [data](./results/minikube/0.json) |
